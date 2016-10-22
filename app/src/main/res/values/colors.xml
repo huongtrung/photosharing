@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="purple_transparent">#a07d67d2</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlue">#4ac1fe</color>
+    <color name="colorTrong">#00ffffff</color>
+    <color name="colorPurpleDam">#a0211845</color>
+    <color name="colorPurple">#7d67d2</color>
+    <color name="colorBlueDam">#6d9ff2</color>
+    <color name="colorRed">#e72573</color>
+    <color name="color_btn_follow_bg">#ec2677</color>
+    <color name="color_bg">#7f67d3</color>
+    <color name="color_white">#FFFFFF</color>
+    <color name="color_button">#4bc2ff</color>
+    <color name="color_button_follow">#ed2777</color>
+    <color name="bg_pin_map">#99000000</color>
+    <color name="bg_violet_transparent">#a0211845</color>
+    <color name="bg_violet">#594893</color>
+    <color name="bg_violet_1">#aca4c9</color>
+</resources>

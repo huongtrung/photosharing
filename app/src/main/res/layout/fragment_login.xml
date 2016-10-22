@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imgBg"
+        android:scaleType="centerCrop"
+        android:src="@drawable/login_bg" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/purple_transparent" />
+
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:id="@+id/imgLogo"
+        android:src="@drawable/icon_camera"
+        android:layout_marginTop="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_person_outline_white_18dp"
+        android:layout_below="@+id/imgLogo"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="30dp"
+        android:id="@+id/etLogin"
+        android:textColor="@color/color_white"
+        android:backgroundTint="@color/color_white"
+        android:lines="1"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_lock_outline_white_18dp"
+        android:id="@+id/etPassword"
+        android:inputType="textPassword"
+        android:layout_below="@id/etLogin"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/color_white"
+        android:backgroundTint="@color/color_white"
+        android:lines="1"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="LOGIN"
+        android:textColor="@color/colorWhite"
+        android:id="@+id/btnLogin"
+        android:layout_below="@id/etPassword"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorBlue" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="@color/color_white"
+        android:text="CREATE NEW ACCOUNT"
+        android:id="@+id/btnCreateAccount"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorTrong"
+        android:layout_below="@id/btnLogin"/>
+
+
+</RelativeLayout>
