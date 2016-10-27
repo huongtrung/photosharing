@@ -11,7 +11,7 @@ import vn.app.base.util.FragmentUtil;
 
 public abstract class CommonActivity extends BaseActivity implements CommonListener {
 
-    protected FragmentListener fragmentListener;
+    public FragmentListener fragmentListener;
 
     public void setFragmentListener(FragmentListener fragmentListener) {
         this.fragmentListener = fragmentListener;

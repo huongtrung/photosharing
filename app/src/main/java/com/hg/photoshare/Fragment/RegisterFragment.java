@@ -1,39 +1,45 @@
-package com.hg.photoshare.Fragment;
+package com.hg.photoshare.fragment;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
-import com.hg.photoshare.Contants.Contants;
+import com.hg.photoshare.api.request.UploadImageRequest;
+import com.hg.photoshare.api.respones.UploadImageResponse;
+import com.hg.photoshare.contants.Contants;
 import com.hg.photoshare.R;
 import com.hg.photoshare.api.request.RegisterRequest;
 import com.hg.photoshare.api.respones.RegisterResponse;
+import com.hg.photoshare.manage.UserManage;
+import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.KeyboardUtil;
+import vn.app.base.util.SharedPrefUtils;
 import vn.app.base.util.StringUtil;
 
 /**
@@ -41,9 +47,9 @@ import vn.app.base.util.StringUtil;
  */
 
 public class RegisterFragment extends BaseFragment {
-
+    public static final String USER_PHOTO = "USER_PHOTO";
     @BindView(R.id.ivAvatar)
-    ImageView ivAvatar;
+    CircleImageView ivAvatar;
 
     @BindView(R.id.etUser)
     EditText etUser;
@@ -57,16 +63,14 @@ public class RegisterFragment extends BaseFragment {
     @BindView(R.id.etConfirm)
     EditText etConfirm;
 
-//    @BindView(R.id.btnSignUp)
-//    Button btnSignUp;
-
     RegisterResponse registerResponse;
 
-    private String userRegist = "";
-    private String emailRegist = "";
-    private String passRegist = "";
-    private String compassRegist = "";
-    private Bitmap bitmap;
+    private String userName = "";
+    private String emailAdd = "";
+    private String password = "";
+    private String compassword = "";
+
+    Bitmap bitmap;
 
     public static RegisterFragment newInstance() {
         RegisterFragment registerFragment = new RegisterFragment();
@@ -95,69 +99,56 @@ public class RegisterFragment extends BaseFragment {
 
     @OnClick(R.id.ivAvatar)
     public void chooseImage() {
-        pickForCam();
+
     }
 
     @OnClick(R.id.btnSignUp)
-    public void goToUserProfile(){
-        checkTextRegist();
-        RegisterRequest registerRequest = new RegisterRequest(userRegist, emailRegist,passRegist, bitmap);
-        registerRequest.setRequestCallBack(new ApiObjectCallBack<RegisterResponse>() {
-            @Override
-            public void onSuccess(RegisterResponse data) {
-                registerResponse = data;
-                handleRegisterSuccess();
-            }
-
-            @Override
-            public void onFail(int failCode, String message) {
-                hideCoverNetworkLoading();
-            }
-        });
-        registerRequest.execute();
-        showCoverNetworkLoading();
-    }
-
-    private void handleRegisterSuccess() {
-        if (registerResponse.registerBean != null) {
-            FragmentUtil.replaceFragment(getActivity(), LoginFragment.newInstance(), null);
-        }
-    }
-
-    private void checkTextRegist() {
-        userRegist = etUser.getText().toString().trim();
-        emailRegist = etEmail.getText().toString().trim();
-        passRegist = etPass.getText().toString().trim();
-        compassRegist = etConfirm.getText().toString().trim();
-        if (!StringUtil.checkStringValid(userRegist) || !StringUtil.checkStringValid(emailRegist)
-                || !StringUtil.checkStringValid(passRegist) || !StringUtil.checkStringValid(compassRegist)) {
+    public void goToUserProfile() {
+        userName = etUser.getText().toString().trim();
+        emailAdd = etEmail.getText().toString().trim();
+        password = etPass.getText().toString().trim();
+        compassword = etConfirm.getText().toString().trim();
+        if (!StringUtil.checkStringValid(userName) || !StringUtil.checkStringValid(emailAdd)
+                || !StringUtil.checkStringValid(password) || !StringUtil.checkStringValid(compassword)) {
             DialogUtil.showOkBtnDialog(getActivity(), "Required fields", "Please re-enter again");
             return;
         }
+        try {
+            RegisterRequest registerRequest = new RegisterRequest(userName, emailAdd, SHA1(password));
+
+            registerRequest.setRequestCallBack(new ApiObjectCallBack<RegisterResponse>() {
+                @Override
+                public void onSuccess(RegisterResponse data) {
+                    registerResponse = data;
+                    handleRegisterSuccess(registerResponse);
+                    hideCoverNetworkLoading();
+                }
+
+                @Override
+                public void onFail(int failCode, String message) {
+                    hideCoverNetworkLoading();
+                    DialogUtil.showOkBtnDialog(getContext(), "Error : " +failCode, message);
+                }
+            });
+            registerRequest.execute();
+            KeyboardUtil.hideKeyboard(getActivity());
+            showCoverNetworkLoading();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
     }
 
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item)
-//    {
-//        int id = item.getItemId();
-//        if (id == R.id.take_photo)
-//        {
-//            pickImage();
-//            return true;
-//        }
-//        if (id==R.id.camera_photo){
-//            pickForCam();
-//            return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        getActivity().getMenuInflater().inflate(R.menu.register_choose_menu,menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
+    private void handleRegisterSuccess(RegisterResponse registerResponse) {
+        if (registerResponse != null) {
+            UserManage.saveCurrentUser(registerResponse.data);
+            SharedPrefUtils.saveAccessToken(registerResponse.data.token);
+            Log.e("user:", registerResponse.data.token);
+            FragmentUtil.replaceFragment(getActivity(), ToturialFragment.newInstance(), null);
+        }
+    }
 
     private void pickImage() {
         Intent intent = new Intent();
@@ -195,6 +186,31 @@ public class RegisterFragment extends BaseFragment {
             ivAvatar.setImageBitmap(bitmap);
         }
     }
+
+    public File savebitmap(Bitmap filename) {
+        String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+        OutputStream outStream = null;
+
+        File file = new File(filename + ".png");
+        if (file.exists()) {
+            file.delete();
+            file = new File(extStorageDirectory, filename + ".png");
+            Log.e("file exist", "" + file + ",Bitmap= " + filename);
+        }
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getName());
+
+            outStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.e("file", "" + file);
+        return file;
+    }
+
 
 
 }

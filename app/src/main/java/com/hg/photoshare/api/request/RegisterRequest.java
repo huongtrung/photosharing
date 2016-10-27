@@ -19,13 +19,11 @@ public class RegisterRequest extends ObjectApiRequest<RegisterResponse> {
     String username;
     String email;
     String password;
-    Bitmap avatar;
 
-    public RegisterRequest(String username, String email, String password, Bitmap avatar) {
+    public RegisterRequest(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.avatar = avatar;
     }
 
     @Override
@@ -47,6 +45,7 @@ public class RegisterRequest extends ObjectApiRequest<RegisterResponse> {
     public Map<String, String> getRequestParams() {
         Map<String, String> params = new HashMap<>();
         params.put(APIConstant.FULLNAME, username);
+        params.put(APIConstant.EMAIL, email);
         params.put(APIConstant.PASSWORD, password);
         return params;
     }

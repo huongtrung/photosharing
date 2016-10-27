@@ -3,151 +3,177 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/bg_violet">
+    android:background="@color/bg_violet"
+    android:orientation="vertical">
+
     <RelativeLayout
+        android:id="@+id/rl_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border_home_menu"
-        >
+        android:background="@drawable/border_home_menu">
+
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_menu_account"
+            android:id="@+id/iv_menu_account"
             android:layout_width="90dp"
             android:layout_height="90dp"
+            android:layout_marginBottom="11dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="11dp"
-            android:src="@drawable/dummy_avatar"/>
+            android:src="@drawable/dummy_avatar" />
+
         <TextView
-            android:layout_below="@+id/img_menu_account"
+            android:id="@+id/tv_menu_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/fontzise_26"
-            tools:text="Jennifer"
-            android:textColor="@color/white"
+            android:layout_below="@+id/iv_menu_account"
+            android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginBottom="20dp"/>
+            android:textColor="@color/white"
+            android:textSize="@dimen/fontzise_26"
+            tools:text="Jennifer" />
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@drawable/border_home_menu_item">
+        android:background="@drawable/border_home_menu_item"
+        android:padding="10dp">
+
         <ImageView
             android:id="@+id/icon_home"
             android:layout_width="41dp"
             android:layout_height="41dp"
-            android:src="@drawable/menu_home"/>
+            android:src="@drawable/menu_home" />
+
         <TextView
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/icon_home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/icon_home"
             android:text="Home"
             android:textColor="@color/white"
-            android:textSize="@dimen/fontzise_20"/>
+            android:textSize="@dimen/fontzise_20" />
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@drawable/border_home_menu_item">
+        android:background="@drawable/border_home_menu_item"
+        android:padding="10dp">
+
         <ImageView
             android:id="@+id/icon_camera"
             android:layout_width="41dp"
             android:layout_height="41dp"
-            android:src="@drawable/icon_camera"/>
+            android:src="@drawable/icon_camera" />
+
         <TextView
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/icon_camera"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/icon_camera"
             android:text="Post"
             android:textColor="@color/white"
-            android:textSize="@dimen/fontzise_20"/>
+            android:textSize="@dimen/fontzise_20" />
     </RelativeLayout>
+
     <RelativeLayout
+        android:id="@+id/rl_favorite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@drawable/border_home_menu_item">
+        android:background="@drawable/border_home_menu_item"
+        android:padding="10dp">
+
         <ImageView
             android:id="@+id/icon_favourite"
             android:layout_width="41dp"
             android:layout_height="41dp"
-            android:src="@drawable/icon_camera"/>
+            android:src="@drawable/icon_camera" />
+
         <TextView
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/icon_favourite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/icon_favourite"
             android:text="Favourite"
             android:textColor="@color/white"
-            android:textSize="@dimen/fontzise_20"/>
+            android:textSize="@dimen/fontzise_20" />
     </RelativeLayout>
+
     <RelativeLayout
+        android:id="@+id/rl_nearby"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@drawable/border_home_menu_item">
+        android:background="@drawable/border_home_menu_item"
+        android:padding="10dp">
+
         <ImageView
             android:id="@+id/icon_nearby"
             android:layout_width="41dp"
             android:layout_height="41dp"
-            android:src="@drawable/menu_around"/>
+            android:src="@drawable/menu_around" />
+
         <TextView
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/icon_nearby"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/icon_nearby"
             android:text="Nearby"
             android:textColor="@color/white"
-            android:textSize="@dimen/fontzise_20"/>
+            android:textSize="@dimen/fontzise_20" />
     </RelativeLayout>
+
     <RelativeLayout
+        android:id="@+id/rl_follow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@drawable/border_home_menu_item">
+        android:background="@drawable/border_home_menu_item"
+        android:padding="10dp">
+
         <ImageView
             android:id="@+id/icon_follow"
             android:layout_width="41dp"
             android:layout_height="41dp"
-            android:src="@drawable/menu_follow"/>
+            android:src="@drawable/menu_follow" />
+
         <TextView
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/icon_follow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/icon_follow"
             android:text="Follow"
             android:textColor="@color/white"
-            android:textSize="@dimen/fontzise_20"/>
+            android:textSize="@dimen/fontzise_20" />
     </RelativeLayout>
+
     <RelativeLayout
+        android:id="@+id/rl_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@drawable/border_home_menu_item">
+        android:background="@drawable/border_home_menu_item"
+        android:padding="10dp">
+
         <ImageView
             android:id="@+id/icon_logout"
             android:layout_width="41dp"
             android:layout_height="41dp"
-            android:src="@drawable/menu_logout"/>
+            android:src="@drawable/menu_logout" />
+
         <TextView
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/icon_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/icon_logout"
             android:text="Logout"
             android:textColor="@color/white"
-            android:textSize="@dimen/fontzise_20"/>
+            android:textSize="@dimen/fontzise_20" />
     </RelativeLayout>
 </LinearLayout>

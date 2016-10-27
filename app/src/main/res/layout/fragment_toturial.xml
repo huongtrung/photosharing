@@ -1,41 +1,38 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-  <ImageView
+
+  <android.support.v4.view.ViewPager
+      android:id="@+id/vp_tutorial"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:src="@drawable/placeholer_image_1600"
-      android:scaleType="centerCrop"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_violet_transparent" />
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/img_account_toturial"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="150dp"
-        android:layout_centerHorizontal="true"
-       android:src="@drawable/dummy_avatar"/>
-    <TextView
-        android:textColor="@color/white"
-        android:layout_marginTop="40dp"
-        android:textSize="@dimen/fontzise_26"
-        android:layout_below="@+id/img_account_toturial"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Wellcome , Jennifer"
-        android:gravity="center"/>
-    <Button
-        android:textColor="@color/white"
-        android:textSize="@dimen/fontzise_20"
-        android:text="Skip tutorial"
-        android:background="@color/color_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"/>
+      android:layout_height="match_parent">
+  </android.support.v4.view.ViewPager>
+
+  <me.relex.circleindicator.CircleIndicator
+      android:id="@+id/tut_indicator"
+      android:layout_width="match_parent"
+      android:layout_height="48dp"
+      android:layout_marginLeft="60dp"
+      android:layout_marginRight="60dp"
+      android:layout_above="@+id/bt_skip"/>
+
+  <Button
+      android:layout_marginTop="10dp"
+      android:textAllCaps="false"
+      android:id="@+id/bt_skip"
+      android:textColor="@color/white"
+      android:textSize="@dimen/fontzise_20"
+      android:text="Skip tutorial"
+      android:background="@color/color_button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_marginBottom="20dp"
+      android:layout_marginLeft="40dp"
+      android:layout_marginRight="40dp"/>
+
 </RelativeLayout>

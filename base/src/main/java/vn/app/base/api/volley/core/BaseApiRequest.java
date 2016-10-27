@@ -1,5 +1,6 @@
 package vn.app.base.api.volley.core;
 
+import android.content.Context;
 import android.net.Uri;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -24,12 +25,13 @@ import vn.app.base.api.volley.event.ApiEventType;
 import vn.app.base.constant.APIConstant;
 import vn.app.base.constant.ApiParam;
 import vn.app.base.util.DebugLog;
+import vn.app.base.util.DialogUtil;
 import vn.app.base.util.NetworkUtils;
 import vn.app.base.util.SharedPrefUtils;
 
 
 public abstract class BaseApiRequest<T> implements BaseTypeRequest.GsonRequestHeaderOnResult {
-
+    static Context mcontext;
     protected BaseTypeRequest<T> baseTypeRequest;
 
     public void execute() {
@@ -189,7 +191,6 @@ public abstract class BaseApiRequest<T> implements BaseTypeRequest.GsonRequestHe
         if (response.isEmpty()) {
             response = volleyError.getMessage();
         }
-
         DebugLog.e("error: " + response + "  " + header + " " + (volleyError.networkResponse != null ? volleyError.networkResponse.statusCode : 0));
         return response;
     }

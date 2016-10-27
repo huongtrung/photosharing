@@ -1,14 +1,19 @@
-package com.hg.photoshare.Fragment;
+package com.hg.photoshare.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.hg.photoshare.R;
 import com.hg.photoshare.api.request.LoginRequest;
 import com.hg.photoshare.api.respones.LoginReponse;
+import com.hg.photoshare.manage.UserManage;
+
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -17,6 +22,7 @@ import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.KeyboardUtil;
+import vn.app.base.util.SharedPrefUtils;
 import vn.app.base.util.StringUtil;
 
 /**
@@ -41,7 +47,7 @@ public class LoginFragment extends BaseFragment {
     private String pass = "";
 
     LoginReponse loginReponse;
-
+    VolleyError volleyError;
     public static LoginFragment newInstance() {
         LoginFragment loginFragment = new LoginFragment();
         return loginFragment;
@@ -74,37 +80,45 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R.id.btnLogin)
     public void doLogin() {
-        checkLogin();
-        LoginRequest loginRequest=new LoginRequest(userId,pass);
-        loginRequest.setRequestCallBack(new ApiObjectCallBack<LoginReponse>() {
-            @Override
-            public void onSuccess(LoginReponse data) {
-                loginReponse=data;
-                handleLoginSuccess(loginReponse);
-            }
-
-            @Override
-            public void onFail(int failCode, String message) {
-                hideCoverNetworkLoading();
-            }
-        });
-        loginRequest.execute();
-        KeyboardUtil.hideKeyboard(getActivity());
-        showCoverNetworkLoading();
-    }
-
-    private void handleLoginSuccess(LoginReponse loginReponse){
-        if (loginReponse.profileBean!=null){
-            Toast.makeText(getContext(),"aaaaaaaa",Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void checkLogin() {
         userId = etLogin.getText().toString().trim();
         pass = etPass.getText().toString().trim();
         if (!StringUtil.checkStringValid(userId) || !StringUtil.checkStringValid(pass)) {
             DialogUtil.showOkBtnDialog(getContext(), "Required fields", "Please re-enter again");
             return;
+        }
+        try {
+            LoginRequest loginRequest = new LoginRequest(userId, SHA1(pass));
+            loginRequest.setRequestCallBack(new ApiObjectCallBack<LoginReponse>() {
+                @Override
+                public void onSuccess(LoginReponse data) {
+                    loginReponse = data;
+                    handleLoginSuccess(loginReponse);
+                    hideCoverNetworkLoading();
+                }
+
+                @Override
+                public void onFail(int failCode, String message) {
+                    hideCoverNetworkLoading();
+                    DialogUtil.showOkBtnDialog(getContext(), "Error : " +failCode,message);
+
+                }
+            });
+            loginRequest.execute();
+            KeyboardUtil.hideKeyboard(getActivity());
+            showCoverNetworkLoading();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleLoginSuccess(LoginReponse loginReponse) {
+        if (loginReponse.data != null) {
+            UserManage.saveCurrentUser(loginReponse.data);
+            SharedPrefUtils.saveAccessToken(loginReponse.data.token);
+            Log.e("user:", loginReponse.data.token);
+            FragmentUtil.replaceFragment(getActivity(), HomeFragment.newInstance(), null);
         }
     }
 }
