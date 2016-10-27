@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,7 +19,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import vn.app.base.BaseApplication;
 import vn.app.base.R;
-import vn.app.base.activity.CommonActivity;
 import vn.app.base.util.DebugLog;
 import vn.app.base.util.NetworkUtils;
 import vn.app.base.util.UiUtil;

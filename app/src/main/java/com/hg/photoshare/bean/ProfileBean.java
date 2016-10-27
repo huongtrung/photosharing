@@ -8,21 +8,16 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ProfileBean {
     @SerializedName("_id")
-    @Expose
-    public String id;
+    public String _id;
     @SerializedName("token")
-    @Expose
     public String token;
     @SerializedName("username")
-    @Expose
     public String username;
     @SerializedName("email")
-    @Expose
     public String email;
     @SerializedName("avatar")
-    @Expose
     public String avatar;
-    @SerializedName("createDate")
-    @Expose
+    @SerializedName("create_date")
     public Integer createDate;
+
 }

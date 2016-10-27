@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="14dp"
     android:orientation="vertical">
 
@@ -16,7 +16,7 @@
             android:layout_weight="7">
 
             <ImageView
-                android:id="@+id/img_account"
+                android:id="@+id/iv_account"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_margin="6dp"
@@ -57,13 +57,14 @@
         android:layout_height="205dp">
 
         <ImageView
-            android:id="@+id/img_photo"
+            android:id="@+id/iv_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/placeholer_image_800"/>
 
         <TextView
+            android:id="@+id/tv_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -77,13 +78,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingLeft="6dp"
         android:paddingRight="6dp">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="8"
             android:orientation="vertical">
 
@@ -91,8 +92,7 @@
                 android:id="@+id/tv_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:ellipsize="end"
+                android:layout_marginTop="6dp" android:ellipsize="end"
                 android:lines="1"
                 android:textSize="@dimen/fontzise_13"
                 tools:text="This is beautiful street good place to go shopping" />
@@ -107,8 +107,9 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/iv_favorite"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_weight="2"
             android:src="@drawable/icon_favourite" />
     </LinearLayout>

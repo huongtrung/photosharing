@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_toturial"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/placeholer_image_1600"
+        android:scaleType="centerCrop"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_violet_transparent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_account_toturial"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="150dp"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/dummy_avatar"/>
+    <TextView
+        android:id="@+id/tv_toturial"
+        android:textColor="@color/white"
+        android:layout_marginTop="40dp"
+        android:textSize="@dimen/fontzise_26"
+        android:layout_below="@+id/iv_account_toturial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Wellcome , Jennifer"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_below="@+id/tv_toturial"
+        android:id="@+id/indicator_step"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+    </LinearLayout>
+
+</RelativeLayout>

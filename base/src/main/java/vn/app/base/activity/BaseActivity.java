@@ -90,17 +90,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     @SuppressWarnings("unused")
     @Subscribe
     public void onEventMainThread(ApiEvent event) {
-        switch (event.apiEventType) {
-            case SHOW_API_ERROR_DIALOG:
-                showApiDialog(dialogErrorAPI, event.getTitle(), event.getMessage());
-                break;
-            case SHOW_API_TIMEOUT_DIALOG:
-                showApiDialog(dialogTimeOutAPI, null, null);
-                break;
-            case SHOW_API_NO_CONNECTION_DIALOG:
-                showApiDialog(dialogNoConnection, null, null);
-                break;
-        }
+//        switch (event.apiEventType) {
+//            case SHOW_API_ERROR_DIALOG:
+//                showApiDialog(dialogErrorAPI, event.getTitle(), event.getMessage());
+//                break;
+//            case SHOW_API_TIMEOUT_DIALOG:
+//                showApiDialog(dialogTimeOutAPI, null, null);
+//                break;
+//            case SHOW_API_NO_CONNECTION_DIALOG:
+//                showApiDialog(dialogNoConnection, null, null);
+//                break;
+//        }
     }
 
     private synchronized void showApiDialog(AlertDialog alertDialog, String title, String message) {
