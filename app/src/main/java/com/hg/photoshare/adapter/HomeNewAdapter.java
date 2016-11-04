@@ -1,5 +1,6 @@
 package com.hg.photoshare.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +23,11 @@ import vn.app.base.util.StringUtil;
  * Created by Nart on 27/10/2016.
  */
 public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHolder> {
+    Context mContext;
     LayoutInflater layoutInflater;
     List<HomeData> homeDataList = new ArrayList<>();
 
-    public HomeNewAdapter(LayoutInflater layoutInflater, List<HomeData> homeDataList) {
-        this.layoutInflater = layoutInflater;
+    public HomeNewAdapter(List<HomeData> homeDataList) {
         this.homeDataList = homeDataList;
     }
 
@@ -39,11 +40,32 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         StringUtil.displayText(homeDataList.get(position).user.username, holder.tvNameAccount);
+        ImageLoader.loadImage(mContext.getApplicationContext(), homeDataList.get(position).user.avatar, holder.ivAccount);
+        if (homeDataList.get(position).user.isFollowing = true) {
+            holder.btFollow.setText("Following");
+//            holder.btFollow.setBackgroundColor();
+        } else {
+            holder.btFollow.setText("Follow");
+        }
+        ImageLoader.loadImage(mContext.getApplicationContext(), homeDataList.get(position).image.url, holder.ivPhoto);
+        StringUtil.displayText(homeDataList.get(position).image.location, holder.tvLocation);
+        StringUtil.displayText(homeDataList.get(position).image.caption, holder.tvCaption);
+//        StringUtil.displayText(homeDataList.get(position).image.hashtag, holder.tvHashTag);
+        if (homeDataList.get(position).image.isFavourite = true) {
+            holder.ivFavorite.setImageResource(R.drawable.icon_favourite);
+        }
+        else {
+            holder.ivFavorite.setImageResource(R.drawable.icon_no_favourite);
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return homeDataList.size();
+       if (homeDataList==null){
+           return 0;
+       }
+        return homeDataList.size()+1;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

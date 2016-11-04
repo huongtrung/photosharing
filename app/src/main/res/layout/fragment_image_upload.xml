@@ -3,130 +3,146 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/color_bg">
+    android:background="@color/color_bg"
+    android:orientation="vertical">
 
     <include layout="@layout/item_bar_navigation" />
 
-    <android.support.design.widget.CoordinatorLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="10dp">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/img_photo_upload"
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/placeholer_image_800" />
+            android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/bt_camera_upload"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/bg_button_profile"
-            android:padding="10dp"
-            android:layout_marginTop="130dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/icon_camera"
-            app:layout_anchor="@id/img_photo_upload"
-            app:layout_anchorGravity="bottom|right" />
-    </android.support.design.widget.CoordinatorLayout>
-        <LinearLayout
-            android:layout_below="@+id/img_photo_upload"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="13dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="169dp"
-                android:layout_height="wrap_content"
-                android:background="@color/black_opacity"
-                android:padding="4dp"
-                android:text="Caption"
-                android:textColor="@color/white"
-                android:textSize="@dimen/fontzise_16" />
-
-            <EditText
+            <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="42dp"
-                android:layout_marginRight="42dp"
-                android:textColor="@color/white"
-                android:layout_marginTop="10dp"
-                tools:text="This is a good place\n Sencond line \nThird line" />
+                android:paddingBottom="10dp">
 
-            <RelativeLayout
+                <ImageView
+                    android:id="@+id/iv_photo_upload"
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/placeholer_image_800" />
+
+                <ImageButton
+                    android:id="@+id/bt_camera_upload"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="130dp"
+                    android:background="@drawable/bg_button_profile"
+                    android:padding="10dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_camera"
+                    app:layout_anchor="@id/iv_photo_upload"
+                    app:layout_anchorGravity="bottom|right" />
+            </android.support.design.widget.CoordinatorLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="42dp"
-                android:layout_marginTop="30dp">
+                android:layout_below="@+id/img_photo_upload"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="13dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="169dp"
                     android:layout_height="wrap_content"
                     android:background="@color/black_opacity"
                     android:padding="4dp"
-                    android:text="Send location"
+                    android:text="Caption"
                     android:textColor="@color/white"
                     android:textSize="@dimen/fontzise_16" />
 
-                <android.support.v7.widget.SwitchCompat
-
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/et_caption"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true" />
-            </RelativeLayout>
+                    android:layout_marginLeft="42dp"
+                    android:layout_marginRight="42dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/color_white"
+                    android:textColor="@color/white"
+                    tools:text="This is a good place\n Sencond line \nThird line" />
 
-            <TextView
-                android:layout_width="169dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:background="@color/black_opacity"
-                android:padding="4dp"
-                android:text="Hashtag"
-                android:textColor="@color/white"
-                android:textSize="@dimen/fontzise_16" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="42dp"
+                    android:layout_marginTop="30dp">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="42dp"
-                android:layout_marginRight="42dp"
-                android:layout_marginTop="30dp"
-                android:textColor="@color/white"
-                tools:text="place UK Hashtag" />
+                    <TextView
+                        android:layout_width="169dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/black_opacity"
+                        android:padding="4dp"
+                        android:text="Send location"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/fontzise_16" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/sc_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true" />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="169dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:background="@color/black_opacity"
+                    android:padding="4dp"
+                    android:text="Hash tag"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/fontzise_16" />
+
+                <EditText
+                    android:id="@+id/et_hashtag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="42dp"
+                    android:layout_marginRight="42dp"
+                    android:layout_marginTop="30dp"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/color_white" />
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp">
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp">
 
                 <Button
-                    android:textColor="@color/white"
-                    android:paddingRight="20dp"
-                    android:paddingLeft="20dp"
-                    android:background="@color/color_button"
+                    android:id="@+id/bt_cancle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:background="@color/color_button"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
                     android:text="Cancel"
-                    android:layout_alignParentLeft="true"/>
+                    android:textColor="@color/white" />
 
                 <Button
-                    android:textColor="@color/white"
-                    android:paddingRight="20dp"
-                    android:paddingLeft="20dp"
-                    android:background="@color/color_button"
-                    android:layout_alignParentRight="true"
+                    android:id="@+id/bt_post"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Post" />
+                    android:layout_alignParentRight="true"
+                    android:background="@color/color_button"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:text="Post"
+                    android:textColor="@color/white" />
             </RelativeLayout>
-        </LinearLayout>
-
+        </TableLayout>
+    </ScrollView>
 </LinearLayout>

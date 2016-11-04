@@ -1,10 +1,13 @@
 package com.hg.photoshare.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hg.photoshare.R;
@@ -17,9 +20,12 @@ import com.hg.photoshare.fragment.HomeFragment;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
+import vn.app.base.customview.endlessrecycler.EndlessRecyclerOnScrollListener;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
+import vn.app.base.util.FragmentUtil;
 
 public class HomeFragment extends BaseFragment {
     @BindView(R.id.vp_home)
@@ -27,11 +33,15 @@ public class HomeFragment extends BaseFragment {
     HomeAdapter homeAdapter;
     @BindView(R.id.tl_home)
     TabLayout tlHome;
+    @BindView(R.id.fab_home)
+    FloatingActionButton fab;
     DrawerLayout drawerLayout;
     List<HomeData> homeData;
     HomeMenuFragment homeMenuFragment;
+    LinearLayout toolbar;
     private int type;
-    private int num=10;
+    private int num = 10;
+    private long last_timestamp = 147702434;
 
     public static HomeFragment newInstance() {
         HomeFragment homeFragment = new HomeFragment();
@@ -57,8 +67,8 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onPageSelected(int position) {
-                Toast.makeText(getContext(), position + "", Toast.LENGTH_SHORT).show();
                 type = position;
+
                 if (homeData == null) {
                     getHomeData();
                 } else {
@@ -74,14 +84,22 @@ public class HomeFragment extends BaseFragment {
         tlHome.setupWithViewPager(vpHome);
         homeMenuFragment = (HomeMenuFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-//        homeMenuFragment.setUp(R.id.navigation_drawer, drawerLayout);
+        toolbar = (LinearLayout) root.findViewById(R.id.tool_bar_home);
+
+    }
+
+    @OnClick(R.id.item_bar)
+    public void openDrawer(){
+//      homeMenuFragment.setUp(R.id.navigation_drawer, drawerLayout, toolbar);
     }
 
     private void getHomeData() {
-        HomeRequest homeRequest = new HomeRequest(type, num);
+        showCoverNetworkLoading();
+        HomeRequest homeRequest = new HomeRequest(type, num, last_timestamp);
         homeRequest.setRequestCallBack(new ApiObjectCallBack<HomeResponse>() {
             @Override
             public void onSuccess(HomeResponse responses) {
+                hideCoverNetworkLoading();
                 initialResponseHandled();
                 handleHomeData(responses.data);
             }
@@ -89,7 +107,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onFail(int failCode, String message) {
                 hideCoverNetworkLoading();
-                DialogUtil.showOkBtnDialog(getContext(), "Error : " +failCode, message);
+                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, message);
             }
         });
         homeRequest.execute();
@@ -100,6 +118,13 @@ public class HomeFragment extends BaseFragment {
         vpHome.setAdapter(homeAdapter);
 
     }
+
+    private EndlessRecyclerOnScrollListener mEndlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener() {
+        @Override
+        public void onLoadMore(int currentPage) {
+
+        }
+    };
 
     @Override
     protected void getArgument(Bundle bundle) {
@@ -114,5 +139,11 @@ public class HomeFragment extends BaseFragment {
             handleHomeData(homeData);
         }
     }
+
+    @OnClick(R.id.fab_home)
+    public void goPost() {
+        FragmentUtil.replaceFragment(getActivity(), ImageUploadFragment.newInstance(), null);
+    }
+
 }
 

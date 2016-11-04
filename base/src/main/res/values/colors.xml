@@ -24,7 +24,7 @@
     <color name="red_sunset">#fd5840</color>
     <color name="white_opacity">#aaffffff</color>
     <color name="black_opacity">#33000000</color>
-
+    <color name="color_bg">#7f67d3</color>
     <color name="loading_cover">#88000000</color>
 
 </resources>

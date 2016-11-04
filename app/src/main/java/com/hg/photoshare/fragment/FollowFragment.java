@@ -23,6 +23,7 @@ public class FollowFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
+        setUpToolBarView(true,"Follow",true,"",false);
 
     }
 

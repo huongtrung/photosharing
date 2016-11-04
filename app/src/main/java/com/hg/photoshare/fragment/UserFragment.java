@@ -18,7 +18,7 @@ public class UserFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-
+        setUpToolBarView(true,"User",true,"",false);
     }
 
     @Override

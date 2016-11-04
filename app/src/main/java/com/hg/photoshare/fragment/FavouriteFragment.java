@@ -24,7 +24,7 @@ public class FavouriteFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-
+        setUpToolBarView(true,"Favorite",true,"",false);
     }
 
     @Override

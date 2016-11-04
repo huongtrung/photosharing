@@ -1,10 +1,17 @@
 package com.hg.photoshare.fragment;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.hg.photoshare.R;
+import com.hg.photoshare.adapter.HomeNewAdapter;
+import com.hg.photoshare.data.HomeData;
 
+import java.util.List;
+
+import butterknife.BindView;
 import vn.app.base.fragment.BaseFragment;
 
 /**
@@ -12,6 +19,10 @@ import vn.app.base.fragment.BaseFragment;
  */
 public class HomeNewFragment extends BaseFragment {
 
+    @BindView(R.id.rc_home_follow)
+    RecyclerView rcHomeFollow;
+    HomeNewAdapter mHomeNewAdapter;
+    List<HomeData> homeDataList;
     public static HomeNewFragment newInstance() {
         HomeNewFragment fragment  = new HomeNewFragment();
         Bundle bundle=new Bundle();
@@ -25,7 +36,10 @@ public class HomeNewFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-
+        mHomeNewAdapter=new HomeNewAdapter(homeDataList);
+        rcHomeFollow.setAdapter(mHomeNewAdapter);
+        rcHomeFollow.setLayoutManager(new LinearLayoutManager(getContext()));
+        mHomeNewAdapter.notifyDataSetChanged();
     }
 
     @Override

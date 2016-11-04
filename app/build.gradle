@@ -6,7 +6,7 @@ android {
     buildToolsVersion "24.0.1"
     defaultConfig {
         applicationId "com.hg.photoshare"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -60,7 +60,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.jakewharton:butterknife:8.4.0'
@@ -71,5 +70,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:9.6.1'
     compile 'com.google.android.gms:play-services-maps:9.6.1'
     compile 'me.villani.lorenzo.android:android-cropimage:1.1.+'
+    compile 'com.github.mugku:activehashtag:1.0.0'
 }
 

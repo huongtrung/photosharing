@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_menu_account"
             android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="40dp"
             android:textColor="@color/white"
             android:textSize="@dimen/fontzise_26"
             tools:text="Jennifer" />

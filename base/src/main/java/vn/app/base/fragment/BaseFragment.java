@@ -1,16 +1,31 @@
 package vn.app.base.fragment;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -19,13 +34,15 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import vn.app.base.BaseApplication;
 import vn.app.base.R;
+import vn.app.base.constant.AppConstant;
 import vn.app.base.util.DebugLog;
 import vn.app.base.util.NetworkUtils;
+import vn.app.base.util.StringUtil;
 import vn.app.base.util.UiUtil;
 
 
 public abstract class BaseFragment extends Fragment {
-
+    public Uri outputFileUri;
     protected View rootView;
 
     protected ViewGroup fragmentViewParent;
@@ -65,6 +82,7 @@ public abstract class BaseFragment extends Fragment {
     public TextView getTvEmpty() {
         return tvEmpty;
     }
+
 
     @Nullable
     @Override
@@ -191,6 +209,73 @@ public abstract class BaseFragment extends Fragment {
         showAndHideOthers(initialNetworkError);
     }
 
+    public void setUpToolBarView(boolean isShowBack, String title, boolean isShowTitle, String titleNav, boolean isShowTitleNav) {
+        RelativeLayout btBack = (RelativeLayout) rootView.findViewById(R.id.rl_item_back);
+        TextView tvTitle = (TextView) rootView.findViewById(R.id.title_item_bar);
+        TextView tvTitleNav = (TextView) rootView.findViewById(R.id.title_nav_item_bar);
+        if (tvTitle != null && isShowTitle) {
+            StringUtil.displayText(title, tvTitle);
+        }
+        if (btBack != null && isShowBack) {
+            UiUtil.showViewClickable(btBack);
+            btBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    handleBack();
+                }
+            });
+        }
+        if (tvTitleNav != null && isShowTitleNav) {
+            StringUtil.displayText(titleNav, tvTitleNav);
+            UiUtil.showViewClickable(tvTitleNav);
+
+        }
+    }
+
+    public void setUpHomeToolBar(boolean isShowBack, String title, boolean isShowTitle) {
+
+    }
+
+    protected void handleBack() {
+        int backStackCnt = getFragmentManager().getBackStackEntryCount();
+        if (backStackCnt > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            getActivity().finish();
+        }
+    }
+
+    public void pickFormStorage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select File"), AppConstant.PICK_PHOTO_FORM_AVATAR);
+    }
+    public void pickFormCam() {
+        Intent mIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        mIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri("temp.png"));
+        if (mIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(mIntent, AppConstant.CAM_PHOTO_FORM_AVATAR);
+        }
+    }
+
+    public Uri getPhotoFileUri(String fileName) {
+        if (isExternalStorageAvailable()) {
+            File mediaStoreDir = new File
+                    (getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Picture");
+            if (!mediaStoreDir.exists() && !mediaStoreDir.mkdir()) {
+            }
+            return Uri.fromFile(new File(mediaStoreDir.getPath() + File.separator + fileName + File.separator));
+        }
+        return null;
+    }
+
+    private boolean isExternalStorageAvailable() {
+        String state = Environment.getExternalStorageState();
+        return state.equals(Environment.MEDIA_MOUNTED);
+    }
+
+
     protected void initialEmptyList() {
         hideCoverNetworkLoading();
         showAndHideOthers(initialEmptyList);
@@ -210,6 +295,7 @@ public abstract class BaseFragment extends Fragment {
             return false;
         }
     }
+
     private static String convertToHex(byte[] data) {
         StringBuilder buf = new StringBuilder();
         for (byte b : data) {
@@ -222,11 +308,35 @@ public abstract class BaseFragment extends Fragment {
         }
         return buf.toString();
     }
+
     public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         md.update(text.getBytes("iso-8859-1"), 0, text.length());
         byte[] sha1hash = md.digest();
         return convertToHex(sha1hash);
+    }
+
+    public File savebitmap(Bitmap bmp) {
+        String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+        OutputStream outStream = null;
+        // String temp = null;
+        File file = new File(extStorageDirectory, bmp + ".png");
+        if (file.exists()) {
+            file.delete();
+            file = new File(extStorageDirectory, bmp + ".png");
+        }
+
+        try {
+            outStream = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return file;
     }
 
 //    protected void clearBackStack() {

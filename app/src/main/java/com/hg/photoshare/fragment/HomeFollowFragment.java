@@ -19,7 +19,7 @@ public class HomeFollowFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_follow;
+        return R.layout.fragment_home_follow;
     }
 
     @Override

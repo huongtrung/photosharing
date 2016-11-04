@@ -1,5 +1,6 @@
 package com.hg.photoshare.fragment;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,22 +10,31 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
 import com.hg.photoshare.R;
+import com.hg.photoshare.bean.ProfileBean;
+import com.hg.photoshare.bean.UserBean;
+import com.hg.photoshare.manage.UserManage;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.fragment.BaseFragment;
+import vn.app.base.imageloader.ImageLoader;
+import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.SharedPrefUtils;
+import vn.app.base.util.StringUtil;
 
 /**
  * Created by Nart on 26/10/2016.
  */
 public class HomeMenuFragment extends BaseFragment {
+    private static final String KEY_USER_NAME = "KEY_USER_NAME";
     @BindView(R.id.iv_menu_account)
     CircleImageView ivAccount;
     @BindView(R.id.tv_menu_account)
@@ -85,22 +95,24 @@ public class HomeMenuFragment extends BaseFragment {
         }
     }
 
-    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+    public void setUp(int fragmentId, DrawerLayout drawerLayout,LinearLayout toolbar) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
         contentView = getActivity().findViewById(R.id.container);
-        ImageView ivOpenDrawer = (ImageView) rootView.findViewById(R.id.iv_open_drawer);
-        ivOpenDrawer.setOnClickListener(new View.OnClickListener() {
+        ImageView openDrawer = (ImageView) toolbar.findViewById(R.id.iv_open_drawer);
+        openDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    mDrawerLayout.closeDrawers();
-                } else {
+//                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+//                    mDrawerLayout.closeDrawers();
+//                } else {
                     mDrawerLayout.openDrawer(GravityCompat.START);
-                }
-                getActivity().invalidateOptionsMenu();
+//                }
+//                getActivity().invalidateOptionsMenu();
+
             }
         });
+
         mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -136,6 +148,7 @@ public class HomeMenuFragment extends BaseFragment {
 
             }
         });
+
         setCurrentMenu(3);
     }
 
@@ -144,8 +157,10 @@ public class HomeMenuFragment extends BaseFragment {
         return R.layout.layout_home_menu;
     }
 
+
     @Override
     protected void initView(View root) {
+
         ivAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,51 +170,70 @@ public class HomeMenuFragment extends BaseFragment {
         tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), ProfileFragment.newInstance(), null);
+                FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(), null);
             }
         });
         rlUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), ProfileFragment.newInstance(), null);
+                FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(), null);
             }
         });
         rlHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), HomeFragment.newInstance(), null);
+                FragmentUtil.replaceFragment(getActivity(), HomeFragment.newInstance(), null);
             }
         });
         rlPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), ImageUploadFragment.newInstance(), null);
+                FragmentUtil.replaceFragment(getActivity(), ImageUploadFragment.newInstance(), null);
             }
         });
         rlFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), FavouriteFragment.newInstance(), null);
+                FragmentUtil.replaceFragment(getActivity(), FavouriteFragment.newInstance(), null);
             }
         });
         rlNearby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), NearbyFragment.newInstance(), null);
+                FragmentUtil.replaceFragment(getActivity(), NearbyFragment.newInstance(), null);
             }
         });
         rlFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), FollowFragment.newInstance(), null);
+                FragmentUtil.replaceFragment(getActivity(), FollowFragment.newInstance(), null);
             }
         });
         rlLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), LoginFragment.newInstance(), null);
+                DialogUtil.showTwoBtnWithHandleDialog(getContext(), "Logout ?", "Are you sure you want to Logout ?", "Ok", "Cancle", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        UserManage.clearUserData();
+                        FragmentUtil.replaceFragment(getActivity(), LoginFragment.newInstance(), null);
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+
             }
         });
+    }
+
+    private void onDrawerClosed() {
+        if (!isAdded()) {
+            return;
+        }
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -209,6 +243,11 @@ public class HomeMenuFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-
+//        if (profileBean !=null) {
+//            ImageLoader.loadImage(getContext(), R.drawable.placeholer_avatar, profileBean.avatar, ivAccount);
+//        }
+//        else {
+//            ivAccount.setImageResource(R.drawable.placeholer_avatar);
+//        }
     }
 }
