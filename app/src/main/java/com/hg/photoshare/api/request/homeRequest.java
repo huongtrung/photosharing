@@ -20,15 +20,17 @@ import vn.app.base.util.SharedPrefUtils;
 public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     int type = 0;
     int num = 0;
+    long last_timestamp = 0;
 
-    public HomeRequest(int type, int num) {
+    public HomeRequest(int type, int num, long last_timestamp) {
         this.type = type;
         this.num = num;
+        this.last_timestamp = last_timestamp;
     }
 
     @Override
     public boolean isRequiredAuthorization() {
-        return true;
+        return false;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
 
     @Override
     public boolean isRequiredAccessToken() {
-        return false;
+        return true;
     }
 
     @Override
@@ -46,6 +48,7 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
         Map<String, String> params = new HashMap<>();
         params.put(APIConstant.TYPE, String.valueOf(type));
         params.put(APIConstant.NUM, String.valueOf(num));
+        params.put(APIConstant.LAST_QUERY_TIMESTAMP, String.valueOf(last_timestamp));
         return params;
     }
 

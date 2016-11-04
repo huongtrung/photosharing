@@ -1,19 +1,11 @@
 package com.hg.photoshare.api.request;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
 import com.android.volley.Request;
-import com.hg.photoshare.api.respones.RegisterResponse;
 import com.hg.photoshare.api.respones.TutorialResponse;
-import com.hg.photoshare.contants.Contants;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import vn.app.base.api.volley.core.MultiPartRequest;
 import vn.app.base.api.volley.core.ObjectApiRequest;
 import vn.app.base.constant.APIConstant;
 import vn.app.base.constant.ApiParam;

@@ -1,160 +1,171 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/item_bar_navigation" />
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/item_bar_navigation" />
 
-    <LinearLayout
+    <!--<LinearLayout-->
+    <!--android:layout_below="@id/tool_bar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@color/color_bg"-->
+    <!--android:orientation="vertical">-->
+
+    <FrameLayout
+        android:id="@+id/layout_avatar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/color_bg"
-        android:orientation="vertical">
+        android:layout_height="150dp"
+        android:layout_below="@+id/tool_bar"
+        android:background="@color/color_bg">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_avatar"
+            android:layout_width="133dp"
+            android:layout_height="137dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/dummy_avatar" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="133dp"
-                android:layout_height="137dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/dummy_avatar" />
+        <ImageButton
+            android:id="@+id/bt_change_avatar"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/bg_button_profile"
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_edit" />
+    </FrameLayout>
 
-            <ImageButton
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="50dp"
-                android:background="@drawable/bg_button_profile"
-                android:padding="5dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/icon_edit" />
-        </FrameLayout>
+    <RelativeLayout
+        android:id="@+id/layout_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_avatar"
+        android:background="@color/color_bg">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
             android:textColor="@color/white"
             android:textSize="@dimen/fontzise_26"
             tools:text="Jennifer" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_subscribe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_name"
+        android:background="@color/color_bg"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/border_user"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/border_user"
-                android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Follow"
+                android:textColor="@color/color_button"
+                android:textSize="@dimen/fontzise_19" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    android:text="Follow"
-                    android:textColor="@color/color_button"
-                    android:textSize="@dimen/fontzise_19" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/fontzise_23"
-                    android:textStyle="bold"
-                    tools:text="99" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/border_user"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    android:text="Follower"
-                    android:textColor="@color/color_button"
-                    android:textSize="@dimen/fontzise_19" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/fontzise_23"
-                    android:textStyle="bold"
-                    tools:text="99" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    android:text="Posts"
-                    android:textColor="@color/color_button"
-                    android:textSize="@dimen/fontzise_19" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/fontzise_23"
-                    android:textStyle="bold"
-                    tools:text="99" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="99"
+                android:textColor="@color/white"
+                android:textSize="@dimen/fontzise_23"
+                android:textStyle="bold" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/border_user"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Follower"
+                android:textColor="@color/color_button"
+                android:textSize="@dimen/fontzise_19" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/fontzise_23"
+                android:textStyle="bold"
+                tools:text="99" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Posts"
+                android:textColor="@color/color_button"
+                android:textSize="@dimen/fontzise_19" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/fontzise_23"
+                android:textStyle="bold"
+                tools:text="99" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layout_subscribe" />
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:padding="10dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/icon_camera"
-            android:background="@drawable/bg_button_profile"
-            android:layout_gravity="bottom|end"
-            />
-    </android.support.design.widget.CoordinatorLayout>
-
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fab_profile"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:clickable="true"
+        android:src="@drawable/icon_camera"
+        app:backgroundTint="@color/color_button" />
+    <!--/>-->
+</RelativeLayout>

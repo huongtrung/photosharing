@@ -3,13 +3,16 @@ package com.hg.photoshare.api.request;
 import android.graphics.Bitmap;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.hg.photoshare.api.respones.RegisterResponse;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import vn.app.base.api.volley.callback.SimpleRequestCallBack;
 import vn.app.base.api.volley.core.ObjectApiRequest;
+import vn.app.base.api.volley.core.UploadBinaryApiRequest;
 import vn.app.base.constant.APIConstant;
 
 /**
@@ -24,11 +27,6 @@ public class RegisterRequest extends ObjectApiRequest<RegisterResponse> {
         this.username = username;
         this.email = email;
         this.password = password;
-    }
-
-    @Override
-    public boolean isRequiredAuthorization() {
-        return false;
     }
 
     @Override
@@ -58,5 +56,10 @@ public class RegisterRequest extends ObjectApiRequest<RegisterResponse> {
     @Override
     public int getMethod() {
         return Request.Method.POST;
+    }
+
+    @Override
+    public boolean isRequiredAuthorization() {
+        return false;
     }
 }

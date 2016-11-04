@@ -17,6 +17,7 @@ public class DialogUtil {
             alertDialogBuilder.setTitle(title);
         }
 
+
         alertDialogBuilder.setMessage(message);
 
         alertDialogBuilder.setPositiveButton(R.string.dialog_btn_close,

@@ -1,5 +1,6 @@
 package com.hg.photoshare.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +32,7 @@ import vn.app.base.util.StringUtil;
 
 public class LoginFragment extends BaseFragment {
 
+    private static final String KEY_USER_NAME = "KEY_USER_NAME";
     @BindView(R.id.etLogin)
     EditText etLogin;
 
@@ -48,6 +50,7 @@ public class LoginFragment extends BaseFragment {
 
     LoginReponse loginReponse;
     VolleyError volleyError;
+
     public static LoginFragment newInstance() {
         LoginFragment loginFragment = new LoginFragment();
         return loginFragment;
@@ -75,7 +78,8 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R.id.btnCreateAccount)
     public void goToRegisterFragment() {
-        FragmentUtil.pushFragment(getActivity(), RegisterFragment.newInstance(), null);
+        FragmentUtil.replaceFragment(getActivity(), RegisterFragment.newInstance(), null);
+//        FragmentUtil.pushFragment(getActivity(), ImageUploadFragment.newInstance(), null);
     }
 
     @OnClick(R.id.btnLogin)
@@ -99,7 +103,7 @@ public class LoginFragment extends BaseFragment {
                 @Override
                 public void onFail(int failCode, String message) {
                     hideCoverNetworkLoading();
-                    DialogUtil.showOkBtnDialog(getContext(), "Error : " +failCode,message);
+                    DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, message);
 
                 }
             });
@@ -111,14 +115,24 @@ public class LoginFragment extends BaseFragment {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
     }
 
     private void handleLoginSuccess(LoginReponse loginReponse) {
         if (loginReponse.data != null) {
             UserManage.saveCurrentUser(loginReponse.data);
             SharedPrefUtils.saveAccessToken(loginReponse.data.token);
+            SharedPrefUtils.putString(KEY_USER_NAME,loginReponse.data.username);
             Log.e("user:", loginReponse.data.token);
-            FragmentUtil.replaceFragment(getActivity(), HomeFragment.newInstance(), null);
+            Intent i;
+            boolean isAgreeTutorial = SharedPrefUtils.getBoolean(ToturialFragment.KEY_AGREE, false);
+            if (isAgreeTutorial) {
+                FragmentUtil.replaceFragment(getActivity(), HomeFragment.newInstance(), null);
+            }
+            else {
+                FragmentUtil.replaceFragment(getActivity(),ToturialFragment.newInstance(),null);
+
+            }
         }
     }
 }

@@ -27,13 +27,14 @@ import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.KeyboardUtil;
+import vn.app.base.util.SharedPrefUtils;
 import vn.app.base.util.StringUtil;
 
 /**
  * Created by Nart on 24/10/2016.
  */
 public class ToturialFragment extends BaseFragment {
-
+    public static final String KEY_AGREE = "key_agree";
     @BindView(R.id.bt_skip)
     Button btSkip;
     @BindView(R.id.vp_tutorial)
@@ -46,7 +47,7 @@ public class ToturialFragment extends BaseFragment {
 
     @OnClick(R.id.bt_skip)
     public void goHome(){
-        FragmentUtil.pushFragment(getActivity(),HomeFragment.newInstance(),null);
+        FragmentUtil.replaceFragment(getActivity(),HomeFragment.newInstance(),null);
     }
 
     public static ToturialFragment newInstance() {
@@ -66,15 +67,15 @@ public class ToturialFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-
+        SharedPrefUtils.putBoolean(KEY_AGREE, true);
     }
 
     private void getDatatutorial() {
-
         TutorialRequest tutorialRequest = new TutorialRequest();
         tutorialRequest.setRequestCallBack(new ApiObjectCallBack<TutorialResponse>() {
             @Override
             public void onSuccess(TutorialResponse data) {
+                hideCoverNetworkLoading();
                 initialResponseHandled();
                 handleTutData(data.data);
 

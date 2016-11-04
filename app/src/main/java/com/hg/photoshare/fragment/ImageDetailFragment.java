@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.hg.photoshare.R;
 
+import butterknife.OnClick;
 import vn.app.base.fragment.BaseFragment;
 
 /**
@@ -18,7 +19,7 @@ public class ImageDetailFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-
+        setUpToolBarView(true,"Image Detail",true,"Delete",true);
     }
 
     @Override
@@ -28,6 +29,10 @@ public class ImageDetailFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+
+    }
+    @OnClick(R.id.title_nav_item_bar)
+    public void delete(){
 
     }
 }

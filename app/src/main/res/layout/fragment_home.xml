@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.hg.photoshare.fragment.HomeFragment">
 
     <include
@@ -26,4 +25,18 @@
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/color_white"
         app:tabTextColor="@color/color_white" />
+
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fab_home"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:clickable="true"
+        app:backgroundTint="@color/color_button"
+        android:src="@drawable/icon_camera"/>
 </RelativeLayout>

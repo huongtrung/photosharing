@@ -76,5 +76,4 @@
         android:background="@color/colorTrong"
         android:layout_below="@id/btnLogin"/>
 
-
 </RelativeLayout>
