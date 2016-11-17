@@ -170,43 +170,43 @@ public class HomeMenuFragment extends BaseFragment {
         tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getActivity(), ProfileFragment.newInstance(), null);
             }
         });
         rlUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getActivity(), ProfileFragment.newInstance(), null);
             }
         });
         rlHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.replaceFragment(getActivity(), HomeFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getActivity(), HomeFragment.newInstance(), null);
             }
         });
         rlPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.replaceFragment(getActivity(), ImageUploadFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getActivity(), ImageUploadFragment.newInstance(), null);
             }
         });
         rlFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.replaceFragment(getActivity(), FavouriteFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getActivity(), FavouriteFragment.newInstance(), null);
             }
         });
         rlNearby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.replaceFragment(getActivity(), NearbyFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getActivity(), NearbyFragment.newInstance(), null);
             }
         });
         rlFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.replaceFragment(getActivity(), FollowFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getActivity(), FollowFragment.newInstance(), null);
             }
         });
         rlLogout.setOnClickListener(new View.OnClickListener() {
@@ -216,7 +216,7 @@ public class HomeMenuFragment extends BaseFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         UserManage.clearUserData();
-                        FragmentUtil.replaceFragment(getActivity(), LoginFragment.newInstance(), null);
+                        FragmentUtil.pushFragment(getActivity(), LoginFragment.newInstance(), null);
                     }
                 }, new DialogInterface.OnClickListener() {
                     @Override

@@ -60,7 +60,7 @@ public class ProfileFragment extends BaseFragment {
 
     @OnClick(R.id.fab_profile)
     public void goPost() {
-        FragmentUtil.replaceFragment(getActivity(), ImageUploadFragment.newInstance(), null);
+        FragmentUtil.pushFragment(getActivity(), ImageUploadFragment.newInstance(), null);
     }
 
     @Override

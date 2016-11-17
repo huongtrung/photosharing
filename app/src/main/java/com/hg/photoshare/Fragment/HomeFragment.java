@@ -40,8 +40,8 @@ public class HomeFragment extends BaseFragment {
     HomeMenuFragment homeMenuFragment;
     LinearLayout toolbar;
     private int type;
-    private int num = 10;
-    private long last_timestamp = 147702434;
+    private int num = 0;
+    private long last_timestamp = 0;
 
     public static HomeFragment newInstance() {
         HomeFragment homeFragment = new HomeFragment();
@@ -142,7 +142,7 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick(R.id.fab_home)
     public void goPost() {
-        FragmentUtil.replaceFragment(getActivity(), ImageUploadFragment.newInstance(), null);
+        FragmentUtil.pushFragment(getActivity(), ImageUploadFragment.newInstance(), null);
     }
 
 }
