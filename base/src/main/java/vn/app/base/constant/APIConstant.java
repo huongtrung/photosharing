@@ -9,6 +9,7 @@ public class APIConstant {
     public static final String REQUEST_URL_TUTORIAL = "https://polar-plains-86888.herokuapp.com/api/tutorial";
     public static final String REQUEST_URL_HOME = "https://polar-plains-86888.herokuapp.com/api/home";
     public static final String REQUEST_URL_IMAGE_UPLOAD = "https://polar-plains-86888.herokuapp.com/api/image/upload";
+    public static final String REQUEST_URL_FOLLOW_LIST = "https://polar-plains-86888.herokuapp.com/api/followlist";
     public static final String FULLNAME = "username";
     public static final String PASSWORD = "password";
     public static final String EMAIL = "email";
