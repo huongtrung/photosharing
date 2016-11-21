@@ -39,7 +39,6 @@ public class FollowFragment extends BaseFragment {
     protected void initView(View root) {
         setUpToolBarView(true, "Follow", true, "", false);
         mFollowListAdapter = new FollowListAdapter(getActivity());
-
         requestFollowList();
     }
 
