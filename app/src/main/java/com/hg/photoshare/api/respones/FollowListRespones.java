@@ -2,6 +2,8 @@ package com.hg.photoshare.api.respones;
 
 import com.hg.photoshare.bean.UserBean;
 
+import java.util.List;
+
 import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.core.BaseApiRequest;
 
@@ -10,5 +12,5 @@ import vn.app.base.api.volley.core.BaseApiRequest;
  */
 
 public class FollowListRespones extends BaseResponse {
-    public UserBean data;
+    public List<UserBean> data;
 }

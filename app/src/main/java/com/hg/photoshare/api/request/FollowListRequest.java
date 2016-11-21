@@ -28,7 +28,7 @@ public class FollowListRequest extends ObjectApiRequest<FollowListRespones>{
 
     @Override
     public boolean isRequiredAccessToken() {
-        return true;
+        return false;
     }
 
     @Override
