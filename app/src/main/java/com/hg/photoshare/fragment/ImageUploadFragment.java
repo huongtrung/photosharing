@@ -60,7 +60,7 @@ public class ImageUploadFragment extends BaseFragment {
     @BindView(R.id.iv_photo_upload)
     ImageView ivPhotoUpload;
     @BindView(R.id.bt_camera_upload)
-    ImageButton btCameraUpload;
+    ImageView btCameraUpload;
     @BindView(R.id.et_hashtag)
     EditText etHashTag;
     @BindView(R.id.bt_cancle)
@@ -176,9 +176,8 @@ public class ImageUploadFragment extends BaseFragment {
                 hideCoverNetworkLoading();
                 if (success) {
                     Log.e("success", success + message + "");
-                }
-                else {
-                    DialogUtil.showOkBtnDialog(getContext(),"Error",message+"");
+                } else {
+                    DialogUtil.showOkBtnDialog(getContext(), "Error", message + "");
                 }
             }
 

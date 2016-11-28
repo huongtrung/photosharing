@@ -39,7 +39,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/icon_camera"
                     app:layout_anchor="@id/iv_photo_upload"
-                    app:layout_anchorGravity="bottom|right" />
+                    app:layout_anchorGravity="bottom|end" />
             </android.support.design.widget.CoordinatorLayout>
 
             <LinearLayout

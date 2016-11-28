@@ -95,7 +95,7 @@ public class HomeMenuFragment extends BaseFragment {
         }
     }
 
-    public void setUp(int fragmentId, DrawerLayout drawerLayout,LinearLayout toolbar) {
+    public void setUp(int fragmentId, DrawerLayout drawerLayout,Toolbar toolbar) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
         contentView = getActivity().findViewById(R.id.container);

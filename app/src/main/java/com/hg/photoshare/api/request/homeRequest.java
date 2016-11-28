@@ -40,7 +40,7 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
 
     @Override
     public boolean isRequiredAccessToken() {
-        return true;
+        return false;
     }
 
     @Override

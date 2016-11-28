@@ -35,13 +35,11 @@ public class HomeFragment extends BaseFragment {
     TabLayout tlHome;
     @BindView(R.id.fab_home)
     FloatingActionButton fab;
-    DrawerLayout drawerLayout;
+
     List<HomeData> homeData;
-    HomeMenuFragment homeMenuFragment;
-    LinearLayout toolbar;
     private int type;
-    private int num = 0;
-    private long last_timestamp = 0;
+    private int num = 10;
+    private long last_timestamp = 16574;
 
     public static HomeFragment newInstance() {
         HomeFragment homeFragment = new HomeFragment();
@@ -55,7 +53,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-        drawerLayout = (DrawerLayout) root.findViewById(R.id.drawer_layout);
+
         homeAdapter = new HomeAdapter(getActivity().getSupportFragmentManager(), homeData);
         vpHome.setAdapter(homeAdapter);
         vpHome.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -82,15 +80,7 @@ public class HomeFragment extends BaseFragment {
             }
         });
         tlHome.setupWithViewPager(vpHome);
-        homeMenuFragment = (HomeMenuFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        toolbar = (LinearLayout) root.findViewById(R.id.tool_bar_home);
 
-    }
-
-    @OnClick(R.id.item_bar)
-    public void openDrawer(){
-//      homeMenuFragment.setUp(R.id.navigation_drawer, drawerLayout, toolbar);
     }
 
     private void getHomeData() {
