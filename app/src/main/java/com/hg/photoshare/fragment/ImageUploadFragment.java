@@ -107,9 +107,6 @@ public class ImageUploadFragment extends BaseFragment {
                     latitude = mGPS.getLatitude();
                     longtitude = mGPS.getLongitude();
                     location = mGPS.getLocation().toString();
-                    Log.e("lat", latitude + "");
-                    Log.e("long", longtitude + "");
-                    Log.e("location", location + "");
                 } else {
                     mGPS.showSettingsAlert();
                 }
@@ -141,7 +138,6 @@ public class ImageUploadFragment extends BaseFragment {
                 if (result != null & result.length() > 0) {
                     result = result.substring(0, result.length() - 1);
                 }
-                Log.e("result", result);
                 hashtag = result;
             }
 
@@ -198,13 +194,11 @@ public class ImageUploadFragment extends BaseFragment {
             if (bitmap != null) {
                 ivPhotoUpload.setImageBitmap(bitmap);
                 fileImage = savebitmap(bitmap);
-                Log.e("file", fileImage + "");
             }
         } else if (requestCode == Constant.CAM_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
             Uri fileUri = getPhotoFileUri("temp.png");
             Bitmap bitmap = BitmapUtil.decodeFromFile(fileUri.getPath(), 1900, 600);
             fileImage = savebitmap(bitmap);
-            Log.e("file", fileImage + "");
             ivPhotoUpload.setImageBitmap(bitmap);
 
         }

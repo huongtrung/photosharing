@@ -12,31 +12,33 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hg.photoshare.R;
+import com.hg.photoshare.bean.ImageBean;
+import com.hg.photoshare.bean.UserBean;
 import com.hg.photoshare.data.HomeData;
+import com.hg.photoshare.data.ImageListData;
 
 import java.util.List;
 
 import vn.app.base.util.StringUtil;
 
 /**
- * Created by GMORUNSYSTEM on 11/26/2016.
+ * Created by GMORUNSYSTEM on 12/1/2016.
  */
 
-public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHolder> {
-    private LayoutInflater inflater;
-    private List<HomeData> homeDataList;
+public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.ViewHolder> {
     private Context mContext;
+    private LayoutInflater inflater;
+    private List<ImageListData> imageListData;
 
-    public HomeListAdapter(Context mContext) {
-        inflater = LayoutInflater.from(mContext);
+    public ImageListAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
-    public void setHomeDataList(List<HomeData> homeDataList) {
-        if (homeDataList == null)
-            this.homeDataList.clear();
+    public void setImageListData(List<ImageListData> imageListData) {
+        if (imageListData == null)
+            this.imageListData.clear();
         else
-            this.homeDataList = homeDataList;
+            this.imageListData = imageListData;
         notifyDataSetChanged();
     }
 
@@ -49,19 +51,19 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        HomeData homeData = homeDataList.get(position);
-        Glide.with(mContext).load(homeData.user.avatar).into(holder.ivAccount);
-        Glide.with(mContext).load(homeData.image.url).into(holder.ivPhoto);
-        StringUtil.displayText(homeData.user.username,holder.tvName);
-        if (homeData.image.isFavourite = true)
+        ImageListData imageList= imageListData.get(position);
+        Glide.with(mContext).load(imageList.user.avatar).into(holder.ivAccount);
+        Glide.with(mContext).load(imageList.image.url).into(holder.ivPhoto);
+        StringUtil.displayText(imageList.user.username,holder.tvName);
+        if (imageList.image.isFavourite = true)
             holder.ivFavorite.setImageResource(R.drawable.icon_favourite);
         else
             holder.ivFavorite.setImageResource(R.drawable.icon_no_favourite);
-        StringUtil.displayText(homeData.image.location, holder.tvAddress);
-        StringUtil.displayText(homeData.image.caption, holder.tvDescription);
-        if (homeData.image.hashtag.size() > 0) {
+        StringUtil.displayText(imageList.image.location, holder.tvAddress);
+        StringUtil.displayText(imageList.image.caption, holder.tvDescription);
+        if (imageList.image.hashtag.size() > 0) {
             String[] result = new String[0];
-            for (String hashTag : homeData.image.hashtag){
+            for (String hashTag : imageList.image.hashtag){
                 result =hashTag.split("#");
             }
             StringUtil.displayText(String.valueOf(result),holder.tvHashTag);
@@ -70,9 +72,8 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return homeDataList.size();
+        return imageListData.size();
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView ivAccount;

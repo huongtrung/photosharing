@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.hg.photoshare.R;
 import com.hg.photoshare.api.request.LoginRequest;
 import com.hg.photoshare.api.respones.LoginReponse;
+import com.hg.photoshare.contants.Constant;
 import com.hg.photoshare.manage.UserManage;
 
 import java.io.UnsupportedEncodingException;
@@ -26,13 +27,14 @@ import vn.app.base.util.KeyboardUtil;
 import vn.app.base.util.SharedPrefUtils;
 import vn.app.base.util.StringUtil;
 
+import static com.hg.photoshare.contants.Constant.KEY_IMAGE_USER;
+
 /**
  * Created by on 10/14/2016.
  */
 
 public class LoginFragment extends BaseFragment {
 
-    private static final String KEY_USER_NAME = "KEY_USER_NAME";
     @BindView(R.id.etLogin)
     EditText etLogin;
 
@@ -49,7 +51,6 @@ public class LoginFragment extends BaseFragment {
     private String pass = "";
 
     LoginReponse loginReponse;
-    VolleyError volleyError;
 
     public static LoginFragment newInstance() {
         LoginFragment loginFragment = new LoginFragment();
@@ -122,7 +123,8 @@ public class LoginFragment extends BaseFragment {
         if (loginReponse.data != null) {
             UserManage.saveCurrentUser(loginReponse.data);
             SharedPrefUtils.saveAccessToken(loginReponse.data.token);
-            SharedPrefUtils.putString(KEY_USER_NAME,loginReponse.data.username);
+            SharedPrefUtils.putString(Constant.KEY_USER_NAME,loginReponse.data.username);
+            SharedPrefUtils.putString(Constant.KEY_IMAGE_USER,loginReponse.data.avatar);
             Log.e("user:", loginReponse.data.token);
             Intent i;
             boolean isAgreeTutorial = SharedPrefUtils.getBoolean(ToturialFragment.KEY_AGREE, false);

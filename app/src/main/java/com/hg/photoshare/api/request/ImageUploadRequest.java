@@ -56,7 +56,6 @@ public class ImageUploadRequest extends UploadBinaryApiRequest<ImageUploadRespon
     @Override
     public Map<String, String> getRequestParams() {
         Map<String, String> params = new HashMap<>();
-//        SharedPrefUtils.getAccessToken()
         params.put(ApiParam.TOKEN, SharedPrefUtils.getAccessToken());
         params.put(APIConstant.CAPTION, caption);
         params.put(APIConstant.LOCATION, location);

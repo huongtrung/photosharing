@@ -1,6 +1,7 @@
 package com.hg.photoshare.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import java.util.List;
 
 import vn.app.base.imageloader.ImageLoader;
 import vn.app.base.util.StringUtil;
+
+import static android.media.CamcorderProfile.get;
 
 /**
  * Created by Nart on 27/10/2016.
@@ -43,18 +46,24 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
         ImageLoader.loadImage(mContext.getApplicationContext(), homeDataList.get(position).user.avatar, holder.ivAccount);
         if (homeDataList.get(position).user.isFollowing = true) {
             holder.btFollow.setText("Following");
-//            holder.btFollow.setBackgroundColor();
+            holder.btFollow.setBackgroundColor(Color.parseColor("#ec2677"));
         } else {
             holder.btFollow.setText("Follow");
+            holder.btFollow.setBackgroundColor(Color.parseColor("#4bc2ff"));
         }
         ImageLoader.loadImage(mContext.getApplicationContext(), homeDataList.get(position).image.url, holder.ivPhoto);
         StringUtil.displayText(homeDataList.get(position).image.location, holder.tvLocation);
         StringUtil.displayText(homeDataList.get(position).image.caption, holder.tvCaption);
-//        StringUtil.displayText(homeDataList.get(position).image.hashtag, holder.tvHashTag);
+        if (homeDataList.get(position).image.hashtag.size() > 0) {
+            String[] result = new String[0];
+            for (String hashTag : homeDataList.get(position).image.hashtag) {
+                result = hashTag.split("#");
+            }
+            StringUtil.displayText(String.valueOf(result), holder.tvHashTag);
+        }
         if (homeDataList.get(position).image.isFavourite = true) {
             holder.ivFavorite.setImageResource(R.drawable.icon_favourite);
-        }
-        else {
+        } else {
             holder.ivFavorite.setImageResource(R.drawable.icon_no_favourite);
         }
 
@@ -62,10 +71,7 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-       if (homeDataList==null){
-           return 0;
-       }
-        return homeDataList.size()+1;
+        return homeDataList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

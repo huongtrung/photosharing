@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,6 +15,7 @@ import com.hg.photoshare.R;
 import com.hg.photoshare.adapter.HomeAdapter;
 import com.hg.photoshare.api.request.HomeRequest;
 import com.hg.photoshare.api.respones.HomeResponse;
+import com.hg.photoshare.api.respones.ImageListResponse;
 import com.hg.photoshare.data.HomeData;
 import com.hg.photoshare.fragment.HomeFragment;
 
@@ -27,6 +29,8 @@ import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
 
+import static android.R.id.message;
+
 public class HomeFragment extends BaseFragment {
     @BindView(R.id.vp_home)
     ViewPager vpHome;
@@ -39,7 +43,7 @@ public class HomeFragment extends BaseFragment {
     List<HomeData> homeData;
     private int type;
     private int num = 10;
-    private long last_timestamp = 16574;
+    private long last_timestamp;
 
     public static HomeFragment newInstance() {
         HomeFragment homeFragment = new HomeFragment();
@@ -74,6 +78,7 @@ public class HomeFragment extends BaseFragment {
                 }
             }
 
+
             @Override
             public void onPageScrollStateChanged(int state) {
 
@@ -85,13 +90,16 @@ public class HomeFragment extends BaseFragment {
 
     private void getHomeData() {
         showCoverNetworkLoading();
-        HomeRequest homeRequest = new HomeRequest(type, num, last_timestamp);
+        HomeRequest homeRequest = new HomeRequest(type, num);
         homeRequest.setRequestCallBack(new ApiObjectCallBack<HomeResponse>() {
             @Override
             public void onSuccess(HomeResponse responses) {
                 hideCoverNetworkLoading();
-                initialResponseHandled();
-                handleHomeData(responses.data);
+                if (responses.data != null && responses.data.size() > 0){
+                    handleHomeData(responses.data);
+                }
+                else
+                    DialogUtil.showOkBtnDialog(getContext(), "Error", "No data");
             }
 
             @Override
@@ -135,5 +143,14 @@ public class HomeFragment extends BaseFragment {
         FragmentUtil.pushFragment(getActivity(), ImageUploadFragment.newInstance(), null);
     }
 
+    private OnAcceptListHomeListener mOnAcceptListHome;
+
+    public void setmOnAcceptListHome(OnAcceptListHomeListener mOnAcceptListHome) {
+        this.mOnAcceptListHome = mOnAcceptListHome;
+    }
+
+    public interface OnAcceptListHomeListener {
+        void onAccept(List<HomeData> homeDatas);
+    }
 }
 

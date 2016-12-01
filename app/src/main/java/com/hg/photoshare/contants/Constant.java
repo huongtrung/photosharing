@@ -11,4 +11,7 @@ public class Constant {
     public static final char SHARP = '#';
     static final char AT = '@';
     static final char SPACE = ' ';
+    public static final String KEY_USER_NAME = "KEY_USER_NAME";
+    public static final String KEY_IMAGE_USER = "KEY_IMAGE_USER";
+    public static final String USERNAME= "USERNAME";
 }

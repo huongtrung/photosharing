@@ -9,6 +9,7 @@ import com.hg.photoshare.R;
 import com.hg.photoshare.adapter.HomeNewAdapter;
 import com.hg.photoshare.data.HomeData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,10 +23,10 @@ public class HomeNewFragment extends BaseFragment {
     @BindView(R.id.rc_home_follow)
     RecyclerView rcHomeFollow;
     HomeNewAdapter mHomeNewAdapter;
-    List<HomeData> homeDataList;
+    List<HomeData> homeDataList = new ArrayList<>();
+
     public static HomeNewFragment newInstance() {
-        HomeNewFragment fragment  = new HomeNewFragment();
-        Bundle bundle=new Bundle();
+        HomeNewFragment fragment = new HomeNewFragment();
         return fragment;
     }
 
@@ -36,10 +37,22 @@ public class HomeNewFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-        mHomeNewAdapter=new HomeNewAdapter(homeDataList);
+        HomeFragment fragment = HomeFragment.newInstance();
+        fragment.setmOnAcceptListHome(new HomeFragment.OnAcceptListHomeListener() {
+            @Override
+            public void onAccept(List<HomeData> homeDatas) {
+                homeDataList = homeDatas;
+            }
+        });
+        mHomeNewAdapter = new HomeNewAdapter(homeDataList);
         rcHomeFollow.setAdapter(mHomeNewAdapter);
         rcHomeFollow.setLayoutManager(new LinearLayoutManager(getContext()));
         mHomeNewAdapter.notifyDataSetChanged();
+    }
+
+    private void setUpList() {
+
+
     }
 
     @Override

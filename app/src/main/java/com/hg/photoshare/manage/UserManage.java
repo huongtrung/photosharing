@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.hg.photoshare.bean.ProfileBean;
 import com.hg.photoshare.bean.RegisterBean;
+import com.hg.photoshare.contants.Constant;
 
 import vn.app.base.constant.AppConstant;
 import vn.app.base.util.SharedPrefUtils;
@@ -37,5 +38,7 @@ public class UserManage {
     public static void clearUserData() {
         SharedPrefUtils.removeKey(USER_DATA);
         SharedPrefUtils.removeKey(AppConstant.ACCESS_TOKEN);
+        SharedPrefUtils.removeKey(Constant.KEY_USER_NAME);
+        SharedPrefUtils.removeKey(Constant.KEY_IMAGE_USER);
     }
 }

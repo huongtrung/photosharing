@@ -10,6 +10,9 @@ public class APIConstant {
     public static final String REQUEST_URL_HOME = "https://polar-plains-86888.herokuapp.com/api/home";
     public static final String REQUEST_URL_IMAGE_UPLOAD = "https://polar-plains-86888.herokuapp.com/api/image/upload";
     public static final String REQUEST_URL_FOLLOW_LIST = "https://polar-plains-86888.herokuapp.com/api/followlist";
+    public static final String REQUEST_URL_PROFILE_USER = "https://polar-plains-86888.herokuapp.com/api/profile";
+    public static final String REQUEST_URL_UPDATE_PROFILE = "https://polar-plains-86888.herokuapp.com/api/profileupdate";
+    public static final String REQUEST_URL_IMAGE_LIST = "https://polar-plains-86888.herokuapp.com/api/image/list";
     public static final String FULLNAME = "username";
     public static final String PASSWORD = "password";
     public static final String EMAIL = "email";
@@ -22,6 +25,7 @@ public class APIConstant {
     public static final String LATITUDE = "lat";
     public static final String LONGTITUDE = "long";
     public static final String HASHTAG = "hashtag";
+    public static final String USER_ID= "userId";
 
     public static final String IMAGE_BASE64_PREFIX = "data:image/png;base64,";
 }
