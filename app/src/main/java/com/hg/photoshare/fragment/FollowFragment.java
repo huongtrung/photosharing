@@ -10,10 +10,14 @@ import com.hg.photoshare.adapter.FollowListAdapter;
 import com.hg.photoshare.api.request.FollowListRequest;
 import com.hg.photoshare.api.respones.FollowListRespones;
 
+import java.util.List;
+
 import butterknife.BindView;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
+
+import static android.R.attr.data;
 
 /**
  * Created by Nart on 26/10/2016.
@@ -47,13 +51,12 @@ public class FollowFragment extends BaseFragment {
         FollowListRequest followListRequest = new FollowListRequest();
         followListRequest.setRequestCallBack(new ApiObjectCallBack<FollowListRespones>() {
             @Override
-            public void onSuccess(FollowListRespones data) {
+            public void onSuccess(FollowListRespones respones) {
                 hideCoverNetworkLoading();
-                initialResponseHandled();
-               if (data!=null)
-                   setUpList(data);
+                if (respones != null)
+                    setUpList(respones);
                 else
-                   DialogUtil.showOkBtnDialog(getContext(), "Error ","");
+                    DialogUtil.showOkBtnDialog(getContext(), "Error ", "No data");
             }
 
             @Override

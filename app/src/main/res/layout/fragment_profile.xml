@@ -7,14 +7,6 @@
         android:id="@+id/tool_bar"
         layout="@layout/item_bar_navigation" />
 
-    <!--<LinearLayout-->
-    <!--android:layout_below="@id/tool_bar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="0dp"-->
-    <!--android:layout_weight="1"-->
-    <!--android:background="@color/color_bg"-->
-    <!--android:orientation="vertical">-->
-
     <FrameLayout
         android:id="@+id/layout_avatar"
         android:layout_width="match_parent"
@@ -28,7 +20,7 @@
             android:layout_height="137dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:src="@drawable/dummy_avatar" />
+            android:src="@drawable/placeholer_avatar" />
 
         <ImageButton
             android:id="@+id/bt_change_avatar"
@@ -51,6 +43,7 @@
         android:background="@color/color_bg">
 
         <TextView
+            android:id="@+id/tv_name_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -87,11 +80,11 @@
                 android:textSize="@dimen/fontzise_19" />
 
             <TextView
+                android:id="@+id/tv_count_follow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:text="99"
+                android:layout_marginTop="5dp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/fontzise_23"
                 android:textStyle="bold" />
@@ -113,10 +106,11 @@
                 android:textSize="@dimen/fontzise_19" />
 
             <TextView
+                android:id="@+id/tv_count_follower"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/fontzise_23"
                 android:textStyle="bold"
@@ -138,10 +132,11 @@
                 android:textSize="@dimen/fontzise_19" />
 
             <TextView
+                android:id="@+id/tv_count_post"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/fontzise_23"
                 android:textStyle="bold"
@@ -150,10 +145,17 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layout_subscribe" />
+        android:layout_below="@+id/layout_subscribe">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rc_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/fab_profile"
@@ -167,5 +169,4 @@
         android:clickable="true"
         android:src="@drawable/icon_camera"
         app:backgroundTint="@color/color_button" />
-    <!--/>-->
 </RelativeLayout>

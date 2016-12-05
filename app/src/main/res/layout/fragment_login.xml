@@ -24,7 +24,7 @@
         android:layout_centerHorizontal="true" />
 
     <EditText
-        android:text="ht1"
+        android:text="HaHien"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_person_outline_white_18dp"
@@ -38,7 +38,7 @@
         android:lines="1"/>
 
     <EditText
-        android:text="123456"
+        android:text="123456789"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_lock_outline_white_18dp"

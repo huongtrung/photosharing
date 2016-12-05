@@ -2,7 +2,6 @@ package com.hg.photoshare.fragment;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
@@ -10,21 +9,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hg.photoshare.R;
-import com.hg.photoshare.bean.ProfileBean;
-import com.hg.photoshare.bean.UserBean;
+import com.hg.photoshare.contants.Constant;
 import com.hg.photoshare.manage.UserManage;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.fragment.BaseFragment;
-import vn.app.base.imageloader.ImageLoader;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.SharedPrefUtils;
@@ -53,6 +48,7 @@ public class HomeMenuFragment extends BaseFragment {
     RelativeLayout rlFollow;
     @BindView(R.id.rl_logout)
     RelativeLayout rlLogout;
+    private String nameAccount;
 
     private static final String PREF_USER_LEARNED_DRAWER = "Navigation drawer learn";
     private DrawerLayout mDrawerLayout;
@@ -95,7 +91,7 @@ public class HomeMenuFragment extends BaseFragment {
         }
     }
 
-    public void setUp(int fragmentId, DrawerLayout drawerLayout,LinearLayout toolbar) {
+    public void setUp(int fragmentId, DrawerLayout drawerLayout, Toolbar toolbar) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
         contentView = getActivity().findViewById(R.id.container);
@@ -106,7 +102,7 @@ public class HomeMenuFragment extends BaseFragment {
 //                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
 //                    mDrawerLayout.closeDrawers();
 //                } else {
-                    mDrawerLayout.openDrawer(GravityCompat.START);
+                mDrawerLayout.openDrawer(GravityCompat.START);
 //                }
 //                getActivity().invalidateOptionsMenu();
 
@@ -164,19 +160,19 @@ public class HomeMenuFragment extends BaseFragment {
         ivAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), ProfileFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getActivity(), ProfileUserFragment.newInstance(nameAccount), null);
             }
         });
         tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), ProfileFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getActivity(), ProfileUserFragment.newInstance(nameAccount), null);
             }
         });
         rlUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), ProfileFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getActivity(), ProfileUserFragment.newInstance(nameAccount), null);
             }
         });
         rlHome.setOnClickListener(new View.OnClickListener() {
@@ -243,11 +239,12 @@ public class HomeMenuFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-//        if (profileBean !=null) {
-//            ImageLoader.loadImage(getContext(), R.drawable.placeholer_avatar, profileBean.avatar, ivAccount);
-//        }
-//        else {
-//            ivAccount.setImageResource(R.drawable.placeholer_avatar);
-//        }
+        String decodeAvatar = SharedPrefUtils.getString(Constant.KEY_IMAGE_USER, "");
+        nameAccount = SharedPrefUtils.getString(Constant.KEY_USER_NAME, "");
+        if (!decodeAvatar.isEmpty())
+            Glide.with(getContext()).load(decodeAvatar).into(ivAccount);
+        else
+            ivAccount.setImageResource(R.drawable.placeholer_avatar);
+        StringUtil.displayText(nameAccount, tvName);
     }
 }

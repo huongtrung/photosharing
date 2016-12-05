@@ -12,6 +12,12 @@ import vn.app.base.fragment.BaseFragment;
  * Created by Nart on 26/10/2016.
  */
 public class ImageDetailFragment extends BaseFragment {
+
+    public static ImageDetailFragment newInstance() {
+        ImageDetailFragment fragment = new ImageDetailFragment();
+        return fragment;
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_image_detail;
@@ -19,7 +25,7 @@ public class ImageDetailFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-        setUpToolBarView(true,"Image Detail",true,"Delete",true);
+        setUpToolBarView(true, "Image Detail", true, "Delete", true);
     }
 
     @Override
@@ -31,8 +37,9 @@ public class ImageDetailFragment extends BaseFragment {
     protected void initData() {
 
     }
+
     @OnClick(R.id.title_nav_item_bar)
-    public void delete(){
+    public void delete() {
 
     }
 }

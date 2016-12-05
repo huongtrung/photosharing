@@ -39,7 +39,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/icon_camera"
                     app:layout_anchor="@id/iv_photo_upload"
-                    app:layout_anchorGravity="bottom|right" />
+                    app:layout_anchorGravity="end" />
             </android.support.design.widget.CoordinatorLayout>
 
             <LinearLayout
@@ -85,7 +85,7 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/fontzise_16" />
 
-                    <android.support.v7.widget.SwitchCompat
+                    <Switch
                         android:id="@+id/sc_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

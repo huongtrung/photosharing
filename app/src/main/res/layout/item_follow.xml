@@ -2,17 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="116dp"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="24dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/iv_avatar_follow"
-        android:layout_width="92dp"
-        android:layout_height="80dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="14dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
         android:src="@drawable/dummy_avatar" />
 
@@ -20,17 +21,19 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
+        android:textSize="25dp"
         tools:text="Jennifer"
         android:layout_toRightOf="@+id/iv_avatar_follow"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/black"/>
     <Button
         android:id="@+id/bt_follow"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:text="Following"
-        android:layout_marginRight="23dp"
+        android:textAllCaps="false"
+        android:layout_marginRight="12dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:textColor="@color/color_white"

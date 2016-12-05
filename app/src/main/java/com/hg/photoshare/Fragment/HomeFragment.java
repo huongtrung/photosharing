@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,6 +15,7 @@ import com.hg.photoshare.R;
 import com.hg.photoshare.adapter.HomeAdapter;
 import com.hg.photoshare.api.request.HomeRequest;
 import com.hg.photoshare.api.respones.HomeResponse;
+import com.hg.photoshare.api.respones.ImageListResponse;
 import com.hg.photoshare.data.HomeData;
 import com.hg.photoshare.fragment.HomeFragment;
 
@@ -27,6 +29,10 @@ import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
 
+import static android.R.attr.fragment;
+import static android.R.id.home;
+import static android.R.id.message;
+
 public class HomeFragment extends BaseFragment {
     @BindView(R.id.vp_home)
     ViewPager vpHome;
@@ -35,13 +41,9 @@ public class HomeFragment extends BaseFragment {
     TabLayout tlHome;
     @BindView(R.id.fab_home)
     FloatingActionButton fab;
-    DrawerLayout drawerLayout;
+
     List<HomeData> homeData;
-    HomeMenuFragment homeMenuFragment;
-    LinearLayout toolbar;
-    private int type;
-    private int num = 0;
-    private long last_timestamp = 0;
+
 
     public static HomeFragment newInstance() {
         HomeFragment homeFragment = new HomeFragment();
@@ -55,69 +57,24 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-        drawerLayout = (DrawerLayout) root.findViewById(R.id.drawer_layout);
-        homeAdapter = new HomeAdapter(getActivity().getSupportFragmentManager(), homeData);
-        vpHome.setAdapter(homeAdapter);
         vpHome.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             public void onPageSelected(int position) {
-                type = position;
 
-                if (homeData == null) {
-                    getHomeData();
-                } else {
-                    handleHomeData(homeData);
-                }
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
-        tlHome.setupWithViewPager(vpHome);
-        homeMenuFragment = (HomeMenuFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        toolbar = (LinearLayout) root.findViewById(R.id.tool_bar_home);
-
-    }
-
-    @OnClick(R.id.item_bar)
-    public void openDrawer(){
-//      homeMenuFragment.setUp(R.id.navigation_drawer, drawerLayout, toolbar);
-    }
-
-    private void getHomeData() {
-        showCoverNetworkLoading();
-        HomeRequest homeRequest = new HomeRequest(type, num, last_timestamp);
-        homeRequest.setRequestCallBack(new ApiObjectCallBack<HomeResponse>() {
-            @Override
-            public void onSuccess(HomeResponse responses) {
-                hideCoverNetworkLoading();
-                initialResponseHandled();
-                handleHomeData(responses.data);
-            }
-
-            @Override
-            public void onFail(int failCode, String message) {
-                hideCoverNetworkLoading();
-                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, message);
-            }
-        });
-        homeRequest.execute();
-    }
-
-    private void handleHomeData(List<HomeData> getData) {
-        HomeAdapter homeAdapter = new HomeAdapter(getChildFragmentManager(), getData);
+        homeAdapter = new HomeAdapter(getActivity().getSupportFragmentManager(), homeData);
         vpHome.setAdapter(homeAdapter);
-
+        tlHome.setupWithViewPager(vpHome);
     }
+
 
     private EndlessRecyclerOnScrollListener mEndlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener() {
         @Override
@@ -133,17 +90,12 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        if (homeData == null) {
-            getHomeData();
-        } else {
-            handleHomeData(homeData);
-        }
+
     }
 
     @OnClick(R.id.fab_home)
     public void goPost() {
         FragmentUtil.pushFragment(getActivity(), ImageUploadFragment.newInstance(), null);
     }
-
 }
 

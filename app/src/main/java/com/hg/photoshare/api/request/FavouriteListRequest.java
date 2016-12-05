@@ -1,31 +1,23 @@
 package com.hg.photoshare.api.request;
 
-import android.util.Log;
-
-import com.android.volley.Request;
-import com.hg.photoshare.api.respones.HomeResponse;
+import com.bumptech.glide.request.Request;
+import com.hg.photoshare.api.respones.ImageListResponse;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import vn.app.base.api.volley.core.BaseApiRequest;
 import vn.app.base.api.volley.core.ObjectApiRequest;
 import vn.app.base.constant.APIConstant;
 import vn.app.base.constant.ApiParam;
 import vn.app.base.util.SharedPrefUtils;
 
-/**
- * Created by Nart on 25/10/2016.
- */
-public class HomeRequest extends ObjectApiRequest<HomeResponse> {
-    int type = 0;
-    int num = 0;
-    long last_timestamp = 0;
+import static com.hg.photoshare.contants.Constant.KEY_ID_NAME;
 
-    public HomeRequest(int type, int num) {
-        this.type = type;
-        this.num = num;
-    }
+/**
+ * Created by GMORUNSYSTEM on 12/5/2016.
+ */
+
+public class FavouriteListRequest extends ObjectApiRequest<ImageListResponse> {
 
     @Override
     public boolean isRequiredAuthorization() {
@@ -34,7 +26,7 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
 
     @Override
     public String getRequestURL() {
-        return APIConstant.REQUEST_URL_HOME;
+        return APIConstant.REQUEST_URL_FAVOURITE_LIST;
     }
 
     @Override
@@ -44,10 +36,7 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
 
     @Override
     public Map<String, String> getRequestParams() {
-        Map<String, String> params = new HashMap<>();
-        params.put(APIConstant.TYPE, String.valueOf(type));
-        params.put(APIConstant.NUM, String.valueOf(num));
-        return params;
+        return null;
     }
 
     @Override
@@ -58,12 +47,12 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     }
 
     @Override
-    public Class<HomeResponse> getResponseClass() {
-        return HomeResponse.class;
+    public Class<ImageListResponse> getResponseClass() {
+        return ImageListResponse.class;
     }
 
     @Override
     public int getMethod() {
-        return Request.Method.POST;
+        return com.android.volley.Request.Method.POST;
     }
 }
