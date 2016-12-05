@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_menu_account"
             android:layout_marginBottom="20dp"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="10dp"
             android:textColor="@color/white"
             android:textSize="@dimen/fontzise_26"
             tools:text="Jennifer" />
@@ -92,7 +92,7 @@
             android:id="@+id/icon_favourite"
             android:layout_width="41dp"
             android:layout_height="41dp"
-            android:src="@drawable/icon_camera" />
+            android:src="@drawable/icon_no_favourite" />
 
         <TextView
             android:layout_width="match_parent"

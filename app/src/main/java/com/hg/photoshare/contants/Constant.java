@@ -12,6 +12,7 @@ public class Constant {
     static final char AT = '@';
     static final char SPACE = ' ';
     public static final String KEY_USER_NAME = "KEY_USER_NAME";
+    public static final String KEY_ID_NAME = "KEY_ID_NAME";
     public static final String KEY_IMAGE_USER = "KEY_IMAGE_USER";
     public static final String USERNAME= "USERNAME";
 }

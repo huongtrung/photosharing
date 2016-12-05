@@ -10,6 +10,8 @@ import com.hg.photoshare.adapter.FollowListAdapter;
 import com.hg.photoshare.api.request.FollowListRequest;
 import com.hg.photoshare.api.respones.FollowListRespones;
 
+import java.util.List;
+
 import butterknife.BindView;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.fragment.BaseFragment;
@@ -51,8 +53,7 @@ public class FollowFragment extends BaseFragment {
             @Override
             public void onSuccess(FollowListRespones respones) {
                 hideCoverNetworkLoading();
-                initialResponseHandled();
-                if (respones != null && respones.data.size() > 0)
+                if (respones != null)
                     setUpList(respones);
                 else
                     DialogUtil.showOkBtnDialog(getContext(), "Error ", "No data");

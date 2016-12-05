@@ -244,7 +244,7 @@ public class HomeMenuFragment extends BaseFragment {
         if (!decodeAvatar.isEmpty())
             Glide.with(getContext()).load(decodeAvatar).into(ivAccount);
         else
-            ivAccount.setImageResource(R.drawable.dummy_avatar);
+            ivAccount.setImageResource(R.drawable.placeholer_avatar);
         StringUtil.displayText(nameAccount, tvName);
     }
 }

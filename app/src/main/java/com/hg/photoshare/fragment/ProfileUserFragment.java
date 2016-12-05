@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -17,29 +18,40 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.hg.photoshare.R;
 import com.hg.photoshare.adapter.ImageListAdapter;
 import com.hg.photoshare.api.request.ImageListRequest;
+import com.hg.photoshare.api.request.ImageUploadRequest;
 import com.hg.photoshare.api.request.ProfileRequest;
 import com.hg.photoshare.api.request.UpdateProfileRequest;
 import com.hg.photoshare.api.request.UserRequest;
 import com.hg.photoshare.api.respones.ImageListResponse;
 import com.hg.photoshare.api.respones.ProfileUserResponse;
+import com.hg.photoshare.bean.ProfileUserBean;
 import com.hg.photoshare.contants.Constant;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import vn.app.base.adapter.DividerItemDecoration;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.api.volley.callback.SimpleRequestCallBack;
+import vn.app.base.constant.APIConstant;
+import vn.app.base.constant.ApiParam;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.BitmapUtil;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.NetworkUtils;
 import vn.app.base.util.SharedPrefUtils;
 import vn.app.base.util.StringUtil;
 
@@ -66,6 +78,8 @@ public class ProfileUserFragment extends BaseFragment {
     RecyclerView rcProfile;
     @BindView(R.id.fab_profile)
     FloatingActionButton fabProfile;
+    @BindView(R.id.swipe_profile)
+    SwipeRefreshLayout swipeRefreshProfile;
 
     private String userName;
     private String mUserName;
@@ -99,7 +113,13 @@ public class ProfileUserFragment extends BaseFragment {
             setUpToolBarView(true, "User", true, "", false);
             fabProfile.setVisibility(View.GONE);
         }
-
+        swipeRefreshProfile.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getRequestImageList();
+            }
+        });
+        swipeRefreshProfile.setColorSchemeResources(android.R.color.holo_blue_bright);
         requestGetProfile();
         getRequestImageList();
     }
@@ -152,7 +172,7 @@ public class ProfileUserFragment extends BaseFragment {
         if (response.data.avatar != null && !response.data.avatar.isEmpty())
             Glide.with(getContext()).load(response.data.avatar).into(civAvatar);
         else
-            civAvatar.setImageResource(R.drawable.dummy_avatar);
+            civAvatar.setImageResource(R.drawable.placeholer_avatar);
         StringUtil.displayText(response.data.username, tvNameAccount);
         StringUtil.displayText(response.data.follow.toString(), tvCountFollow);
         StringUtil.displayText(response.data.follower.toString(), tvCountFollower);
@@ -164,10 +184,15 @@ public class ProfileUserFragment extends BaseFragment {
         imageListRequest.setRequestCallBack(new ApiObjectCallBack<ImageListResponse>() {
             @Override
             public void onSuccess(ImageListResponse response) {
-                if (response != null)
+                if (response != null) {
                     setUpList(response);
-                else
+                    if (swipeRefreshProfile.isRefreshing())
+                        swipeRefreshProfile.setRefreshing(false);
+                } else {
                     DialogUtil.showOkBtnDialog(getContext(), "Error", "No data");
+                    if (swipeRefreshProfile.isRefreshing())
+                        swipeRefreshProfile.setRefreshing(false);
+                }
             }
 
             @Override
@@ -182,24 +207,39 @@ public class ProfileUserFragment extends BaseFragment {
         mImageListAdapter.setImageListData(response.data);
         rcProfile.setAdapter(mImageListAdapter);
         rcProfile.setLayoutManager(new LinearLayoutManager(getContext()));
+        rcProfile.addItemDecoration(new DividerItemDecoration(getContext(), null));
         mImageListAdapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.title_nav_item_bar)
     public void update() {
         showCoverNetworkLoading();
-        new UpdateProfileRequest(fileImage, new SimpleRequestCallBack() {
-            @Override
-            public void onResponse(boolean success, String message) {
-                hideCoverNetworkLoading();
-                if (success)
-                    Toast.makeText(getContext(), "aaaaa", Toast.LENGTH_LONG).show();
-                else
-                    Toast.makeText(getContext(), "cc", Toast.LENGTH_LONG).show();
+        Map<String, String> header = new HashMap<>();
+        header.put(ApiParam.TOKEN, SharedPrefUtils.getAccessToken());
 
+        Map<String, String> params = new HashMap<>();
+
+
+        Map<String, File> filePart = new HashMap<>();
+        filePart.put(APIConstant.UPLOAD_IMAGE, fileImage);
+
+        UpdateProfileRequest updateProfileRequest = new UpdateProfileRequest(Request.Method.POST, APIConstant.REQUEST_URL_UPDATE_PROFILE, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                hideCoverNetworkLoading();
+                DialogUtil.showOkBtnDialog(getContext(), "Update Fail", "Update Profile Failed !");
             }
-        }).execute();
+        }, ProfileUserResponse.class, header, new Response.Listener<ProfileUserResponse>() {
+            @Override
+            public void onResponse(ProfileUserResponse response) {
+                hideCoverNetworkLoading();
+                showData(response);
+                DialogUtil.showOkBtnDialog(getContext(), "Upload Success", "Upload Image Success !");
+            }
+        }, params, filePart);
+        NetworkUtils.getInstance(getActivity().getApplicationContext()).addToRequestQueue(updateProfileRequest);
     }
+
 
     @OnClick(R.id.fab_profile)
     public void goPost() {

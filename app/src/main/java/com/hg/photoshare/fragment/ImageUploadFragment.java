@@ -1,62 +1,72 @@
 package com.hg.photoshare.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Matrix;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.hg.photoshare.R;
 import com.hg.photoshare.api.request.ImageUploadRequest;
+import com.hg.photoshare.api.respones.ImageUploadRespones;
 import com.hg.photoshare.contants.ActiveHashTag;
 import com.hg.photoshare.contants.Constant;
 import com.hg.photoshare.contants.GPSTracker;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import vn.app.base.api.volley.callback.SimpleRequestCallBack;
-import vn.app.base.constant.AppConstant;
+import vn.app.base.constant.APIConstant;
+import vn.app.base.constant.ApiParam;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.BitmapUtil;
-import vn.app.base.util.ColorUtil;
 import vn.app.base.util.DialogUtil;
+import vn.app.base.util.NetworkUtils;
+import vn.app.base.util.SharedPrefUtils;
+
+import com.google.android.gms.location.LocationServices;
 
 /**
  * Created by Nart on 26/10/2016.
  */
-public class ImageUploadFragment extends BaseFragment {
+public class ImageUploadFragment extends BaseFragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     @BindView(R.id.sc_location)
-    SwitchCompat scLocation;
+    Switch scLocation;
     @BindView(R.id.iv_photo_upload)
     ImageView ivPhotoUpload;
     @BindView(R.id.bt_camera_upload)
@@ -72,11 +82,15 @@ public class ImageUploadFragment extends BaseFragment {
     private boolean switchStatus = false;
     Bitmap bitmap;
     File fileImage;
-    GPSTracker mGPS;
     double latitude;
     double longtitude;
+    String strlat;
+    String strlong;
     String location;
     String caption;
+    protected GoogleApiClient mGoogleApiClient;
+
+    protected Location mCurrentLocation;
 
     public static ImageUploadFragment newInstance() {
         ImageUploadFragment fragment = new ImageUploadFragment();
@@ -97,21 +111,6 @@ public class ImageUploadFragment extends BaseFragment {
     @Override
     protected void initView(View root) {
         setUpToolBarView(true, "Post Image", true, "", false);
-        scLocation.setChecked(false);
-        ColorUtil.switchColor(switchStatus, scLocation);
-        scLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mGPS = new GPSTracker(getContext());
-                if (mGPS.canGetLocation()) {
-                    latitude = mGPS.getLatitude();
-                    longtitude = mGPS.getLongitude();
-                    location = mGPS.getLocation().toString();
-                } else {
-                    mGPS.showSettingsAlert();
-                }
-            }
-        });
 
         char[] additionalSymbols = new char[]{'_'};
         final ActiveHashTag editHashTag = ActiveHashTag.Factory.create(ResourcesCompat.getColor(getResources(), R.color.color_white, null), null, additionalSymbols);
@@ -165,19 +164,43 @@ public class ImageUploadFragment extends BaseFragment {
     public void post() {
         caption = etCaption.getText().toString();
         showCoverNetworkLoading();
-        new ImageUploadRequest(fileImage, caption, location, latitude,
-                longtitude, hashtag, new SimpleRequestCallBack() {
+        Map<String, String> header = new HashMap<>();
+        header.put(ApiParam.TOKEN, SharedPrefUtils.getAccessToken());
+        Map<String, String> params = new HashMap<>();
+        if (!caption.isEmpty()) {
+            params.put(APIConstant.CAPTION, caption);
+        }
+
+        if (!hashtag.isEmpty()) {
+            params.put(APIConstant.HASHTAG, hashtag);
+        }
+
+        if (scLocation.isChecked()) {
+            params.put(APIConstant.LOCATION, location);
+            params.put(APIConstant.LATITUDE, strlat);
+            params.put(APIConstant.LONGTITUDE, strlong);
+        }
+
+        Map<String, File> filePart = new HashMap<>();
+        filePart.put(APIConstant.UPLOAD_IMAGE, fileImage);
+
+        ImageUploadRequest uploadImageRequest = new ImageUploadRequest(Request.Method.POST, APIConstant.REQUEST_URL_IMAGE_UPLOAD, new Response.ErrorListener() {
             @Override
-            public void onResponse(boolean success, String message) {
+            public void onErrorResponse(VolleyError error) {
                 hideCoverNetworkLoading();
-                if (success) {
-                    Log.e("success", success + message + "");
-                } else {
-                    DialogUtil.showOkBtnDialog(getContext(), "Error", message + "");
+                DialogUtil.showOkBtnDialog(getContext(), "Upload Fail", "Upload Image Fail !");
+            }
+        }, ImageUploadRespones.class, header, new Response.Listener<ImageUploadRespones>() {
+            @Override
+            public void onResponse(ImageUploadRespones response) {
+                hideCoverNetworkLoading();
+                if (response != null) {
+                    DialogUtil.showOkBtnDialog(getContext(), "Success", "Upload Image Success !");
                 }
             }
+        }, params, filePart);
 
-        }).execute();
+        NetworkUtils.getInstance(getActivity().getApplicationContext()).addToRequestQueue(uploadImageRequest);
     }
 
     @Override
@@ -228,5 +251,112 @@ public class ImageUploadFragment extends BaseFragment {
     @OnClick(R.id.bt_cancle)
     public void cancle() {
         handleBack();
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    public void getAddress() {
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        List<Address> addresses;
+
+        try {
+            addresses = geocoder.getFromLocation(latitude, longtitude, 1);
+            String address = addresses.get(0).getAddressLine(0);
+            String city = addresses.get(0).getLocality();
+            String state = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+
+            location = address + ", " + state + ", " + city + ", " + country;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        if (mCurrentLocation != null) {
+
+            latitude = mCurrentLocation.getLatitude();
+            longtitude = mCurrentLocation.getLongitude();
+
+            strlat = Double.toString(latitude);
+            strlong = Double.toString(longtitude);
+
+            getAddress();
+
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (scLocation.isChecked()) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (scLocation.isChecked()) {
+            if (mGoogleApiClient.isConnected()) {
+                mGoogleApiClient.disconnect();
+            }
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiClient.connect();
+    }
+
+    @OnCheckedChanged(R.id.sc_location)
+    public void checkChangedSend() {
+        if (scLocation.isChecked()) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

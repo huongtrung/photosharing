@@ -29,6 +29,8 @@ import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
 
+import static android.R.attr.fragment;
+import static android.R.id.home;
 import static android.R.id.message;
 
 public class HomeFragment extends BaseFragment {
@@ -41,9 +43,7 @@ public class HomeFragment extends BaseFragment {
     FloatingActionButton fab;
 
     List<HomeData> homeData;
-    private int type;
-    private int num = 10;
-    private long last_timestamp;
+
 
     public static HomeFragment newInstance() {
         HomeFragment homeFragment = new HomeFragment();
@@ -57,65 +57,24 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-
-        homeAdapter = new HomeAdapter(getActivity().getSupportFragmentManager(), homeData);
-        vpHome.setAdapter(homeAdapter);
         vpHome.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             public void onPageSelected(int position) {
-                type = position;
 
-                if (homeData == null) {
-                    getHomeData();
-                } else {
-                    handleHomeData(homeData);
-                }
             }
-
-
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
-        tlHome.setupWithViewPager(vpHome);
-
-    }
-
-    private void getHomeData() {
-        showCoverNetworkLoading();
-        HomeRequest homeRequest = new HomeRequest(type, num);
-        homeRequest.setRequestCallBack(new ApiObjectCallBack<HomeResponse>() {
-            @Override
-            public void onSuccess(HomeResponse responses) {
-                hideCoverNetworkLoading();
-                if (responses.data != null && responses.data.size() > 0){
-                    handleHomeData(responses.data);
-                }
-                else
-                    DialogUtil.showOkBtnDialog(getContext(), "Error", "No data");
-            }
-
-            @Override
-            public void onFail(int failCode, String message) {
-                hideCoverNetworkLoading();
-                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, message);
-            }
-        });
-        homeRequest.execute();
-    }
-
-    private void handleHomeData(List<HomeData> getData) {
-        HomeAdapter homeAdapter = new HomeAdapter(getChildFragmentManager(), getData);
+        homeAdapter = new HomeAdapter(getActivity().getSupportFragmentManager(), homeData);
         vpHome.setAdapter(homeAdapter);
-
+        tlHome.setupWithViewPager(vpHome);
     }
+
 
     private EndlessRecyclerOnScrollListener mEndlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener() {
         @Override
@@ -131,26 +90,12 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        if (homeData == null) {
-            getHomeData();
-        } else {
-            handleHomeData(homeData);
-        }
+
     }
 
     @OnClick(R.id.fab_home)
     public void goPost() {
         FragmentUtil.pushFragment(getActivity(), ImageUploadFragment.newInstance(), null);
-    }
-
-    private OnAcceptListHomeListener mOnAcceptListHome;
-
-    public void setmOnAcceptListHome(OnAcceptListHomeListener mOnAcceptListHome) {
-        this.mOnAcceptListHome = mOnAcceptListHome;
-    }
-
-    public interface OnAcceptListHomeListener {
-        void onAccept(List<HomeData> homeDatas);
     }
 }
 

@@ -10,9 +10,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hg.photoshare.R;
 import com.hg.photoshare.bean.ImageBean;
 import com.hg.photoshare.data.HomeData;
+import com.hg.photoshare.data.ImageListData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,46 +29,57 @@ import static android.media.CamcorderProfile.get;
  */
 public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHolder> {
     Context mContext;
-    LayoutInflater layoutInflater;
+    LayoutInflater inflater;
     List<HomeData> homeDataList = new ArrayList<>();
 
-    public HomeNewAdapter(List<HomeData> homeDataList) {
+    public HomeNewAdapter(Context context) {
+        this.mContext = context;
+        inflater = LayoutInflater.from(context);
+    }
+
+    public void setHomeDataList(List<HomeData> homeDataList) {
         this.homeDataList = homeDataList;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_favorite, parent, false);
+        View view = inflater.inflate(R.layout.item_favorite, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        StringUtil.displayText(homeDataList.get(position).user.username, holder.tvNameAccount);
-        ImageLoader.loadImage(mContext.getApplicationContext(), homeDataList.get(position).user.avatar, holder.ivAccount);
-        if (homeDataList.get(position).user.isFollowing = true) {
-            holder.btFollow.setText("Following");
-            holder.btFollow.setBackgroundColor(Color.parseColor("#ec2677"));
-        } else {
-            holder.btFollow.setText("Follow");
-            holder.btFollow.setBackgroundColor(Color.parseColor("#4bc2ff"));
-        }
-        ImageLoader.loadImage(mContext.getApplicationContext(), homeDataList.get(position).image.url, holder.ivPhoto);
-        StringUtil.displayText(homeDataList.get(position).image.location, holder.tvLocation);
-        StringUtil.displayText(homeDataList.get(position).image.caption, holder.tvCaption);
-        if (homeDataList.get(position).image.hashtag.size() > 0) {
-            String[] result = new String[0];
-            for (String hashTag : homeDataList.get(position).image.hashtag) {
-                result = hashTag.split("#");
-            }
-            StringUtil.displayText(String.valueOf(result), holder.tvHashTag);
-        }
-        if (homeDataList.get(position).image.isFavourite = true) {
-            holder.ivFavorite.setImageResource(R.drawable.icon_favourite);
-        } else {
-            holder.ivFavorite.setImageResource(R.drawable.icon_no_favourite);
-        }
+        HomeData homeData = homeDataList.get(position);
+        if (homeData.user.avatar != null && !homeData.user.avatar.isEmpty())
+            Glide.with(mContext).load(homeData.user.avatar).into(holder.ivAccount);
+        else
+            holder.ivAccount.setImageResource(R.drawable.placeholer_avatar);
+        if (homeData.image.url != null && !homeData.image.url.isEmpty())
+            Glide.with(mContext).load(homeData.image.url).into(holder.ivPhoto);
+        else
+            holder.ivPhoto.setImageResource(R.drawable.placeholer_image_1600);
 
+        StringUtil.displayText(homeData.user.username, holder.tvNameAccount);
+        if (homeData.image.isFavourite = true)
+            holder.ivFavorite.setImageResource(R.drawable.icon_favourite);
+        else
+            holder.ivFavorite.setImageResource(R.drawable.icon_no_favourite);
+        if (homeData.user.isFollowing = true)
+            holder.btFollow.setBackgroundResource(R.color.color_btn_follow_bg);
+        else
+            holder.btFollow.setBackgroundResource(R.color.color_button);
+        if (homeData.image.location != null && !homeData.image.location.isEmpty())
+            StringUtil.displayText(homeData.image.location, holder.tvLocation);
+        else
+            holder.tvLocation.setVisibility(View.GONE);
+        StringUtil.displayText(homeData.image.caption, holder.tvCaption);
+        if (homeData.image.hashtag.size() > 0) {
+            String result = "";
+            for (String hashTag : homeData.image.hashtag) {
+                result += "#" + hashTag + " ";
+            }
+            StringUtil.displayText(result, holder.tvHashTag);
+        }
     }
 
     @Override

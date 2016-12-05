@@ -80,7 +80,6 @@ public class LoginFragment extends BaseFragment {
     @OnClick(R.id.btnCreateAccount)
     public void goToRegisterFragment() {
         FragmentUtil.pushFragment(getActivity(), RegisterFragment.newInstance(), null);
-//        FragmentUtil.pushFragment(getActivity(), ImageUploadFragment.newInstance(), null);
     }
 
     @OnClick(R.id.btnLogin)
@@ -124,6 +123,7 @@ public class LoginFragment extends BaseFragment {
             UserManage.saveCurrentUser(loginReponse.data);
             SharedPrefUtils.saveAccessToken(loginReponse.data.token);
             SharedPrefUtils.putString(Constant.KEY_USER_NAME,loginReponse.data.username);
+            SharedPrefUtils.putString(Constant.KEY_ID_NAME,loginReponse.data._id);
             SharedPrefUtils.putString(Constant.KEY_IMAGE_USER,loginReponse.data.avatar);
             Log.e("user:", loginReponse.data.token);
             Intent i;
