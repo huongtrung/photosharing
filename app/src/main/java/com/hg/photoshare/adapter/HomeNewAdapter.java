@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hg.photoshare.R;
+import com.hg.photoshare.api.request.FollowRequest;
 import com.hg.photoshare.bean.ImageBean;
 import com.hg.photoshare.data.HomeData;
 import com.hg.photoshare.data.ImageListData;
@@ -19,9 +20,15 @@ import com.hg.photoshare.data.ImageListData;
 import java.util.ArrayList;
 import java.util.List;
 
+import vn.app.base.api.response.BaseResponse;
+import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.imageloader.ImageLoader;
+import vn.app.base.util.DialogUtil;
+import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.StringUtil;
 
+import static android.R.attr.data;
+import static android.R.id.message;
 import static android.media.CamcorderProfile.get;
 
 /**
@@ -31,10 +38,18 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
     Context mContext;
     LayoutInflater inflater;
     List<HomeData> homeDataList = new ArrayList<>();
+    private OnItemClickListener mOnItemClickListener;
+    private String userId;
+    private int isFollow;
 
     public HomeNewAdapter(Context context) {
         this.mContext = context;
         inflater = LayoutInflater.from(context);
+    }
+
+    public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+
     }
 
     public void setHomeDataList(List<HomeData> homeDataList) {
@@ -48,8 +63,10 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         HomeData homeData = homeDataList.get(position);
+        userId = homeDataList.get(position).user.id;
+
         if (homeData.user.avatar != null && !homeData.user.avatar.isEmpty())
             Glide.with(mContext).load(homeData.user.avatar).into(holder.ivAccount);
         else
@@ -60,14 +77,19 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
             holder.ivPhoto.setImageResource(R.drawable.placeholer_image_1600);
 
         StringUtil.displayText(homeData.user.username, holder.tvNameAccount);
-        if (homeData.image.isFavourite = true)
+        if (homeData.image.isFavourite) {
             holder.ivFavorite.setImageResource(R.drawable.icon_favourite);
-        else
+        } else
             holder.ivFavorite.setImageResource(R.drawable.icon_no_favourite);
-        if (homeData.user.isFollowing = true)
+        if (homeData.user.isFollowing) {
+            isFollow = 1;
+            holder.btFollow.setText("Following");
             holder.btFollow.setBackgroundResource(R.color.color_btn_follow_bg);
-        else
+        } else {
+            isFollow = 0;
+            holder.btFollow.setText("Follow");
             holder.btFollow.setBackgroundResource(R.color.color_button);
+        }
         if (homeData.image.location != null && !homeData.image.location.isEmpty())
             StringUtil.displayText(homeData.image.location, holder.tvLocation);
         else
@@ -80,6 +102,21 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
             }
             StringUtil.displayText(result, holder.tvHashTag);
         }
+        holder.ivAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null)
+                    mOnItemClickListener.onItemClick(v, homeDataList.get(position).user.id);
+            }
+        });
+        holder.tvNameAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null)
+                    mOnItemClickListener.onItemClick(v, homeDataList.get(position).user.id);
+            }
+        });
+
     }
 
     @Override
@@ -108,5 +145,11 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
             tvHashTag = (TextView) itemView.findViewById(R.id.tv_hash_tag);
             ivFavorite = (ImageView) itemView.findViewById(R.id.iv_favorite);
         }
+    }
+
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, String userId);
+
     }
 }

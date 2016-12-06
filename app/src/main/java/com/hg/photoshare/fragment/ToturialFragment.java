@@ -47,7 +47,7 @@ public class ToturialFragment extends BaseFragment {
 
     @OnClick(R.id.bt_skip)
     public void goHome(){
-        FragmentUtil.pushFragment(getActivity(),HomeFragment.newInstance(),null);
+        FragmentUtil.replaceFragment(getActivity(),HomeFragment.newInstance(),null);
     }
 
     public static ToturialFragment newInstance() {
@@ -87,19 +87,14 @@ public class ToturialFragment extends BaseFragment {
             }
 
         });
-
         tutorialRequest.execute();
-
     }
 
 
 
     private void handleTutData(TutorialData getData) {
-
         TutorialAdapter tutorialAdapter = new TutorialAdapter(getChildFragmentManager(), getData);
-
         vpTutorial.setAdapter(tutorialAdapter);
-
         indicator.setViewPager(vpTutorial);
 
     }

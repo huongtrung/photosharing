@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -25,13 +24,11 @@ import com.bumptech.glide.Glide;
 import com.hg.photoshare.R;
 import com.hg.photoshare.adapter.ImageListAdapter;
 import com.hg.photoshare.api.request.ImageListRequest;
-import com.hg.photoshare.api.request.ImageUploadRequest;
 import com.hg.photoshare.api.request.ProfileRequest;
 import com.hg.photoshare.api.request.UpdateProfileRequest;
 import com.hg.photoshare.api.request.UserRequest;
 import com.hg.photoshare.api.respones.ImageListResponse;
 import com.hg.photoshare.api.respones.ProfileUserResponse;
-import com.hg.photoshare.bean.ProfileUserBean;
 import com.hg.photoshare.contants.Constant;
 
 import java.io.File;
@@ -44,7 +41,6 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.adapter.DividerItemDecoration;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
-import vn.app.base.api.volley.callback.SimpleRequestCallBack;
 import vn.app.base.constant.APIConstant;
 import vn.app.base.constant.ApiParam;
 import vn.app.base.fragment.BaseFragment;
@@ -55,12 +51,10 @@ import vn.app.base.util.NetworkUtils;
 import vn.app.base.util.SharedPrefUtils;
 import vn.app.base.util.StringUtil;
 
-import static android.R.id.message;
-
 /**
  * Created by Nart on 26/10/2016.
  */
-public class ProfileUserFragment extends BaseFragment {
+public class ProfileFragment extends BaseFragment {
 
     @BindView(R.id.civ_avatar)
     CircleImageView civAvatar;
@@ -81,17 +75,14 @@ public class ProfileUserFragment extends BaseFragment {
     @BindView(R.id.swipe_profile)
     SwipeRefreshLayout swipeRefreshProfile;
 
-    private String userName;
-    private String mUserName;
-    private String userId = "";
+    private String userId;
     private ImageListAdapter mImageListAdapter;
 
     File fileImage;
 
-    public static ProfileUserFragment newInstance(String userName) {
-        ProfileUserFragment fragment = new ProfileUserFragment();
+    public static ProfileFragment newInstance() {
+        ProfileFragment fragment = new ProfileFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(Constant.USERNAME, userName);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -103,16 +94,9 @@ public class ProfileUserFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-        mUserName = SharedPrefUtils.getString(Constant.KEY_USER_NAME, "");
         mImageListAdapter = new ImageListAdapter(getContext());
+        setUpToolBarView(true, "Profile", true, "Update", true);
 
-        if (userName.equalsIgnoreCase(mUserName))
-            setUpToolBarView(true, "Profile", true, "Update", true);
-
-        else {
-            setUpToolBarView(true, "User", true, "", false);
-            fabProfile.setVisibility(View.GONE);
-        }
         swipeRefreshProfile.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -126,7 +110,6 @@ public class ProfileUserFragment extends BaseFragment {
 
     private void requestGetProfile() {
         showCoverNetworkLoading();
-        if (userName.equalsIgnoreCase(mUserName)) {
             ProfileRequest profilelRequest = new ProfileRequest();
             profilelRequest.setRequestCallBack(new ApiObjectCallBack<ProfileUserResponse>() {
                 @Override
@@ -145,26 +128,6 @@ public class ProfileUserFragment extends BaseFragment {
                 }
             });
             profilelRequest.execute();
-        } else {
-            UserRequest userRequest = new UserRequest(userName);
-            userRequest.setRequestCallBack(new ApiObjectCallBack<ProfileUserResponse>() {
-                @Override
-                public void onSuccess(ProfileUserResponse data) {
-                    hideCoverNetworkLoading();
-                    if (data != null)
-                        showData(data);
-                    else
-                        DialogUtil.showOkBtnDialog(getContext(), "Error", "No data");
-                }
-
-                @Override
-                public void onFail(int failCode, String message) {
-                    hideCoverNetworkLoading();
-                    DialogUtil.showOkBtnDialog(getContext(), "Error " + failCode, message);
-                }
-            });
-            userRequest.execute();
-        }
     }
 
     private void showData(ProfileUserResponse response) {
@@ -180,7 +143,7 @@ public class ProfileUserFragment extends BaseFragment {
     }
 
     private void getRequestImageList() {
-        ImageListRequest imageListRequest = new ImageListRequest(userName, userId);
+        ImageListRequest imageListRequest = new ImageListRequest(userId);
         imageListRequest.setRequestCallBack(new ApiObjectCallBack<ImageListResponse>() {
             @Override
             public void onSuccess(ImageListResponse response) {
@@ -197,6 +160,8 @@ public class ProfileUserFragment extends BaseFragment {
 
             @Override
             public void onFail(int failCode, String message) {
+                if (swipeRefreshProfile.isRefreshing())
+                    swipeRefreshProfile.setRefreshing(false);
                 DialogUtil.showOkBtnDialog(getContext(), "Error", message);
             }
         });
@@ -243,12 +208,11 @@ public class ProfileUserFragment extends BaseFragment {
 
     @OnClick(R.id.fab_profile)
     public void goPost() {
-        FragmentUtil.pushFragment(getActivity(), ImageUploadFragment.newInstance(), null);
+        FragmentUtil.replaceFragment(getActivity(), ImageUploadFragment.newInstance(), null);
     }
 
     @Override
     protected void getArgument(Bundle bundle) {
-        userName = bundle.getString(Constant.USERNAME);
     }
 
     @Override

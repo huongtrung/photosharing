@@ -79,7 +79,7 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R.id.btnCreateAccount)
     public void goToRegisterFragment() {
-        FragmentUtil.pushFragment(getActivity(), RegisterFragment.newInstance(), null);
+        FragmentUtil.replaceFragment(getActivity(), RegisterFragment.newInstance(), null);
     }
 
     @OnClick(R.id.btnLogin)
@@ -124,15 +124,16 @@ public class LoginFragment extends BaseFragment {
             SharedPrefUtils.saveAccessToken(loginReponse.data.token);
             SharedPrefUtils.putString(Constant.KEY_USER_NAME,loginReponse.data.username);
             SharedPrefUtils.putString(Constant.KEY_ID_NAME,loginReponse.data._id);
+            SharedPrefUtils.putString(Constant.KEY_USER_ID,loginReponse.data._id);
             SharedPrefUtils.putString(Constant.KEY_IMAGE_USER,loginReponse.data.avatar);
             Log.e("user:", loginReponse.data.token);
             Intent i;
             boolean isAgreeTutorial = SharedPrefUtils.getBoolean(ToturialFragment.KEY_AGREE, false);
             if (isAgreeTutorial) {
-                FragmentUtil.pushFragment(getActivity(), HomeFragment.newInstance(), null);
+                FragmentUtil.replaceFragment(getActivity(), HomeFragment.newInstance(), null);
             }
             else {
-                FragmentUtil.pushFragment(getActivity(),ToturialFragment.newInstance(),null);
+                FragmentUtil.replaceFragment(getActivity(),ToturialFragment.newInstance(),null);
 
             }
         }

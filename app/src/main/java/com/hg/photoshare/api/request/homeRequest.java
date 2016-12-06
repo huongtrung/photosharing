@@ -18,9 +18,8 @@ import vn.app.base.util.SharedPrefUtils;
  * Created by Nart on 25/10/2016.
  */
 public class HomeRequest extends ObjectApiRequest<HomeResponse> {
-    int type = 0;
-    int num = 0;
-    long last_timestamp = 0;
+    private int type = 0;
+    private int num = 0;
 
     public HomeRequest(int type, int num) {
         this.type = type;

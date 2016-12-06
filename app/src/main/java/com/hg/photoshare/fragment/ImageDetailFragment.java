@@ -30,7 +30,6 @@ public class ImageDetailFragment extends BaseFragment {
 
     @Override
     protected void getArgument(Bundle bundle) {
-
     }
 
     @Override

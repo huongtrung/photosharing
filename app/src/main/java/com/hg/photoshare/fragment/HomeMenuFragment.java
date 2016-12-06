@@ -49,6 +49,7 @@ public class HomeMenuFragment extends BaseFragment {
     @BindView(R.id.rl_logout)
     RelativeLayout rlLogout;
     private String nameAccount;
+    private String IDAccount;
 
     private static final String PREF_USER_LEARNED_DRAWER = "Navigation drawer learn";
     private DrawerLayout mDrawerLayout;
@@ -99,13 +100,12 @@ public class HomeMenuFragment extends BaseFragment {
         openDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-//                    mDrawerLayout.closeDrawers();
-//                } else {
-                mDrawerLayout.openDrawer(GravityCompat.START);
-//                }
-//                getActivity().invalidateOptionsMenu();
-
+                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    mDrawerLayout.closeDrawers();
+                } else {
+                    mDrawerLayout.openDrawer(GravityCompat.START);
+                }
+                getActivity().invalidateOptionsMenu();
             }
         });
 
@@ -160,37 +160,37 @@ public class HomeMenuFragment extends BaseFragment {
         ivAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), ProfileUserFragment.newInstance(nameAccount), null);
+                FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(), null);
             }
         });
         tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), ProfileUserFragment.newInstance(nameAccount), null);
+                FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(), null);
             }
         });
         rlUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), ProfileUserFragment.newInstance(nameAccount), null);
+                FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(), null);
             }
         });
         rlHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), HomeFragment.newInstance(), null);
+                FragmentUtil.replaceFragment(getActivity(), HomeFragment.newInstance(), null);
             }
         });
         rlPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), ImageUploadFragment.newInstance(), null);
+                FragmentUtil.replaceFragment(getActivity(), ImageUploadFragment.newInstance(), null);
             }
         });
         rlFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentUtil.pushFragment(getActivity(), FavouriteFragment.newInstance(), null);
+                FragmentUtil.replaceFragment(getActivity(), FavouriteFragment.newInstance(), null);
             }
         });
         rlNearby.setOnClickListener(new View.OnClickListener() {

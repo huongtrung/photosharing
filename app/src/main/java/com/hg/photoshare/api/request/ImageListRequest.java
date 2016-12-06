@@ -24,11 +24,9 @@ import static vn.app.base.constant.APIConstant.REQUEST_URL_IMAGE_LIST;
 
 public class ImageListRequest extends ObjectApiRequest<ImageListResponse> {
 
-    private String userName;
     private String userId;
 
-    public ImageListRequest(String userName, String userId) {
-        this.userName = userName;
+    public ImageListRequest(String userId) {
         this.userId = userId;
     }
 
@@ -50,7 +48,7 @@ public class ImageListRequest extends ObjectApiRequest<ImageListResponse> {
     @Override
     public Map<String, String> getRequestParams() {
         Map<String, String> params = new HashMap<>();
-        if (SharedPrefUtils.getString(Constant.KEY_USER_NAME, "").equalsIgnoreCase(userName))
+        if (SharedPrefUtils.getString(Constant.KEY_ID_NAME, "").equalsIgnoreCase(userId))
             return null;
         else
             params.put(APIConstant.USER_ID, userId);

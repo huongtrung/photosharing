@@ -40,5 +40,7 @@ public class UserManage {
         SharedPrefUtils.removeKey(AppConstant.ACCESS_TOKEN);
         SharedPrefUtils.removeKey(Constant.KEY_USER_NAME);
         SharedPrefUtils.removeKey(Constant.KEY_IMAGE_USER);
+        SharedPrefUtils.removeKey(Constant.KEY_ID_NAME);
+        SharedPrefUtils.removeKey(Constant.USER_ID);
     }
 }

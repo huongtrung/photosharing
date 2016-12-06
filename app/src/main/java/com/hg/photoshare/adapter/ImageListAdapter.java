@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,20 +12,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hg.photoshare.R;
-import com.hg.photoshare.bean.ImageBean;
-import com.hg.photoshare.bean.UserBean;
-import com.hg.photoshare.data.HomeData;
 import com.hg.photoshare.data.ImageListData;
-import com.hg.photoshare.fragment.ImageDetailFragment;
-import com.hg.photoshare.fragment.ProfileUserFragment;
 
-import java.security.AccessController;
 import java.util.List;
 
-import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.StringUtil;
-
-import static org.apache.http.HttpHeaders.IF;
 
 /**
  * Created by GMORUNSYSTEM on 12/1/2016.
@@ -70,14 +60,17 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
             holder.ivPhoto.setImageResource(R.drawable.placeholer_image_1600);
 
         StringUtil.displayText(imageList.user.username, holder.tvName);
-        if (imageList.image.isFavourite = true)
+        if (imageList.image.isFavourite)
             holder.ivFavorite.setImageResource(R.drawable.icon_favourite);
         else
             holder.ivFavorite.setImageResource(R.drawable.icon_no_favourite);
-        if (imageList.user.isFollowing = true)
+        if (imageList.user.isFollowing) {
             holder.btFollow.setBackgroundResource(R.color.color_btn_follow_bg);
-        else
+            holder.btFollow.setText("Following");
+        } else {
             holder.btFollow.setBackgroundResource(R.color.color_button);
+            holder.btFollow.setText("Follow");
+        }
         if (imageList.image.location != null && !imageList.image.location.isEmpty())
             StringUtil.displayText(imageList.image.location, holder.tvAddress);
         else
@@ -118,7 +111,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
             ivFavorite = (ImageView) itemView.findViewById(R.id.iv_favorite);
             tvName = (TextView) itemView.findViewById(R.id.tv_name_account);
             btFollow = (Button) itemView.findViewById(R.id.bt_follow);
-            llImage=(LinearLayout)itemView.findViewById(R.id.ll_image);
+            llImage = (LinearLayout) itemView.findViewById(R.id.ll_image);
         }
     }
 }

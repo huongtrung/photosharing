@@ -21,8 +21,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_margin="6dp"
-                android:background="@drawable/border_image_follow"
-                android:src="@drawable/dummy_avatar_2" />
+                android:background="@drawable/border_image_follow"/>
 
             <TextView
                 android:id="@+id/tv_name_account"
@@ -47,7 +46,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/button_follow_bg"
-                android:text="Following"
+                tools:text="Following"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/fontzise_13" />
@@ -122,7 +121,7 @@
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_weight="2"
-                android:src="@drawable/icon_favourite" />
+                android:src="@drawable/icon_favourite"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

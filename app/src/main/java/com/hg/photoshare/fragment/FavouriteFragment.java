@@ -1,6 +1,7 @@
 package com.hg.photoshare.fragment;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -25,6 +26,8 @@ public class FavouriteFragment extends BaseFragment {
     private ImageListAdapter mFavoriteAdapter;
     @BindView(R.id.rc_favourite)
     RecyclerView rcFavourite;
+    @BindView(R.id.swipe_favourite)
+    SwipeRefreshLayout swipeFavorite;
 
     public static FavouriteFragment newInstance() {
         FavouriteFragment fragment = new FavouriteFragment();
@@ -40,15 +43,25 @@ public class FavouriteFragment extends BaseFragment {
     protected void initView(View root) {
         setUpToolBarView(true, "Favorite", true, "", false);
         mFavoriteAdapter = new ImageListAdapter(getContext());
+        showCoverNetworkLoading();
         getRequestFavorite();
+        swipeFavorite.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getRequestFavorite();
+            }
+        });
+        swipeFavorite.setColorSchemeResources(android.R.color.holo_blue_bright);
     }
 
     private void getRequestFavorite() {
-        showCoverNetworkLoading();
         FavouriteListRequest favouriteListRequest = new FavouriteListRequest();
         favouriteListRequest.setRequestCallBack(new ApiObjectCallBack<ImageListResponse>() {
             @Override
             public void onSuccess(ImageListResponse response) {
+                if (swipeFavorite.isRefreshing())
+                    swipeFavorite.setRefreshing(false);
+                hideCoverNetworkLoading();
                 if (response.data != null && response.data.size() > 0)
                     setUpList(response);
                 else
@@ -58,6 +71,8 @@ public class FavouriteFragment extends BaseFragment {
             @Override
             public void onFail(int failCode, String message) {
                 hideCoverNetworkLoading();
+                if (swipeFavorite.isRefreshing())
+                    swipeFavorite.setRefreshing(false);
                 DialogUtil.showOkBtnDialog(getContext(), "Error " + failCode, message);
             }
         });
