@@ -44,32 +44,10 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-        vpHome.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
         homeAdapter = new HomeAdapter(getActivity().getSupportFragmentManager());
         vpHome.setAdapter(homeAdapter);
         tlHome.setupWithViewPager(vpHome);
     }
-
-
-    private EndlessRecyclerOnScrollListener mEndlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener() {
-        @Override
-        public void onLoadMore(int currentPage) {
-
-        }
-    };
-
     @Override
     protected void getArgument(Bundle bundle) {
 

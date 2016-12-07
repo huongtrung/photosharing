@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.hg.photoshare.contants.Constant;
-import com.hg.photoshare.data.HomeData;
 import com.hg.photoshare.fragment.HomeFollowFragment;
 import com.hg.photoshare.fragment.HomeNewFragment;
 

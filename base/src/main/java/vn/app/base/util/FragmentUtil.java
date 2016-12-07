@@ -109,7 +109,7 @@ public class FragmentUtil {
 
         fragmentTransaction.replace(R.id.container, fragment, tag);
         if (isPushInsteadOfReplace) {
-            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.addToBackStack(tag);
         }
 
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);

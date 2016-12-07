@@ -1,33 +1,28 @@
 package com.hg.photoshare.api.request;
 
 import com.android.volley.Request;
-import com.android.volley.VolleyError;
-import com.hg.photoshare.api.respones.ImageListResponse;
-import com.hg.photoshare.contants.Constant;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import vn.app.base.api.volley.core.BaseApiRequest;
+import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.core.ObjectApiRequest;
 import vn.app.base.constant.APIConstant;
 import vn.app.base.constant.ApiParam;
 import vn.app.base.util.SharedPrefUtils;
 
-import static vn.app.base.constant.APIConstant.REQUEST_URL_IMAGE_LIST;
-
 /**
- * Created by GMORUNSYSTEM on 12/1/2016.
+ * Created by GMORUNSYSTEM on 12/7/2016.
  */
 
+public class FavoriteRequest extends ObjectApiRequest<BaseResponse> {
 
-public class ImageListRequest extends ObjectApiRequest<ImageListResponse> {
+    private String imageId;
+    private int isFavorite;
 
-    private String userId;
-
-    public ImageListRequest(String userId) {
-        this.userId = userId;
+    public FavoriteRequest(String imageId, int isFavorite) {
+        this.imageId = imageId;
+        this.isFavorite = isFavorite;
     }
 
     @Override
@@ -37,7 +32,7 @@ public class ImageListRequest extends ObjectApiRequest<ImageListResponse> {
 
     @Override
     public String getRequestURL() {
-        return APIConstant.REQUEST_URL_IMAGE_LIST;
+        return APIConstant.REQUEST_URL_FAVORITE;
     }
 
     @Override
@@ -48,7 +43,8 @@ public class ImageListRequest extends ObjectApiRequest<ImageListResponse> {
     @Override
     public Map<String, String> getRequestParams() {
         Map<String, String> params = new HashMap<>();
-        params.put(APIConstant.USER_ID, userId);
+        params.put(APIConstant.IMAGE_ID, imageId);
+        params.put(APIConstant.IS_FAVORITE, String.valueOf(isFavorite));
         return params;
     }
 
@@ -60,8 +56,8 @@ public class ImageListRequest extends ObjectApiRequest<ImageListResponse> {
     }
 
     @Override
-    public Class<ImageListResponse> getResponseClass() {
-        return ImageListResponse.class;
+    public Class<BaseResponse> getResponseClass() {
+        return BaseResponse.class;
     }
 
     @Override

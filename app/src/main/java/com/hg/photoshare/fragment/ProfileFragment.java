@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.hg.photoshare.R;
+import com.hg.photoshare.adapter.HomeNewAdapter;
 import com.hg.photoshare.adapter.ImageListAdapter;
 import com.hg.photoshare.api.request.ImageListRequest;
 import com.hg.photoshare.api.request.ProfileRequest;
@@ -29,11 +31,14 @@ import com.hg.photoshare.api.request.UpdateProfileRequest;
 import com.hg.photoshare.api.request.UserRequest;
 import com.hg.photoshare.api.respones.ImageListResponse;
 import com.hg.photoshare.api.respones.ProfileUserResponse;
+import com.hg.photoshare.bean.ImageBean;
+import com.hg.photoshare.bean.UserBean;
 import com.hg.photoshare.contants.Constant;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -75,14 +80,16 @@ public class ProfileFragment extends BaseFragment {
     @BindView(R.id.swipe_profile)
     SwipeRefreshLayout swipeRefreshProfile;
 
+    private String mUserId;
     private String userId;
     private ImageListAdapter mImageListAdapter;
 
     File fileImage;
 
-    public static ProfileFragment newInstance() {
+    public static ProfileFragment newInstance(String userId) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle bundle = new Bundle();
+        bundle.putString(Constant.USER_ID, userId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -104,34 +111,59 @@ public class ProfileFragment extends BaseFragment {
             }
         });
         swipeRefreshProfile.setColorSchemeResources(android.R.color.holo_blue_bright);
+
         requestGetProfile();
         getRequestImageList();
+
+        mImageListAdapter.setmOnItemClickListener(new HomeNewAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemAvatarClick(View view, String userId) {
+            }
+
+            @Override
+            public void onItemNameClick(View view, String userId) {
+            }
+
+            @Override
+            public void onItemPhotoClick(View view, ImageBean imageBean, UserBean userBean) {
+                FragmentUtil.replaceFragment(getActivity(), ImageDetailFragment.newInstance(imageBean, userBean), null);
+            }
+
+            @Override
+            public void OnItemLocationClick(View view, String lat, String longtitude) {
+                Uri uri = Uri.parse(String.format(Locale.ENGLISH, "geo:%f,%f", Float.valueOf(lat), Float.valueOf(longtitude)));
+                Log.e("lat", lat + "long" + longtitude);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+
+        });
     }
 
     private void requestGetProfile() {
         showCoverNetworkLoading();
-            ProfileRequest profilelRequest = new ProfileRequest();
-            profilelRequest.setRequestCallBack(new ApiObjectCallBack<ProfileUserResponse>() {
-                @Override
-                public void onSuccess(ProfileUserResponse response) {
-                    hideCoverNetworkLoading();
-                    if (response != null)
-                        showData(response);
-                    else
-                        DialogUtil.showOkBtnDialog(getContext(), "Error", "No data ");
-                }
+        ProfileRequest profilelRequest = new ProfileRequest();
+        profilelRequest.setRequestCallBack(new ApiObjectCallBack<ProfileUserResponse>() {
+            @Override
+            public void onSuccess(ProfileUserResponse response) {
+                hideCoverNetworkLoading();
+                if (response != null)
+                    showData(response);
+                else
+                    DialogUtil.showOkBtnDialog(getContext(), "Error", "No data ");
+            }
 
-                @Override
-                public void onFail(int failCode, String message) {
-                    hideCoverNetworkLoading();
-                    DialogUtil.showOkBtnDialog(getContext(), "Error " + failCode, message);
-                }
-            });
-            profilelRequest.execute();
+            @Override
+            public void onFail(int failCode, String message) {
+                hideCoverNetworkLoading();
+                DialogUtil.showOkBtnDialog(getContext(), "Error " + failCode, message);
+            }
+        });
+        profilelRequest.execute();
     }
 
     private void showData(ProfileUserResponse response) {
-        userId = response.data.id;
         if (response.data.avatar != null && !response.data.avatar.isEmpty())
             Glide.with(getContext()).load(response.data.avatar).into(civAvatar);
         else
@@ -140,6 +172,7 @@ public class ProfileFragment extends BaseFragment {
         StringUtil.displayText(response.data.follow.toString(), tvCountFollow);
         StringUtil.displayText(response.data.follower.toString(), tvCountFollower);
         StringUtil.displayText(response.data.post.toString(), tvCountPost);
+
     }
 
     private void getRequestImageList() {
@@ -172,7 +205,6 @@ public class ProfileFragment extends BaseFragment {
         mImageListAdapter.setImageListData(response.data);
         rcProfile.setAdapter(mImageListAdapter);
         rcProfile.setLayoutManager(new LinearLayoutManager(getContext()));
-        rcProfile.addItemDecoration(new DividerItemDecoration(getContext(), null));
         mImageListAdapter.notifyDataSetChanged();
     }
 
@@ -213,6 +245,7 @@ public class ProfileFragment extends BaseFragment {
 
     @Override
     protected void getArgument(Bundle bundle) {
+        userId = bundle.getString(Constant.USER_ID);
     }
 
     @Override

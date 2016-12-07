@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tool_bar_home"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@drawable/bg_item_navigation"
@@ -9,7 +8,7 @@
 
     <RelativeLayout
         android:id="@+id/item_bar"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
         <ImageView
@@ -30,4 +29,4 @@
         android:textSize="@dimen/fontzise_20"
         android:text="Home" />
 
-</LinearLayout>
+</android.support.v7.widget.Toolbar>

@@ -15,8 +15,7 @@
         android:layout_marginLeft="14dp"
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/dummy_avatar"
-        android:background="@drawable/bg_avatar_follow"/>
+        android:src="@drawable/dummy_avatar"/>
 
     <TextView
         android:id="@+id/tv_name"

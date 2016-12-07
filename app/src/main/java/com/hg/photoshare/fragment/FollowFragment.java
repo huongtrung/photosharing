@@ -53,7 +53,7 @@ public class FollowFragment extends BaseFragment {
             @Override
             public void onItemClick(View view, int position, String userID) {
                 if (userID.equalsIgnoreCase(mUserId))
-                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(), null);
+                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userID), null);
                 else
                     FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userID), null);
             }

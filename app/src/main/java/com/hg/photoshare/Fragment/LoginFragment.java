@@ -2,12 +2,15 @@ package com.hg.photoshare.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.volley.VolleyError;
+import com.hg.photoshare.HomeActivity;
+import com.hg.photoshare.MainActivity;
 import com.hg.photoshare.R;
 import com.hg.photoshare.api.request.LoginRequest;
 import com.hg.photoshare.api.respones.LoginReponse;
@@ -99,7 +102,6 @@ public class LoginFragment extends BaseFragment {
                     handleLoginSuccess(loginReponse);
                     hideCoverNetworkLoading();
                 }
-
                 @Override
                 public void onFail(int failCode, String message) {
                     hideCoverNetworkLoading();
@@ -122,20 +124,24 @@ public class LoginFragment extends BaseFragment {
         if (loginReponse.data != null) {
             UserManage.saveCurrentUser(loginReponse.data);
             SharedPrefUtils.saveAccessToken(loginReponse.data.token);
-            SharedPrefUtils.putString(Constant.KEY_USER_NAME,loginReponse.data.username);
-            SharedPrefUtils.putString(Constant.KEY_ID_NAME,loginReponse.data._id);
-            SharedPrefUtils.putString(Constant.KEY_USER_ID,loginReponse.data._id);
-            SharedPrefUtils.putString(Constant.KEY_IMAGE_USER,loginReponse.data.avatar);
+            SharedPrefUtils.putString(Constant.KEY_USER_NAME, loginReponse.data.username);
+            SharedPrefUtils.putString(Constant.KEY_ID_NAME, loginReponse.data._id);
+            SharedPrefUtils.putString(Constant.KEY_USER_ID, loginReponse.data._id);
+            SharedPrefUtils.putString(Constant.KEY_IMAGE_USER, loginReponse.data.avatar);
             Log.e("user:", loginReponse.data.token);
-            Intent i;
             boolean isAgreeTutorial = SharedPrefUtils.getBoolean(ToturialFragment.KEY_AGREE, false);
             if (isAgreeTutorial) {
-                FragmentUtil.replaceFragment(getActivity(), HomeFragment.newInstance(), null);
-            }
-            else {
-                FragmentUtil.replaceFragment(getActivity(),ToturialFragment.newInstance(),null);
+                Intent intent = new Intent(getActivity(), HomeActivity.class);
+                startActivity(intent);
+            } else {
+                FragmentUtil.replaceFragment(getActivity(), ToturialFragment.newInstance(), null);
 
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }
