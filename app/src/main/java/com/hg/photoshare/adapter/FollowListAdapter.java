@@ -14,6 +14,7 @@ import com.hg.photoshare.R;
 import com.hg.photoshare.api.request.FollowRequest;
 import com.hg.photoshare.bean.UserBean;
 import com.hg.photoshare.data.UserData;
+import com.hg.photoshare.inter.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +33,12 @@ import static android.R.attr.data;
 public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.ViewHolder> {
     private LayoutInflater inflater;
     private Context mContext;
+    private OnItemClickListener mOnItemClickListener;
     private List<UserData> userList = new ArrayList<>();
 
-    public FollowListAdapter(Context context) {
+    public FollowListAdapter(Context context, OnItemClickListener itemClickListener) {
         this.mContext = context;
+        this.mOnItemClickListener = itemClickListener;
         inflater = LayoutInflater.from(context);
     }
 
@@ -51,12 +54,12 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         final UserData userData = userList.get(position);
         if (userData.user.avatar != null && !userData.user.avatar.isEmpty())
             Glide.with(mContext).load(userData.user.avatar).into(holder.ivAvatarFollow);
         else
-            holder.ivAvatarFollow.setImageResource(R.drawable.dummy_avatar);
+            holder.ivAvatarFollow.setImageResource(R.drawable.placeholer_avatar);
         StringUtil.displayText(userData.user.username, holder.tvName);
         if (userData.user.isFollowing != null) {
             if (userData.user.isFollowing) {
@@ -67,6 +70,12 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
                 holder.btFollow.setBackgroundResource(R.color.color_button);
             }
         }
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onItemClick(v, position, userData.user.id);
+            }
+        });
     }
 
     @Override
@@ -78,9 +87,11 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         ImageView ivAvatarFollow;
         TextView tvName;
         Button btFollow;
+        View container;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            container = itemView;
             ivAvatarFollow = (ImageView) itemView.findViewById(R.id.iv_avatar_follow);
             tvName = (TextView) itemView.findViewById(R.id.tv_name);
             btFollow = (Button) itemView.findViewById(R.id.bt_follow);

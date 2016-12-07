@@ -1,29 +1,28 @@
 package com.hg.photoshare.api.request;
 
-import android.util.Log;
-
 import com.android.volley.Request;
-import com.hg.photoshare.api.respones.HomeResponse;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import vn.app.base.api.volley.core.BaseApiRequest;
+import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.core.ObjectApiRequest;
 import vn.app.base.constant.APIConstant;
 import vn.app.base.constant.ApiParam;
 import vn.app.base.util.SharedPrefUtils;
 
 /**
- * Created by Nart on 25/10/2016.
+ * Created by GMORUNSYSTEM on 12/7/2016.
  */
-public class HomeRequest extends ObjectApiRequest<HomeResponse> {
-    private int type = 0;
-    private int num = 0;
 
-    public HomeRequest(int type, int num) {
-        this.type = type;
-        this.num = num;
+public class FavoriteRequest extends ObjectApiRequest<BaseResponse> {
+
+    private String imageId;
+    private int isFavorite;
+
+    public FavoriteRequest(String imageId, int isFavorite) {
+        this.imageId = imageId;
+        this.isFavorite = isFavorite;
     }
 
     @Override
@@ -33,7 +32,7 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
 
     @Override
     public String getRequestURL() {
-        return APIConstant.REQUEST_URL_HOME;
+        return APIConstant.REQUEST_URL_FAVORITE;
     }
 
     @Override
@@ -44,8 +43,8 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     @Override
     public Map<String, String> getRequestParams() {
         Map<String, String> params = new HashMap<>();
-        params.put(APIConstant.TYPE, String.valueOf(type));
-        params.put(APIConstant.NUM, String.valueOf(num));
+        params.put(APIConstant.IMAGE_ID, imageId);
+        params.put(APIConstant.IS_FAVORITE, String.valueOf(isFavorite));
         return params;
     }
 
@@ -57,8 +56,8 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     }
 
     @Override
-    public Class<HomeResponse> getResponseClass() {
-        return HomeResponse.class;
+    public Class<BaseResponse> getResponseClass() {
+        return BaseResponse.class;
     }
 
     @Override

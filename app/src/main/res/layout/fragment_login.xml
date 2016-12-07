@@ -24,7 +24,7 @@
         android:layout_centerHorizontal="true" />
 
     <EditText
-        android:text="HaHien"
+        android:text="ThinhHoang"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_person_outline_white_18dp"

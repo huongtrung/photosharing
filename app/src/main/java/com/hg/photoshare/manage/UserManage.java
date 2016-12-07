@@ -22,6 +22,7 @@ public class UserManage {
         String userData = gson.toJson(userProfileBean, ProfileBean.class);
         SharedPrefUtils.putString(USER_DATA, userData);
     }
+
     public static ProfileBean getCurrentUser() {
         String userData = SharedPrefUtils.getString(USER_DATA, null);
         if (StringUtil.checkStringValid(userData)) {
@@ -40,5 +41,16 @@ public class UserManage {
         SharedPrefUtils.removeKey(AppConstant.ACCESS_TOKEN);
         SharedPrefUtils.removeKey(Constant.KEY_USER_NAME);
         SharedPrefUtils.removeKey(Constant.KEY_IMAGE_USER);
+        SharedPrefUtils.removeKey(Constant.KEY_ID_NAME);
+        SharedPrefUtils.removeKey(Constant.USER_ID);
+    }
+
+    public static void clearUser() {
+        SharedPrefUtils.putString(USER_DATA, "");
+        SharedPrefUtils.putString(AppConstant.ACCESS_TOKEN, "");
+        SharedPrefUtils.putString(Constant.KEY_USER_NAME, "");
+        SharedPrefUtils.putString(Constant.KEY_IMAGE_USER, "");
+        SharedPrefUtils.putString(Constant.KEY_ID_NAME, "");
+        SharedPrefUtils.putString(Constant.USER_ID, "");
     }
 }

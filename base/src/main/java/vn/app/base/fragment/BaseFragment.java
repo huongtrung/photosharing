@@ -232,10 +232,6 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    public void setUpHomeToolBar(boolean isShowBack, String title, boolean isShowTitle) {
-
-    }
-
     protected void handleBack() {
         int backStackCnt = getFragmentManager().getBackStackEntryCount();
         if (backStackCnt > 0) {

@@ -147,7 +147,7 @@ public class RegisterFragment extends BaseFragment {
             UserManage.saveCurrentUser(registerResponse.data);
             SharedPrefUtils.saveAccessToken(registerResponse.data.token);
             Log.e("user:", registerResponse.data.token);
-            FragmentUtil.pushFragment(getActivity(), ToturialFragment.newInstance(), null);
+            FragmentUtil.replaceFragment(getActivity(), ToturialFragment.newInstance(), null);
         }
     }
 
