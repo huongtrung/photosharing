@@ -34,7 +34,6 @@ import static vn.app.base.util.FragmentUtil.replaceFragment;
  * Created by Nart on 26/10/2016.
  */
 public class HomeMenuFragment extends BaseFragment {
-    private static final String KEY_USER_NAME = "KEY_USER_NAME";
     @BindView(R.id.iv_menu_account)
     CircleImageView ivAccount;
     @BindView(R.id.tv_menu_account)
@@ -109,80 +108,43 @@ public class HomeMenuFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-//        ivAccount.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentUtil.replaceFragment(getFragmentManager(), ProfileFragment.newInstance(userId), null);
-//            }
-//        });
-//        tvName.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentUtil.replaceFragment(getFragmentManager(), ProfileFragment.newInstance(userId), null);
-//            }
-//        });
-//        rlUser.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentUtil.replaceFragment(getFragmentManager(), ProfileFragment.newInstance(userId), null);
-//            }
-//        });
-//        rlHome.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentUtil.replaceFragment(getFragmentManager(), HomeFragment.newInstance(), null);
-//            }
-//        });
-//        rlPost.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentUtil.replaceFragment(getFragmentManager(), ImageUploadFragment.newInstance(), null);
-//            }
-//        });
-//        rlFavorite.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentUtil.replaceFragment(getFragmentManager(), FavouriteFragment.newInstance(), null);
-//            }
-//        });
-//        rlNearby.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentUtil.replaceFragment(getFragmentManager(), NearbyFragment.newInstance(), null);
-//            }
-//        });
-//        rlFollow.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentUtil.replaceFragment(getFragmentManager(), FollowFragment.newInstance(), null);
-//            }
-//        });
-//        rlLogout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                DialogUtil.showTwoBtnWithHandleDialog(getContext(), "Logout ?", "Are you sure you want to Logout ?", "Ok", "Cancle", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        UserManage.clearUser();
-//                        FragmentUtil.replaceFragment(getFragmentManager(), LoginFragment.newInstance(), null);
-//                    }
-//                }, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        dialogInterface.dismiss();
-//                    }
-//                });
-//
-//            }
-//        });
     }
 
-    @OnClick(R.id.tv_menu_account)
-    public void OnClick(View v){
+    @OnClick({R.id.rl_user, R.id.rl_home, R.id.rl_post, R.id.rl_favorite, R.id.rl_nearby, R.id.rl_follow, R.id.rl_logout})
+    public void OnClick(View v) {
         mDrawerLayout.closeDrawers();
-        switch (v.getId()){
-            case R.id.tv_menu_account:
+        switch (v.getId()) {
+            case R.id.rl_user:
                 FragmentUtil.replaceFragment(getFragmentManager(), ProfileFragment.newInstance(userId), null);
+                break;
+            case R.id.rl_home:
+                FragmentUtil.replaceFragment(getFragmentManager(), HomeFragment.newInstance(), null);
+                break;
+            case R.id.rl_post:
+                FragmentUtil.replaceFragment(getFragmentManager(), ImageUploadFragment.newInstance(), null);
+                break;
+            case R.id.rl_favorite:
+                FragmentUtil.replaceFragment(getFragmentManager(), FavouriteFragment.newInstance(), null);
+                break;
+            case R.id.rl_nearby:
+                FragmentUtil.replaceFragment(getFragmentManager(), NearbyFragment.newInstance(), null);
+                break;
+            case R.id.rl_follow:
+                FragmentUtil.replaceFragment(getFragmentManager(), FollowFragment.newInstance(), null);
+                break;
+            case R.id.rl_logout:
+                DialogUtil.showTwoBtnWithHandleDialog(getContext(), "Logout ?", "Are you sure you want to Logout ?", "Ok", "Cancle", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        UserManage.clearUser();
+                        FragmentUtil.replaceFragment(getFragmentManager(), LoginFragment.newInstance(), null);
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
                 break;
         }
     }
