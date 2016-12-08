@@ -24,6 +24,7 @@ import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.SharedPrefUtils;
 
 import static android.R.attr.type;
 
@@ -39,6 +40,7 @@ public class HomeFollowFragment extends BaseFragment {
     private int typeIndex = 1;
     private int num = 10;
     private HomeNewAdapter mHomeNewAdapter;
+    private String mUserId;
 
     public static HomeFollowFragment newInstance(int type) {
         HomeFollowFragment fragment = new HomeFollowFragment();
@@ -64,16 +66,21 @@ public class HomeFollowFragment extends BaseFragment {
             }
         });
         swipeHome.setColorSchemeResources(android.R.color.holo_blue_bright);
+        mUserId = SharedPrefUtils.getString(Constant.KEY_USER_ID, "");
         mHomeNewAdapter.setmOnItemClickListener(new HomeNewAdapter.OnItemClickListener() {
-
             @Override
             public void onItemAvatarClick(View view, String userId) {
-                FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
+                if (userId.equalsIgnoreCase(mUserId))
+                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userId), null);
+                else
+                    FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
             }
-
             @Override
             public void onItemNameClick(View view, String userId) {
-                FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
+                if (userId.equalsIgnoreCase(mUserId))
+                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userId), null);
+                else
+                    FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
             }
 
             @Override

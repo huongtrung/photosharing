@@ -45,6 +45,7 @@ public class HomeNewFragment extends BaseFragment {
     private HomeNewAdapter mHomeNewAdapter;
     private int typeIndex;
     private int num = 10;
+    private String mUserId;
 
     public static HomeNewFragment newInstance(int type) {
         HomeNewFragment fragment = new HomeNewFragment();
@@ -61,6 +62,7 @@ public class HomeNewFragment extends BaseFragment {
     @Override
     protected void initView(View root) {
         getHomeData();
+        mUserId = SharedPrefUtils.getString(Constant.KEY_USER_ID, "");
         mHomeNewAdapter = new HomeNewAdapter(getContext());
         swipeHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -75,12 +77,18 @@ public class HomeNewFragment extends BaseFragment {
 
             @Override
             public void onItemAvatarClick(View view, String userId) {
-                FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
+                if (userId.equalsIgnoreCase(mUserId))
+                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userId), null);
+                else
+                    FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
             }
 
             @Override
             public void onItemNameClick(View view, String userId) {
-                FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
+                if (userId.equalsIgnoreCase(mUserId))
+                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userId), null);
+                else
+                    FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
             }
 
             @Override

@@ -49,6 +49,7 @@ public class UserManage {
         SharedPrefUtils.putString(USER_DATA, "");
         SharedPrefUtils.putString(AppConstant.ACCESS_TOKEN, "");
         SharedPrefUtils.putString(Constant.KEY_USER_NAME, "");
+        SharedPrefUtils.putString(Constant.KEY_USER_ID, "");
         SharedPrefUtils.putString(Constant.KEY_IMAGE_USER, "");
         SharedPrefUtils.putString(Constant.KEY_ID_NAME, "");
         SharedPrefUtils.putString(Constant.USER_ID, "");

@@ -15,6 +15,7 @@
         android:background="@color/color_bg">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:scaleType="centerCrop"
             android:id="@+id/civ_avatar"
             android:layout_width="133dp"
             android:layout_height="137dp"

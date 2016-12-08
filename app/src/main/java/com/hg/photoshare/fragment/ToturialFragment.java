@@ -46,8 +46,8 @@ public class ToturialFragment extends BaseFragment {
     TutorialAdapter tutorialAdapter;
 
     @OnClick(R.id.bt_skip)
-    public void goHome(){
-        FragmentUtil.replaceFragment(getActivity(),HomeFragment.newInstance(),null);
+    public void goHome() {
+        FragmentUtil.replaceFragment(getActivity(), HomeFragment.newInstance(), null);
     }
 
     public static ToturialFragment newInstance() {
@@ -62,7 +62,7 @@ public class ToturialFragment extends BaseFragment {
 
     @Override
     protected boolean isStartWithLoading() {
-        return tutorialData==null;
+        return tutorialData == null;
     }
 
     @Override
@@ -80,16 +80,16 @@ public class ToturialFragment extends BaseFragment {
                 handleTutData(data.data);
 
             }
+
             @Override
             public void onFail(int failCode, String message) {
                 hideCoverNetworkLoading();
-                DialogUtil.showOkBtnDialog(getContext(), "Error : " +failCode, message);
+                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, message);
             }
 
         });
         tutorialRequest.execute();
     }
-
 
 
     private void handleTutData(TutorialData getData) {
@@ -106,10 +106,9 @@ public class ToturialFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        if (tutorialData==null){
+        if (tutorialData == null) {
             getDatatutorial();
-        }
-        else {
+        } else {
             handleTutData(tutorialData);
         }
     }

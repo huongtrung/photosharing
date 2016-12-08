@@ -12,6 +12,5 @@ import vn.app.base.api.response.BaseResponse;
 
 public class ProfileUserResponse extends BaseResponse{
     @SerializedName("data")
-    @Expose
     public ProfileUserBean data;
 }

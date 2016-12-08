@@ -61,6 +61,8 @@ import vn.app.base.util.SharedPrefUtils;
 
 import com.google.android.gms.location.LocationServices;
 
+import static android.R.attr.country;
+
 /**
  * Created by Nart on 26/10/2016.
  */
@@ -78,8 +80,6 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
     @BindView(R.id.et_caption)
     EditText etCaption;
     String hashtag = "";
-
-    private boolean switchStatus = false;
     Bitmap bitmap;
     File fileImage;
     double latitude;
@@ -182,7 +182,7 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
         }
 
         Map<String, File> filePart = new HashMap<>();
-        filePart.put(APIConstant.UPLOAD_IMAGE, fileImage);
+        filePart.put(APIConstant.IMAGE_PUT, fileImage);
 
         ImageUploadRequest uploadImageRequest = new ImageUploadRequest(Request.Method.POST, APIConstant.REQUEST_URL_IMAGE_UPLOAD, new Response.ErrorListener() {
             @Override
@@ -207,23 +207,19 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constant.PICK_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
-            Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().
                         getApplicationContext().getContentResolver(), data.getData());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (bitmap != null) {
-                ivPhotoUpload.setImageBitmap(bitmap);
-                fileImage = savebitmap(bitmap);
-            }
         } else if (requestCode == Constant.CAM_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
             Uri fileUri = getPhotoFileUri("temp.png");
-            Bitmap bitmap = BitmapUtil.decodeFromFile(fileUri.getPath(), 1900, 600);
-            fileImage = savebitmap(bitmap);
+            bitmap = BitmapUtil.decodeFromFile(fileUri.getPath(), 1900, 600);
+        }
+        if (bitmap != null) {
             ivPhotoUpload.setImageBitmap(bitmap);
-
+            fileImage = savebitmap(bitmap);
         }
     }
 
@@ -277,7 +273,6 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
     public void getAddress() {
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         List<Address> addresses;
-
         try {
             addresses = geocoder.getFromLocation(latitude, longtitude, 1);
             String address = addresses.get(0).getAddressLine(0);
@@ -290,7 +285,6 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -316,7 +310,6 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
             strlong = Double.toString(longtitude);
 
             getAddress();
-
         }
     }
 

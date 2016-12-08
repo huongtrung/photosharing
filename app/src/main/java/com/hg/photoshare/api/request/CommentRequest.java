@@ -1,22 +1,28 @@
 package com.hg.photoshare.api.request;
 
-import com.bumptech.glide.request.Request;
-import com.hg.photoshare.api.respones.ImageListResponse;
+import com.android.volley.Request;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.core.ObjectApiRequest;
 import vn.app.base.constant.APIConstant;
 import vn.app.base.constant.ApiParam;
 import vn.app.base.util.SharedPrefUtils;
 
-
 /**
- * Created by GMORUNSYSTEM on 12/5/2016.
+ * Created by GMORUNSYSTEM on 12/8/2016.
  */
 
-public class FavouriteListRequest extends ObjectApiRequest<ImageListResponse> {
+public class CommentRequest extends ObjectApiRequest<BaseResponse> {
+    private String imageId;
+    private String commentContent;
+
+    public CommentRequest(String imageId, String commentContent) {
+        this.imageId = imageId;
+        this.commentContent = commentContent;
+    }
 
     @Override
     public boolean isRequiredAuthorization() {
@@ -25,7 +31,7 @@ public class FavouriteListRequest extends ObjectApiRequest<ImageListResponse> {
 
     @Override
     public String getRequestURL() {
-        return APIConstant.REQUEST_URL_FAVOURITE_LIST;
+        return APIConstant.REQUEST_URL_COMMENT;
     }
 
     @Override
@@ -35,7 +41,10 @@ public class FavouriteListRequest extends ObjectApiRequest<ImageListResponse> {
 
     @Override
     public Map<String, String> getRequestParams() {
-        return null;
+        Map<String, String> params = new HashMap<>();
+        params.put(APIConstant.COMMENT, commentContent);
+        params.put(APIConstant.IMAGE_ID, imageId);
+        return params;
     }
 
     @Override
@@ -46,12 +55,12 @@ public class FavouriteListRequest extends ObjectApiRequest<ImageListResponse> {
     }
 
     @Override
-    public Class<ImageListResponse> getResponseClass() {
-        return ImageListResponse.class;
+    public Class<BaseResponse> getResponseClass() {
+        return BaseResponse.class;
     }
 
     @Override
     public int getMethod() {
-        return com.android.volley.Request.Method.POST;
+        return Request.Method.POST;
     }
 }

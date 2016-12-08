@@ -103,6 +103,8 @@ public class RegisterFragment extends BaseFragment {
 
     @OnClick(R.id.btnSignUp)
     public void goToUserProfile() {
+        KeyboardUtil.hideKeyboard(getActivity());
+        showCoverNetworkLoading();
         userName = etUser.getText().toString().trim();
         emailAdd = etEmail.getText().toString().trim();
         password = etPass.getText().toString().trim();
@@ -132,8 +134,7 @@ public class RegisterFragment extends BaseFragment {
                     }
                 });
                 registerRequest.execute();
-                KeyboardUtil.hideKeyboard(getActivity());
-                showCoverNetworkLoading();
+
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             } catch (UnsupportedEncodingException e) {

@@ -56,6 +56,8 @@ import vn.app.base.util.NetworkUtils;
 import vn.app.base.util.SharedPrefUtils;
 import vn.app.base.util.StringUtil;
 
+import static android.R.attr.bitmap;
+
 /**
  * Created by Nart on 26/10/2016.
  */
@@ -83,8 +85,7 @@ public class ProfileFragment extends BaseFragment {
     private String mUserId;
     private String userId;
     private ImageListAdapter mImageListAdapter;
-
-    File fileImage;
+    private File fileImage;
 
     public static ProfileFragment newInstance(String userId) {
         ProfileFragment fragment = new ProfileFragment();
@@ -133,7 +134,6 @@ public class ProfileFragment extends BaseFragment {
             @Override
             public void OnItemLocationClick(View view, String lat, String longtitude) {
                 Uri uri = Uri.parse(String.format(Locale.ENGLISH, "geo:%f,%f", Float.valueOf(lat), Float.valueOf(longtitude)));
-                Log.e("lat", lat + "long" + longtitude);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }
@@ -231,7 +231,9 @@ public class ProfileFragment extends BaseFragment {
             public void onResponse(ProfileUserResponse response) {
                 hideCoverNetworkLoading();
                 showData(response);
+                getRequestImageList();
                 DialogUtil.showOkBtnDialog(getContext(), "Upload Success", "Upload Image Success !");
+                SharedPrefUtils.putString(Constant.KEY_IMAGE_USER, "");
             }
         }, params, filePart);
         NetworkUtils.getInstance(getActivity().getApplicationContext()).addToRequestQueue(updateProfileRequest);
@@ -267,20 +269,25 @@ public class ProfileFragment extends BaseFragment {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().
                         getApplicationContext().getContentResolver(), data.getData());
+                if (bitmap != null) {
+                    civAvatar.setImageBitmap(bitmap);
+                    fileImage = savebitmap(bitmap);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+        } else if (requestCode == Constant.CAM_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
+            Uri fileUri = getPhotoFileUri("temp.png");
+            Bitmap bitmap = BitmapUtil.decodeFromFile(fileUri.getPath(), 800, 800);
             if (bitmap != null) {
                 civAvatar.setImageBitmap(bitmap);
                 fileImage = savebitmap(bitmap);
             }
-        } else if (requestCode == Constant.CAM_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
-            Uri fileUri = getPhotoFileUri("temp.png");
-            Bitmap bitmap = BitmapUtil.decodeFromFile(fileUri.getPath(), 800, 800);
-            civAvatar.setImageBitmap(bitmap);
-            fileImage = savebitmap(bitmap);
         }
+
     }
+
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

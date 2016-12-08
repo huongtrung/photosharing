@@ -16,7 +16,6 @@ import static android.R.attr.fragment;
 public class HomeActivity extends BaseActivity {
     private Toolbar mToolbar;
     private HomeMenuFragment mHomeMenu;
-    DrawerLayout mDrawerLayout;
 
     @Override
     protected String getNoConnectionMessage() {

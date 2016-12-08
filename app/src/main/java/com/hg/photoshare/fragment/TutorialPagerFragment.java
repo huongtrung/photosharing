@@ -75,7 +75,7 @@ public class TutorialPagerFragment extends BaseFragment {
         StringUtil.displayText(title,tvToturial);
         if (showAvatar == true) {
             if (avatarUser.isEmpty()) {
-                ivAccount.setVisibility(View.GONE);
+                ivAccount.setImageResource(R.drawable.placeholer_avatar);
             } else {
                 ImageLoader.loadImage(getContext(), avatarUser, ivAccount);
             }

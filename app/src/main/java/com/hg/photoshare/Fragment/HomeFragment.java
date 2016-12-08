@@ -44,7 +44,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-        homeAdapter = new HomeAdapter(getActivity().getSupportFragmentManager());
+        homeAdapter = new HomeAdapter(getChildFragmentManager());
         vpHome.setAdapter(homeAdapter);
         tlHome.setupWithViewPager(vpHome);
     }

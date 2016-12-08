@@ -91,7 +91,7 @@ public class HomeMenuFragment extends BaseFragment {
         });
 
         mActionBarDrawerToggle.setDrawerIndicatorEnabled(false);
-        ImageView iconDrawer = (ImageView) toolbar.findViewById(R.id.iv_open_drawer);
+        RelativeLayout iconDrawer = (RelativeLayout) toolbar.findViewById(R.id.item_bar);
         iconDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,6 +136,7 @@ public class HomeMenuFragment extends BaseFragment {
                 DialogUtil.showTwoBtnWithHandleDialog(getContext(), "Logout ?", "Are you sure you want to Logout ?", "Ok", "Cancle", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        UserManage.clearUserData();
                         UserManage.clearUser();
                         FragmentUtil.replaceFragment(getFragmentManager(), LoginFragment.newInstance(), null);
                     }
