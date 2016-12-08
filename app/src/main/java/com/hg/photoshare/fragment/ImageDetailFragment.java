@@ -1,5 +1,6 @@
 package com.hg.photoshare.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,12 +12,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hg.photoshare.R;
+import com.hg.photoshare.api.request.DeleteImageRequest;
 import com.hg.photoshare.api.request.FavoriteRequest;
 import com.hg.photoshare.api.request.FollowRequest;
 import com.hg.photoshare.bean.ImageBean;
 import com.hg.photoshare.bean.UserBean;
 import com.hg.photoshare.contants.Constant;
 import com.hg.photoshare.data.HomeData;
+import com.hg.photoshare.manage.UserManage;
 
 import java.util.Locale;
 
@@ -139,7 +142,7 @@ public class ImageDetailFragment extends BaseFragment {
     }
 
     @OnClick({R.id.title_nav_item_bar, R.id.bt_follow, R.id.iv_favorite, R.id.tv_location, R.id.ll_user})
-    public void onClick(View v) {
+    public void onClickItem(View v) {
         switch (v.getId()) {
             case R.id.bt_follow:
                 FollowRequest followRequest = new FollowRequest(userId, isFollow);
@@ -205,6 +208,37 @@ public class ImageDetailFragment extends BaseFragment {
                     FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userId), null);
                 else
                     FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
+                break;
+            case R.id.title_nav_item_bar:
+                DialogUtil.showTwoBtnWithHandleDialog(getContext(), "Delete Image ?", "Are you sure you want to delete image ?", "Ok", "Cancle", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        DeleteImageRequest deleteImageRequest = new DeleteImageRequest();
+                        deleteImageRequest.setImageId(imageId);
+                        deleteImageRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                            @Override
+                            public void onSuccess(BaseResponse data) {
+                                if (data != null && data.status == 1) {
+                                   FragmentUtil.replaceFragment(getActivity(),HomeFragment.newInstance(),null);
+                                } else
+                                    DialogUtil.showOkBtnDialog(getContext(), "Error", "Delete Image Fail");
+                            }
+
+                            @Override
+                            public void onFail(int failCode, String message) {
+                                DialogUtil.showOkBtnDialog(getContext(), "Error " + failCode, message);
+                            }
+                        });
+                        deleteImageRequest.execute();
+
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                break;
         }
     }
 }
