@@ -50,8 +50,8 @@ public class LoginFragment extends BaseFragment {
     @BindView(R.id.btnCreateAccount)
     Button btnCreate;
 
-    private String userId = "";
-    private String pass = "";
+    private String userId;
+    private String pass;
 
     LoginReponse loginReponse;
 
@@ -82,7 +82,7 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R.id.btnCreateAccount)
     public void goToRegisterFragment() {
-        FragmentUtil.replaceFragment(getActivity(), RegisterFragment.newInstance(), null);
+        replaceFragment(R.id.container, RegisterFragment.newInstance());
     }
 
     @OnClick(R.id.btnLogin)
@@ -125,16 +125,15 @@ public class LoginFragment extends BaseFragment {
             UserManage.saveCurrentUser(loginReponse.data);
             SharedPrefUtils.saveAccessToken(loginReponse.data.token);
             SharedPrefUtils.putString(Constant.KEY_USER_NAME, loginReponse.data.username);
-            SharedPrefUtils.putString(Constant.KEY_ID_NAME, loginReponse.data._id);
             SharedPrefUtils.putString(Constant.KEY_USER_ID, loginReponse.data._id);
             SharedPrefUtils.putString(Constant.KEY_IMAGE_USER, loginReponse.data.avatar);
-            Log.e("user:", loginReponse.data.token);
+            Log.e("user:", loginReponse.data._id);
             boolean isAgreeTutorial = SharedPrefUtils.getBoolean(ToturialFragment.KEY_AGREE, false);
             if (isAgreeTutorial) {
                 Intent intent = new Intent(getActivity(), HomeActivity.class);
                 startActivity(intent);
             } else {
-                FragmentUtil.replaceFragment(getActivity(), ToturialFragment.newInstance(), null);
+                replaceFragment(R.id.container, ToturialFragment.newInstance());
 
             }
         }

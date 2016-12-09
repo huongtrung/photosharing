@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
+import vn.app.base.fragment.BaseFragment;
 import vn.app.base.imageloader.ImageLoader;
+import vn.app.base.util.DebugLog;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.SharedPrefUtils;
@@ -79,7 +83,7 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final HomeData homeData = homeDataList.get(position);
-        mUserId = SharedPrefUtils.getString(Constant.KEY_USER_ID, "");
+        mUserId = SharedPrefUtils.getString(Constant.KEY_ID_NAME, "");
         userId = homeDataList.get(position).user.id;
         imageId = homeDataList.get(position).image.id;
 
@@ -93,28 +97,27 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
             holder.ivPhoto.setImageResource(R.drawable.placeholer_image_1600);
 
         StringUtil.displayText(homeData.user.username, holder.tvNameAccount);
-        if (!userId.equalsIgnoreCase(mUserId)) {
-            if (homeData.image.isFavourite) {
-                isFavorite = 0;
-                holder.ivFavorite.setImageResource(R.drawable.icon_favourite);
-            } else {
-                isFavorite = 1;
-                holder.ivFavorite.setImageResource(R.drawable.icon_no_favourite);
-            }
-        } else
-            holder.ivFavorite.setVisibility(View.GONE);
-        if (!userId.equalsIgnoreCase(mUserId)) {
-            if (homeData.user.isFollowing) {
-                isFollow = 0;
-                holder.btFollow.setBackgroundResource(R.color.color_btn_follow_bg);
-                holder.btFollow.setText("Following");
-            } else {
-                isFollow = 1;
-                holder.btFollow.setBackgroundResource(R.color.color_button);
-                holder.btFollow.setText("Follow");
-            }
+        if (homeData.image.isFavourite) {
+            isFavorite = 0;
+            holder.ivFavorite.setImageResource(R.drawable.icon_favourite);
+        } else {
+            isFavorite = 1;
+            holder.ivFavorite.setImageResource(R.drawable.icon_no_favourite);
+        }
+        if (!userId.equalsIgnoreCase(SharedPrefUtils.getString(Constant.KEY_USER_ID, ""))) {
+            holder.btFollow.setVisibility(View.VISIBLE);
+
         } else
             holder.btFollow.setVisibility(View.GONE);
+        if (homeData.user.isFollowing) {
+            isFollow = 0;
+            holder.btFollow.setBackgroundResource(R.color.color_btn_follow_bg);
+            holder.btFollow.setText("Following");
+        } else {
+            isFollow = 1;
+            holder.btFollow.setBackgroundResource(R.color.color_button);
+            holder.btFollow.setText("Follow");
+        }
         if (homeData.image.location != null && !homeData.image.location.isEmpty())
             StringUtil.displayText(homeData.image.location, holder.tvLocation);
         else
@@ -234,7 +237,7 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ivAccount = (ImageView) itemView.findViewById(R.id.iv_account);
+            ivAccount = (CircleImageView) itemView.findViewById(R.id.iv_account);
             tvNameAccount = (TextView) itemView.findViewById(R.id.tv_name_account);
             btFollow = (Button) itemView.findViewById(R.id.bt_follow);
             ivPhoto = (ImageView) itemView.findViewById(R.id.iv_photo);

@@ -9,6 +9,7 @@ import com.hg.photoshare.fragment.HomeMenuFragment;
 import com.hg.photoshare.fragment.LoginFragment;
 
 import vn.app.base.activity.BaseActivity;
+import vn.app.base.util.FragmentUtil;
 
 import static android.R.attr.drawable;
 import static android.R.attr.fragment;
@@ -16,7 +17,6 @@ import static android.R.attr.fragment;
 public class HomeActivity extends BaseActivity {
     private Toolbar mToolbar;
     private HomeMenuFragment mHomeMenu;
-    DrawerLayout mDrawerLayout;
 
     @Override
     protected String getNoConnectionMessage() {

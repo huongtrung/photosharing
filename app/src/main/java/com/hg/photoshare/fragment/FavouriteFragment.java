@@ -17,6 +17,7 @@ import com.hg.photoshare.api.request.FavouriteListRequest;
 import com.hg.photoshare.api.respones.ImageListResponse;
 import com.hg.photoshare.bean.ImageBean;
 import com.hg.photoshare.bean.UserBean;
+import com.hg.photoshare.contants.Constant;
 
 import java.util.Locale;
 
@@ -25,6 +26,7 @@ import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.SharedPrefUtils;
 
 import static android.R.id.message;
 
@@ -51,8 +53,8 @@ public class FavouriteFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-
-        setUpToolBarView(true, "Favorite", true, "", false);
+        setUpToolBarView(true, getString(R.string.title_favorite), true, "", false);
+        mUserId = SharedPrefUtils.getString(Constant.KEY_USER_ID, "");
         mFavoriteAdapter = new ImageListAdapter(getContext());
         showCoverNetworkLoading();
         getRequestFavorite();
@@ -68,28 +70,27 @@ public class FavouriteFragment extends BaseFragment {
             @Override
             public void onItemAvatarClick(View view, String userId) {
                 if (userId.equalsIgnoreCase(mUserId))
-                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userId), null);
+                   replaceFragment(R.id.container, ProfileFragment.newInstance(userId));
                 else
-                    FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
+                    replaceFragment(R.id.container, UserFragment.newInstance(userId));
             }
 
             @Override
             public void onItemNameClick(View view, String userId) {
                 if (userId.equalsIgnoreCase(mUserId))
-                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userId), null);
+                    replaceFragment(R.id.container, ProfileFragment.newInstance(userId));
                 else
-                    FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
+                    replaceFragment(R.id.container, UserFragment.newInstance(userId));
             }
 
             @Override
             public void onItemPhotoClick(View view, ImageBean imageBean, UserBean userBean) {
-                FragmentUtil.replaceFragment(getActivity(), ImageDetailFragment.newInstance(imageBean, userBean), null);
+                replaceFragment(R.id.container, ImageDetailFragment.newInstance(imageBean, userBean));
             }
 
             @Override
             public void OnItemLocationClick(View view, String lat, String longtitude) {
                 Uri uri = Uri.parse(String.format(Locale.ENGLISH, "geo:%f,%f", Float.valueOf(lat), Float.valueOf(longtitude)));
-                Log.e("lat", lat + "long" + longtitude);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }

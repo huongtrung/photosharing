@@ -16,9 +16,11 @@ import com.hg.photoshare.api.request.FavoriteRequest;
 import com.hg.photoshare.api.request.FollowRequest;
 import com.hg.photoshare.contants.Constant;
 import com.hg.photoshare.data.ImageListData;
+import com.hg.photoshare.fragment.HomeFragment;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.util.DialogUtil;
@@ -86,29 +88,26 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
 
         StringUtil.displayText(imageList.user.username, holder.tvName);
 
-        if (!userId.equalsIgnoreCase(mUserId)) {
-            if (imageList.image.isFavourite) {
-                isFavorite = 0;
-                holder.ivFavorite.setImageResource(R.drawable.icon_favourite);
-            } else {
-                isFavorite = 1;
-                holder.ivFavorite.setImageResource(R.drawable.icon_no_favourite);
-            }
-        } else
-            holder.ivFavorite.setVisibility(View.GONE);
-        if (!userId.equalsIgnoreCase(mUserId)) {
-            if (imageList.user.isFollowing) {
-                isFollow = 0;
-                holder.btFollow.setBackgroundResource(R.color.color_btn_follow_bg);
-                holder.btFollow.setText("Following");
-            } else {
-                isFollow = 1;
-                holder.btFollow.setBackgroundResource(R.color.color_button);
-                holder.btFollow.setText("Follow");
-            }
-        } else
+        if (imageList.image.isFavourite) {
+            isFavorite = 0;
+            holder.ivFavorite.setImageResource(R.drawable.icon_favourite);
+        } else {
+            isFavorite = 1;
+            holder.ivFavorite.setImageResource(R.drawable.icon_no_favourite);
+        }
+        if (!userId.equalsIgnoreCase(mUserId))
+            holder.btFollow.setVisibility(View.VISIBLE);
+        else
             holder.btFollow.setVisibility(View.GONE);
-
+        if (imageList.user.isFollowing) {
+            isFollow = 0;
+            holder.btFollow.setBackgroundResource(R.color.color_btn_follow_bg);
+            holder.btFollow.setText("Following");
+        } else {
+            isFollow = 1;
+            holder.btFollow.setBackgroundResource(R.color.color_button);
+            holder.btFollow.setText("Follow");
+        }
         if (imageList.image.location != null && !imageList.image.location.isEmpty())
             StringUtil.displayText(imageList.image.location, holder.tvLocation);
         else
@@ -152,17 +151,17 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
                         if (data != null && data.status == 1) {
                             if (isFollow == 1) {
                                 isFollow = 0;
-                                holder.btFollow.setText("Following");
+                                holder.btFollow.setText(mContext.getString(R.string.title_bt_following));
                                 holder.btFollow.setBackgroundResource(R.color.color_btn_follow_bg);
-                                DialogUtil.showOkBtnDialog(mContext, "Success", "Follow User Successfully !");
+                                DialogUtil.showOkBtnDialog(mContext, mContext.getString(R.string.success), mContext.getString(R.string.follow_success));
                             } else {
                                 isFollow = 1;
-                                holder.btFollow.setText("Follow");
+                                holder.btFollow.setText(mContext.getString(R.string.title_bt_follow));
                                 holder.btFollow.setBackgroundResource(R.color.color_button);
-                                DialogUtil.showOkBtnDialog(mContext, "Success", " Unfollow User Successfully !");
+                                DialogUtil.showOkBtnDialog(mContext, mContext.getString(R.string.success),mContext.getString(R.string.Unfollow_success));
                             }
                         } else
-                            DialogUtil.showOkBtnDialog(mContext, "Error", "Follow User Fail !");
+                            DialogUtil.showOkBtnDialog(mContext, mContext.getString(R.string.error), mContext.getString(R.string.follow_fail));
                     }
 
                     @Override
@@ -229,7 +228,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ivAccount = (ImageView) itemView.findViewById(R.id.iv_account);
+            ivAccount = (CircleImageView) itemView.findViewById(R.id.iv_account);
             ivPhoto = (ImageView) itemView.findViewById(R.id.iv_photo);
             tvLocation = (TextView) itemView.findViewById(R.id.tv_address);
             tvDescription = (TextView) itemView.findViewById(R.id.tv_description);

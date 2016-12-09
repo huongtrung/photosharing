@@ -1,12 +1,9 @@
 package com.hg.photoshare;
 
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 
 import vn.app.base.activity.BaseActivity;
-import vn.app.base.util.SharedPrefUtils;
 
-import com.hg.photoshare.fragment.HomeMenuFragment;
 import com.hg.photoshare.fragment.LoginFragment;
 
 public class MainActivity extends BaseActivity {

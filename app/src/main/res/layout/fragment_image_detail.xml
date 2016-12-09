@@ -9,8 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -23,12 +22,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="7">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_account"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_margin="6dp"
-                    android:background="@drawable/border_image_follow"
                     android:scaleType="centerCrop"
                     android:src="@drawable/dummy_avatar_3" />
 
@@ -88,7 +86,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:layout_margin="5dp"
+                android:layout_marginRight="75dp"
+                android:layout_marginLeft="7dp"
                 android:background="@drawable/bg_text_pin_map"
                 android:padding="2dp"
                 android:textColor="@color/white"
@@ -100,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:paddingLeft="2dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="2dp"
                 android:orientation="vertical"
                 android:layout_marginRight="70dp">
@@ -122,8 +121,6 @@
                         tools:text="#hash tag" />
                 </LinearLayout>
 
-
-
         </android.support.design.widget.CoordinatorLayout>
 
     </LinearLayout>
@@ -135,11 +132,20 @@
         android:layout_weight="0.9"
         android:orientation="vertical">
 
-        <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_comment_list"
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:layout_width="match_parent"
+        android:background="@color/color_bg">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rc_comment_list"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="9"
-            android:background="@color/color_bg"></LinearLayout>
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -151,10 +157,11 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
-                android:layout_weight="9" />
+                android:layout_weight="9"
+                android:hint="Comment here !"/>
 
             <ImageButton
-                android:id="@+id/ib_comment"
+                android:id="@+id/bt_comment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"

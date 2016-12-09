@@ -15,13 +15,13 @@
         android:background="@color/color_bg">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:scaleType="centerCrop"
             android:id="@+id/civ_avatar"
             android:layout_width="133dp"
             android:layout_height="137dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:src="@drawable/placeholer_avatar" />
-
         <ImageButton
             android:id="@+id/bt_change_avatar"
             android:layout_width="35dp"

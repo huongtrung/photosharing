@@ -44,7 +44,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
-        homeAdapter = new HomeAdapter(getActivity().getSupportFragmentManager());
+        homeAdapter = new HomeAdapter(getChildFragmentManager());
         vpHome.setAdapter(homeAdapter);
         tlHome.setupWithViewPager(vpHome);
     }
@@ -60,7 +60,7 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick(R.id.fab_home)
     public void goPost() {
-        FragmentUtil.replaceFragment(getActivity(), ImageUploadFragment.newInstance(), null);
+        replaceFragment(R.id.container, ImageUploadFragment.newInstance());
     }
 }
 
