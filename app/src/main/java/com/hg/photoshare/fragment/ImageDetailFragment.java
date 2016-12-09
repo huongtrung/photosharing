@@ -242,9 +242,9 @@ public class ImageDetailFragment extends BaseFragment {
                 break;
             case R.id.ll_user:
                 if (userId.equalsIgnoreCase(mUserId))
-                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userId), null);
+                    replaceFragment(R.id.container, ProfileFragment.newInstance(userId));
                 else
-                    FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
+                    replaceFragment(R.id.container,UserFragment.newInstance(userId));
                 break;
             case R.id.title_nav_item_bar:
                 DialogUtil.showTwoBtnWithHandleDialog(getContext(), "Delete Image ?", "Are you sure you want to delete image ?", "Ok", "Cancle", new DialogInterface.OnClickListener() {
@@ -256,7 +256,7 @@ public class ImageDetailFragment extends BaseFragment {
                             @Override
                             public void onSuccess(BaseResponse data) {
                                 if (data != null && data.status == 1) {
-                                    FragmentUtil.replaceFragment(getActivity(), HomeFragment.newInstance(), null);
+                                    replaceFragment(R.id.container, HomeFragment.newInstance());
                                 } else
                                     DialogUtil.showOkBtnDialog(getContext(), "Error", "Delete Image Fail");
                             }
@@ -277,10 +277,10 @@ public class ImageDetailFragment extends BaseFragment {
                 });
                 break;
             case R.id.bt_comment:
-                showCoverNetworkLoading();
-                KeyboardUtil.hideKeyboard(getActivity());
-                commentContent = edComment.getText().toString().trim();
                 if (commentContent != null && !commentContent.isEmpty()) {
+                    showCoverNetworkLoading();
+                    KeyboardUtil.hideKeyboard(getActivity());
+                    commentContent = edComment.getText().toString().trim();
                     CommentRequest commentRequest = new CommentRequest(imageId, commentContent);
                     commentRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                         @Override

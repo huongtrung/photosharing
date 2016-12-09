@@ -14,5 +14,5 @@ import vn.app.base.api.response.BaseResponse;
  */
 public class ImageUploadRespones extends BaseResponse {
     @SerializedName("data")
-    public List<ImageUploadData> data = new ArrayList<>();
+    public ImageUploadData data;
 }

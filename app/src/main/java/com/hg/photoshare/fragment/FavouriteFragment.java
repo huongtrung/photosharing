@@ -70,22 +70,22 @@ public class FavouriteFragment extends BaseFragment {
             @Override
             public void onItemAvatarClick(View view, String userId) {
                 if (userId.equalsIgnoreCase(mUserId))
-                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userId), null);
+                   replaceFragment(R.id.container, ProfileFragment.newInstance(userId));
                 else
-                    FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
+                    replaceFragment(R.id.container, UserFragment.newInstance(userId));
             }
 
             @Override
             public void onItemNameClick(View view, String userId) {
                 if (userId.equalsIgnoreCase(mUserId))
-                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userId), null);
+                    replaceFragment(R.id.container, ProfileFragment.newInstance(userId));
                 else
-                    FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
+                    replaceFragment(R.id.container, UserFragment.newInstance(userId));
             }
 
             @Override
             public void onItemPhotoClick(View view, ImageBean imageBean, UserBean userBean) {
-                FragmentUtil.replaceFragment(getActivity(), ImageDetailFragment.newInstance(imageBean, userBean), null);
+                replaceFragment(R.id.container, ImageDetailFragment.newInstance(imageBean, userBean));
             }
 
             @Override

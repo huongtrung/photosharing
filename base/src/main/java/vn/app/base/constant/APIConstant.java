@@ -19,6 +19,7 @@ public class APIConstant {
     public static final String REQUEST_URL_DEL_IMAGE= "https://polar-plains-86888.herokuapp.com/api/image/delete";
     public static final String REQUEST_URL_COMMENT= "https://polar-plains-86888.herokuapp.com/api/comment";
     public static final String REQUEST_URL_COMMENT_LIST= "https://polar-plains-86888.herokuapp.com/api/commentlist";
+    public static final String REQUEST_URL_NEAR_BY= "https://polar-plains-86888.herokuapp.com/api/nearby";
     public static final String FULLNAME = "username";
     public static final String PASSWORD = "password";
     public static final String EMAIL = "email";

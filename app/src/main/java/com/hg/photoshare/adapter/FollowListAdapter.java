@@ -19,6 +19,7 @@ import com.hg.photoshare.inter.OnItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.util.DialogUtil;
@@ -84,7 +85,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivAvatarFollow;
+        CircleImageView ivAvatarFollow;
         TextView tvName;
         Button btFollow;
         View container;
@@ -92,7 +93,7 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
             container = itemView;
-            ivAvatarFollow = (ImageView) itemView.findViewById(R.id.iv_avatar_follow);
+            ivAvatarFollow = (CircleImageView) itemView.findViewById(R.id.iv_avatar_follow);
             tvName = (TextView) itemView.findViewById(R.id.tv_name);
             btFollow = (Button) itemView.findViewById(R.id.bt_follow);
         }

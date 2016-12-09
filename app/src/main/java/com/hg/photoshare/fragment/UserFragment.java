@@ -107,7 +107,7 @@ public class UserFragment extends BaseFragment {
 
             @Override
             public void onItemPhotoClick(View view, ImageBean imageBean, UserBean userBean) {
-                FragmentUtil.replaceFragment(getActivity(), ImageDetailFragment.newInstance(imageBean, userBean), null);
+                replaceFragment(R.id.container, ImageDetailFragment.newInstance(imageBean, userBean));
             }
 
             @Override

@@ -37,9 +37,10 @@
                     android:background="@drawable/bg_button_profile"
                     android:padding="10dp"
                     android:scaleType="centerCrop"
+                    android:layout_gravity="right"
                     android:src="@drawable/icon_camera"
                     app:layout_anchor="@id/iv_photo_upload"
-                    app:layout_anchorGravity="bottom|right|end" />
+                    app:layout_anchorGravity="end" />
             </android.support.design.widget.CoordinatorLayout>
 
             <LinearLayout

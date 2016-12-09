@@ -47,7 +47,7 @@ public class ToturialFragment extends BaseFragment {
 
     @OnClick(R.id.bt_skip)
     public void goHome() {
-        FragmentUtil.replaceFragment(getActivity(), HomeFragment.newInstance(), null);
+        replaceFragment(R.id.container, HomeFragment.newInstance());
     }
 
     public static ToturialFragment newInstance() {

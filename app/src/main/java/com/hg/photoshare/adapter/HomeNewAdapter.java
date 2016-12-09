@@ -33,6 +33,7 @@ import java.util.Locale;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
+import vn.app.base.fragment.BaseFragment;
 import vn.app.base.imageloader.ImageLoader;
 import vn.app.base.util.DebugLog;
 import vn.app.base.util.DialogUtil;

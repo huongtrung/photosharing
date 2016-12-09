@@ -15,4 +15,5 @@
     <string name="follow_fail">Follow User Fail !</string>
     <string name="title_bt_follow">Follow</string>
     <string name="title_bt_following">Following</string>
+    <string name="title_activity_crop_image">CropImageActivity</string>
 </resources>

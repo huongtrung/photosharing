@@ -9,6 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.hg.photoshare.R;
 import com.hg.photoshare.adapter.HomeNewAdapter;
 import com.hg.photoshare.api.request.FollowRequest;
@@ -31,6 +39,7 @@ import vn.app.base.util.SharedPrefUtils;
 
 import static android.R.attr.data;
 import static android.R.id.message;
+import static java.lang.String.valueOf;
 
 /**
  * Created by Nart on 25/10/2016.
@@ -46,6 +55,8 @@ public class HomeNewFragment extends BaseFragment {
     private int typeIndex;
     private int num = 10;
     private String mUserId;
+    private double lat;
+    private String lng;
 
     public static HomeNewFragment newInstance(int type) {
         HomeNewFragment fragment = new HomeNewFragment();
@@ -78,22 +89,22 @@ public class HomeNewFragment extends BaseFragment {
             @Override
             public void onItemAvatarClick(View view, String userId) {
                 if (userId.equalsIgnoreCase(mUserId))
-                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userId), null);
+                    replaceFragment(R.id.container, ProfileFragment.newInstance(userId));
                 else
-                    FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
+                    replaceFragment(R.id.container, UserFragment.newInstance(userId));
             }
 
             @Override
             public void onItemNameClick(View view, String userId) {
                 if (userId.equalsIgnoreCase(mUserId))
-                    FragmentUtil.replaceFragment(getActivity(), ProfileFragment.newInstance(userId), null);
+                    replaceFragment(R.id.container, ProfileFragment.newInstance(userId));
                 else
-                    FragmentUtil.replaceFragment(getActivity(), UserFragment.newInstance(userId), null);
+                    replaceFragment(R.id.container, UserFragment.newInstance(userId));
             }
 
             @Override
             public void onItemPhotoClick(View view, ImageBean imageBean, UserBean userBean) {
-                FragmentUtil.replaceFragment(getActivity(), ImageDetailFragment.newInstance(imageBean, userBean), null);
+                replaceFragment(R.id.container, ImageDetailFragment.newInstance(imageBean, userBean));
             }
 
             @Override

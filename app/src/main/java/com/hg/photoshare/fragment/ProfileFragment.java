@@ -34,6 +34,8 @@ import com.hg.photoshare.api.respones.ProfileUserResponse;
 import com.hg.photoshare.bean.ImageBean;
 import com.hg.photoshare.bean.UserBean;
 import com.hg.photoshare.contants.Constant;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,11 +83,13 @@ public class ProfileFragment extends BaseFragment {
     FloatingActionButton fabProfile;
     @BindView(R.id.swipe_profile)
     SwipeRefreshLayout swipeRefreshProfile;
+    CropImageView cropImage;
 
     private String mUserId;
     private String userId;
     private ImageListAdapter mImageListAdapter;
     private File fileImage;
+    private Bitmap bitmap;
 
     public static ProfileFragment newInstance(String userId) {
         ProfileFragment fragment = new ProfileFragment();
@@ -128,7 +132,7 @@ public class ProfileFragment extends BaseFragment {
 
             @Override
             public void onItemPhotoClick(View view, ImageBean imageBean, UserBean userBean) {
-                FragmentUtil.replaceFragment(getActivity(), ImageDetailFragment.newInstance(imageBean, userBean), null);
+                replaceFragment(R.id.container, ImageDetailFragment.newInstance(imageBean, userBean));
             }
 
             @Override
@@ -242,7 +246,7 @@ public class ProfileFragment extends BaseFragment {
 
     @OnClick(R.id.fab_profile)
     public void goPost() {
-        FragmentUtil.replaceFragment(getActivity(), ImageUploadFragment.newInstance(), null);
+        replaceFragment(R.id.container, ImageUploadFragment.newInstance());
     }
 
     @Override
@@ -265,27 +269,19 @@ public class ProfileFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constant.PICK_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
-            Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().
                         getApplicationContext().getContentResolver(), data.getData());
-                if (bitmap != null) {
-                    civAvatar.setImageBitmap(bitmap);
-                    fileImage = savebitmap(bitmap);
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         } else if (requestCode == Constant.CAM_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
             Uri fileUri = getPhotoFileUri("temp.png");
-            Bitmap bitmap = BitmapUtil.decodeFromFile(fileUri.getPath(), 800, 800);
-            if (bitmap != null) {
-                civAvatar.setImageBitmap(bitmap);
-                fileImage = savebitmap(bitmap);
-            }
+            bitmap = BitmapUtil.decodeFromFile(fileUri.getPath(), 800, 800);
         }
-
+        fileImage = savebitmap(bitmap);
+        civAvatar.setImageBitmap(bitmap);
     }
 
 

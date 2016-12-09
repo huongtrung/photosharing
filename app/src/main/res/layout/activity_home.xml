@@ -6,15 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <include
             android:id="@+id/toolbar_home"
             layout="@layout/item_bar_home"/>
-
-        <FrameLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+    </FrameLayout>
     <fragment
         android:id="@+id/navigation_drawer"
         android:name="com.hg.photoshare.fragment.HomeMenuFragment"

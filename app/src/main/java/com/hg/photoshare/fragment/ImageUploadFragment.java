@@ -56,10 +56,12 @@ import vn.app.base.constant.ApiParam;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.BitmapUtil;
 import vn.app.base.util.DialogUtil;
+import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.NetworkUtils;
 import vn.app.base.util.SharedPrefUtils;
 
 import com.google.android.gms.location.LocationServices;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import static android.R.attr.country;
 
@@ -147,6 +149,7 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
 //                etHashTag.setText(wordtoSpan);
             }
         });
+
     }
 
 
@@ -246,7 +249,7 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
 
     @OnClick(R.id.bt_cancle)
     public void cancle() {
-        handleBack();
+        FragmentUtil.popBackStack(getActivity());
     }
 
 
@@ -274,13 +277,13 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         List<Address> addresses;
         try {
-            addresses = geocoder.getFromLocation(latitude, longtitude, 1);
+            addresses = geocoder.getFromLocation(latitude, longtitude,1);
             String address = addresses.get(0).getAddressLine(0);
             String city = addresses.get(0).getLocality();
             String state = addresses.get(0).getAdminArea();
             String country = addresses.get(0).getCountryName();
 
-            location = address + ", " + state + ", " + city + ", " + country;
+//            location = address+"";
 
         } catch (IOException e) {
             e.printStackTrace();

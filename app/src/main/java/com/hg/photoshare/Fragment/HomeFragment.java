@@ -60,7 +60,7 @@ public class HomeFragment extends BaseFragment {
 
     @OnClick(R.id.fab_home)
     public void goPost() {
-        FragmentUtil.replaceFragment(getActivity(), ImageUploadFragment.newInstance(), null);
+        replaceFragment(R.id.container, ImageUploadFragment.newInstance());
     }
 }
 

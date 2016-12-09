@@ -11,6 +11,8 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -36,6 +38,7 @@ import vn.app.base.BaseApplication;
 import vn.app.base.R;
 import vn.app.base.constant.AppConstant;
 import vn.app.base.util.DebugLog;
+import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.NetworkUtils;
 import vn.app.base.util.StringUtil;
 import vn.app.base.util.UiUtil;
@@ -233,12 +236,32 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void handleBack() {
-        int backStackCnt = getFragmentManager().getBackStackEntryCount();
-        if (backStackCnt > 0) {
-            getFragmentManager().popBackStack();
-        } else {
-            getActivity().finish();
+            int backStackCnt = getFragmentManager().getBackStackEntryCount();
+            if (backStackCnt > 1) {
+                getFragmentManager().popBackStack();
+            } else {
+                getActivity().onBackPressed();
+            }
+    }
+
+    public void replaceFragment(int container, Fragment fragment) {
+        replaceFragment(container, fragment, null, true);
+    }
+
+    public void replaceFragment(int container, Fragment fragment, String tag, boolean isAddToBackStack) {
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        if (tag != null) {
+            Fragment f = manager.findFragmentByTag(tag);
+            if (f != null) {
+                manager.popBackStack();
+            }
         }
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(container, fragment, tag);
+        if (isAddToBackStack){
+            transaction.addToBackStack(tag);
+        }
+        int id = transaction.commit();
     }
 
     public void pickFormStorage() {

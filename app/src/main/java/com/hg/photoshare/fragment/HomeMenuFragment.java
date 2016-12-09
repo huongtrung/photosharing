@@ -1,16 +1,12 @@
 package com.hg.photoshare.fragment;
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,11 +20,9 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
-import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.SharedPrefUtils;
 import vn.app.base.util.StringUtil;
 
-import static vn.app.base.util.FragmentUtil.replaceFragment;
 
 /**
  * Created by Nart on 26/10/2016.
@@ -115,22 +109,22 @@ public class HomeMenuFragment extends BaseFragment {
         mDrawerLayout.closeDrawers();
         switch (v.getId()) {
             case R.id.rl_user:
-                FragmentUtil.replaceFragment(getFragmentManager(), ProfileFragment.newInstance(userId), null);
+                replaceFragment(R.id.container, ProfileFragment.newInstance(userId));
                 break;
             case R.id.rl_home:
-                FragmentUtil.replaceFragment(getFragmentManager(), HomeFragment.newInstance(), null);
+                replaceFragment(R.id.container, HomeFragment.newInstance());
                 break;
             case R.id.rl_post:
-                FragmentUtil.replaceFragment(getFragmentManager(), ImageUploadFragment.newInstance(), null);
+                replaceFragment(R.id.container, ImageUploadFragment.newInstance());
                 break;
             case R.id.rl_favorite:
-                FragmentUtil.replaceFragment(getFragmentManager(), FavouriteFragment.newInstance(), null);
+                replaceFragment(R.id.container, FavouriteFragment.newInstance());
                 break;
             case R.id.rl_nearby:
-                FragmentUtil.replaceFragment(getFragmentManager(), NearbyFragment.newInstance(), null);
+                replaceFragment(R.id.container, NearbyFragment.newInstance());
                 break;
             case R.id.rl_follow:
-                FragmentUtil.replaceFragment(getFragmentManager(), FollowFragment.newInstance(), null);
+                replaceFragment(R.id.container, FollowFragment.newInstance());
                 break;
             case R.id.rl_logout:
                 DialogUtil.showTwoBtnWithHandleDialog(getContext(), "Logout ?", "Are you sure you want to Logout ?", "Ok", "Cancle", new DialogInterface.OnClickListener() {
@@ -138,7 +132,7 @@ public class HomeMenuFragment extends BaseFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         UserManage.clearUserData();
                         UserManage.clearUser();
-                        FragmentUtil.replaceFragment(getFragmentManager(), LoginFragment.newInstance(), null);
+                        replaceFragment(R.id.container, LoginFragment.newInstance());
                     }
                 }, new DialogInterface.OnClickListener() {
                     @Override

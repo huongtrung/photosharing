@@ -82,7 +82,7 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R.id.btnCreateAccount)
     public void goToRegisterFragment() {
-        FragmentUtil.replaceFragment(getActivity(), RegisterFragment.newInstance(), null);
+        replaceFragment(R.id.container, RegisterFragment.newInstance());
     }
 
     @OnClick(R.id.btnLogin)
@@ -133,7 +133,7 @@ public class LoginFragment extends BaseFragment {
                 Intent intent = new Intent(getActivity(), HomeActivity.class);
                 startActivity(intent);
             } else {
-                FragmentUtil.replaceFragment(getActivity(), ToturialFragment.newInstance(), null);
+                replaceFragment(R.id.container, ToturialFragment.newInstance());
 
             }
         }
