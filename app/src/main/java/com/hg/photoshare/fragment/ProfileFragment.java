@@ -50,10 +50,12 @@ import vn.app.base.adapter.DividerItemDecoration;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.constant.APIConstant;
 import vn.app.base.constant.ApiParam;
+import vn.app.base.constant.AppConstant;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.BitmapUtil;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.ImagePickerUtil;
 import vn.app.base.util.NetworkUtils;
 import vn.app.base.util.SharedPrefUtils;
 import vn.app.base.util.StringUtil;
@@ -83,7 +85,7 @@ public class ProfileFragment extends BaseFragment {
     FloatingActionButton fabProfile;
     @BindView(R.id.swipe_profile)
     SwipeRefreshLayout swipeRefreshProfile;
-    CropImageView cropImage;
+    private Uri fileUri;
 
     private String mUserId;
     private String userId;
@@ -236,8 +238,9 @@ public class ProfileFragment extends BaseFragment {
                 hideCoverNetworkLoading();
                 showData(response);
                 getRequestImageList();
+                SharedPrefUtils.putString(Constant.KEY_IMAGE_USER,response.data.avatar );
                 DialogUtil.showOkBtnDialog(getContext(), "Upload Success", "Upload Image Success !");
-                SharedPrefUtils.putString(Constant.KEY_IMAGE_USER, "");
+
             }
         }, params, filePart);
         NetworkUtils.getInstance(getActivity().getApplicationContext()).addToRequestQueue(updateProfileRequest);
@@ -272,16 +275,34 @@ public class ProfileFragment extends BaseFragment {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().
                         getApplicationContext().getContentResolver(), data.getData());
+                if (bitmap != null) {
+                    civAvatar.setImageBitmap(bitmap);
+                    fileImage = savebitmap(bitmap);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-        } else if (requestCode == Constant.CAM_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
-            Uri fileUri = getPhotoFileUri("temp.png");
-            bitmap = BitmapUtil.decodeFromFile(fileUri.getPath(), 800, 800);
         }
-        fileImage = savebitmap(bitmap);
-        civAvatar.setImageBitmap(bitmap);
+
+        if (requestCode == Constant.CAM_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
+            CropImage.activity(fileUri).setAspectRatio(16, 9).start(getContext(), this);
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == Activity.RESULT_OK) {
+                Uri resultUri = result.getUri();
+                Bitmap bitmap = BitmapUtil.decodeFromFile(resultUri.getPath(), 900, 900);
+                try {
+                    fileImage = creatFilefromBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                civAvatar.setImageBitmap(bitmap);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
     }
 
 
@@ -295,12 +316,20 @@ public class ProfileFragment extends BaseFragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
         switch (item.getItemId()) {
             case Constant.CONTEXT_MENU_FROM_CAM:
-                pickFormCam();
+
+                Intent getCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                fileUri = Uri.fromFile(imagePickerUtil.createFileUri(getActivity()));
+                getCamera.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                startActivityForResult(getCamera, AppConstant.CAM_PHOTO_FORM_AVATAR);
                 break;
             case Constant.CONTEXT_MENU_FROM_STORAGE:
-                pickFormStorage();
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select File"), AppConstant.PICK_PHOTO_FORM_AVATAR);
                 break;
         }
         return super.onContextItemSelected(item);

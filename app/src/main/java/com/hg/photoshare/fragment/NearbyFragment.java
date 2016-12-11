@@ -46,7 +46,8 @@ import static android.R.attr.data;
 /**
  * Created by Nart on 26/10/2016.
  */
-public class NearbyFragment extends BaseFragment implements GoogleMap.OnInfoWindowClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class NearbyFragment extends BaseFragment implements OnMapReadyCallback,GoogleMap.OnInfoWindowClickListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private double latitude;
     private double longtitude;
@@ -67,6 +68,7 @@ public class NearbyFragment extends BaseFragment implements GoogleMap.OnInfoWind
         NearbyFragment fragment = new NearbyFragment();
         return fragment;
     }
+
 
     @Override
     protected int getLayoutId() {
@@ -124,15 +126,15 @@ public class NearbyFragment extends BaseFragment implements GoogleMap.OnInfoWind
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                    nearByData = respones.data;
-                    for (int i = 0; i < nearByData.size(); i++) {
-                        latCurrentUser = nearByData.get(i).image.lat;
-                        longCurrentUser = nearByData.get(i).image._long;
-                        userName = nearByData.get(i).user.username;
-                        captionPost = nearByData.get(i).image.caption;
-                        imageBean = nearByData.get(i).image;
-                        userBean = nearByData.get(i).user;
-                        if (latCurrentUser != null && !latCurrentUser.isEmpty() || longCurrentUser != null && !longCurrentUser.isEmpty()) {
+                nearByData = respones.data;
+                for (int i = 0; i < nearByData.size(); i++) {
+                    latCurrentUser = nearByData.get(i).image.lat;
+                    longCurrentUser = nearByData.get(i).image._long;
+                    userName = nearByData.get(i).user.username;
+                    captionPost = nearByData.get(i).image.caption;
+                    imageBean = nearByData.get(i).image;
+                    userBean = nearByData.get(i).user;
+                    if (latCurrentUser != null && !latCurrentUser.isEmpty() || longCurrentUser != null && !longCurrentUser.isEmpty()) {
                         LatLng latLng = new LatLng(Double.parseDouble(latCurrentUser), Double.parseDouble(longCurrentUser));
                         CameraUpdate allTheThings = CameraUpdateFactory.newLatLngZoom(latLng, 16);
                         googleMap.moveCamera(allTheThings);
@@ -144,13 +146,11 @@ public class NearbyFragment extends BaseFragment implements GoogleMap.OnInfoWind
                 }
             }
         });
-}
+    }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        String description = marker.getSnippet();
-        if (captionPost.equalsIgnoreCase(description))
-            replaceFragment(R.id.container, ImageDetailFragment.newInstance(imageBean, userBean));
+        replaceFragment(R.id.container, ImageDetailFragment.newInstance(imageBean, userBean));
     }
 
     @Override
@@ -181,7 +181,19 @@ public class NearbyFragment extends BaseFragment implements GoogleMap.OnInfoWind
                     LatLng latLng = new LatLng(latitude, longtitude);
                     CameraUpdate allTheThings = CameraUpdateFactory.newLatLngZoom(latLng, 16);
                     googleMap.moveCamera(allTheThings);
-                    googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longtitude)).title("Your position"));
+                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    googleMap.setMyLocationEnabled(true);
+
+
                 }
             });
         }
@@ -243,5 +255,12 @@ public class NearbyFragment extends BaseFragment implements GoogleMap.OnInfoWind
     public void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        googleMap.setOnInfoWindowClickListener(this);
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
     }
 }

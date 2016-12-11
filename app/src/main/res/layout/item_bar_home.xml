@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="30dp"
         android:textColor="@color/white"
         android:textSize="@dimen/fontzise_20"
         android:text="Home" />

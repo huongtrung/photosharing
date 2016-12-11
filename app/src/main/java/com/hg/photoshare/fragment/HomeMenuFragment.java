@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -85,13 +86,13 @@ public class HomeMenuFragment extends BaseFragment {
         });
 
         mActionBarDrawerToggle.setDrawerIndicatorEnabled(false);
-        RelativeLayout iconDrawer = (RelativeLayout) toolbar.findViewById(R.id.item_bar);
-        iconDrawer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mDrawerLayout.openDrawer(Gravity.LEFT);
-            }
-        });
+//        ImageView iconDrawer = (ImageView) toolbar.findViewById(R.id.iv_open_drawer);
+//        iconDrawer.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mDrawerLayout.openDrawer(Gravity.LEFT);
+//            }
+//        });
     }
 
     @Override
@@ -108,6 +109,9 @@ public class HomeMenuFragment extends BaseFragment {
     public void OnClick(View v) {
         mDrawerLayout.closeDrawers();
         switch (v.getId()) {
+            case R.id.iv_open_drawer:
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+                break;
             case R.id.rl_user:
                 replaceFragment(R.id.container, ProfileFragment.newInstance(userId));
                 break;

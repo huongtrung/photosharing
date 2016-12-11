@@ -277,7 +277,6 @@ public class ImageDetailFragment extends BaseFragment {
                 });
                 break;
             case R.id.bt_comment:
-                if (commentContent != null && !commentContent.isEmpty()) {
                     showCoverNetworkLoading();
                     KeyboardUtil.hideKeyboard(getActivity());
                     commentContent = edComment.getText().toString().trim();
@@ -300,8 +299,6 @@ public class ImageDetailFragment extends BaseFragment {
                         }
                     });
                     commentRequest.execute();
-                } else
-                    DialogUtil.showOkBtnDialog(getContext(), "Required fields !", "Please re-enter again");
         }
     }
 
