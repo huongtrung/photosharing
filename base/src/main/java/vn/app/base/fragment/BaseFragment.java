@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -39,6 +40,7 @@ import vn.app.base.R;
 import vn.app.base.constant.AppConstant;
 import vn.app.base.util.DebugLog;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.ImagePickerUtil;
 import vn.app.base.util.NetworkUtils;
 import vn.app.base.util.StringUtil;
 import vn.app.base.util.UiUtil;
@@ -271,11 +273,7 @@ public abstract class BaseFragment extends Fragment {
         startActivityForResult(Intent.createChooser(intent, "Select File"), AppConstant.PICK_PHOTO_FORM_AVATAR);
     }
     public void pickFormCam() {
-        Intent mIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        mIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri("temp.png"));
-        if (mIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(mIntent, AppConstant.CAM_PHOTO_FORM_AVATAR);
-        }
+
     }
 
     public Uri getPhotoFileUri(String fileName) {
@@ -356,6 +354,20 @@ public abstract class BaseFragment extends Fragment {
             return null;
         }
         return file;
+    }
+
+    public static File creatFilefromBitmap(Bitmap bitmap) throws IOException {
+        File imageAvatar;
+        File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
+        imageDir.mkdir();
+        imageAvatar = new File(imageDir, "avatarCropped.jpg");
+        DebugLog.i("Duong dan" + imageDir);
+        OutputStream fOut = new FileOutputStream(imageAvatar);
+        Bitmap getBitmap = bitmap;
+        getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+        fOut.flush();
+        fOut.close();
+        return imageAvatar;
     }
 
 //    protected void clearBackStack() {

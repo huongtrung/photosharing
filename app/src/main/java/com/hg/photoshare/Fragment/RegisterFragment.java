@@ -23,6 +23,7 @@ import com.hg.photoshare.R;
 import com.hg.photoshare.api.request.RegisterRequest;
 import com.hg.photoshare.api.respones.RegisterResponse;
 import com.hg.photoshare.manage.UserManage;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,6 +45,7 @@ import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.BitmapUtil;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.ImagePickerUtil;
 import vn.app.base.util.KeyboardUtil;
 import vn.app.base.util.NetworkUtils;
 import vn.app.base.util.SharedPrefUtils;
@@ -69,14 +71,13 @@ public class RegisterFragment extends BaseFragment {
     @BindView(R.id.etConfirm)
     EditText etConfirm;
 
-    RegisterResponse registerResponse;
-
     private String userName = "";
     private String emailAdd = "";
     private String password = "";
     private String compassword = "";
-    File fileImageAvatar;
+    Uri fileUri;
     Bitmap bitmap;
+    private File fileImage;
 
     public static RegisterFragment newInstance() {
         RegisterFragment registerFragment = new RegisterFragment();
@@ -132,7 +133,7 @@ public class RegisterFragment extends BaseFragment {
                 params.put(APIConstant.EMAIL, emailAdd);
                 params.put(APIConstant.PASSWORD, SHA1(password));
                 Map<String, File> filePart = new HashMap<>();
-                filePart.put(APIConstant.UPLOAD_IMAGE, fileImageAvatar);
+                filePart.put(APIConstant.UPLOAD_IMAGE, fileImage);
                 RegisterRequest registerRequest = new RegisterRequest(Request.Method.POST, APIConstant.REQUEST_URL_REGISTER, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -141,6 +142,7 @@ public class RegisterFragment extends BaseFragment {
                 }, RegisterResponse.class, header, new Response.Listener<RegisterResponse>() {
                     @Override
                     public void onResponse(RegisterResponse response) {
+                        hideCoverNetworkLoading();
                         if (response != null && response.data != null)
                             handleRegisterSuccess(response);
                         else
@@ -160,7 +162,6 @@ public class RegisterFragment extends BaseFragment {
         if (registerResponse != null) {
             UserManage.saveCurrentUser(registerResponse.data);
             SharedPrefUtils.saveAccessToken(registerResponse.data.token);
-            Log.e("user:", registerResponse.data.token);
             replaceFragment(R.id.container, ToturialFragment.newInstance());
         }
     }
@@ -168,22 +169,38 @@ public class RegisterFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap = null;
         if (requestCode == Constant.PICK_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
-
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().
                         getApplicationContext().getContentResolver(), data.getData());
+                if (bitmap != null) {
+                    ivAvatar.setImageBitmap(bitmap);
+                    fileImage = savebitmap(bitmap);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (requestCode == Constant.CAM_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
-            Uri fileUri = getPhotoFileUri("temp.png");
-            bitmap = BitmapUtil.decodeFromFile(fileUri.getPath(), 800, 800);
         }
-        ivAvatar.setImageBitmap(bitmap);
-        fileImageAvatar = savebitmap(bitmap);
-        Log.e("file", fileImageAvatar + "");
+
+        if (requestCode == Constant.CAM_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
+            CropImage.activity(fileUri).setAspectRatio(16, 9).start(getContext(), this);
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == Activity.RESULT_OK) {
+                Uri resultUri = result.getUri();
+                Bitmap bitmap = BitmapUtil.decodeFromFile(resultUri.getPath(), 900, 900);
+                try {
+                    fileImage = creatFilefromBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ivAvatar.setImageBitmap(bitmap);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
     }
 
     @Override
@@ -196,12 +213,20 @@ public class RegisterFragment extends BaseFragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
         switch (item.getItemId()) {
             case Constant.CONTEXT_MENU_FROM_CAM:
-                pickFormCam();
+
+                Intent getCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                fileUri = Uri.fromFile(imagePickerUtil.createFileUri(getActivity()));
+                getCamera.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                startActivityForResult(getCamera, AppConstant.CAM_PHOTO_FORM_AVATAR);
                 break;
             case Constant.CONTEXT_MENU_FROM_STORAGE:
-                pickFormStorage();
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select File"), AppConstant.PICK_PHOTO_FORM_AVATAR);
                 break;
         }
         return super.onContextItemSelected(item);

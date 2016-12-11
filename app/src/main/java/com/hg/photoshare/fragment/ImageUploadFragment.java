@@ -53,10 +53,12 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import vn.app.base.constant.APIConstant;
 import vn.app.base.constant.ApiParam;
+import vn.app.base.constant.AppConstant;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.BitmapUtil;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.ImagePickerUtil;
 import vn.app.base.util.NetworkUtils;
 import vn.app.base.util.SharedPrefUtils;
 
@@ -81,7 +83,7 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
     Button btCancle;
     @BindView(R.id.et_caption)
     EditText etCaption;
-    String hashtag = "";
+    String hashtag;
     Bitmap bitmap;
     File fileImage;
     double latitude;
@@ -90,8 +92,8 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
     String strlong;
     String location;
     String caption;
+    private Uri fileUri;
     protected GoogleApiClient mGoogleApiClient;
-
     protected Location mCurrentLocation;
 
     public static ImageUploadFragment newInstance() {
@@ -199,11 +201,21 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
                 hideCoverNetworkLoading();
                 if (response != null) {
                     DialogUtil.showOkBtnDialog(getContext(), "Success", "Upload Image Success !");
+                    resetLayout();
                 }
             }
         }, params, filePart);
 
         NetworkUtils.getInstance(getActivity().getApplicationContext()).addToRequestQueue(uploadImageRequest);
+    }
+
+    private void resetLayout(){
+        fileImage =null;
+        ivPhotoUpload.setImageResource(R.drawable.placeholer_image_800);
+        etCaption.setText("");
+        scLocation.setChecked(false);
+        etHashTag.setText("");
+
     }
 
     @Override
@@ -213,16 +225,33 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().
                         getApplicationContext().getContentResolver(), data.getData());
+                if (bitmap != null) {
+                    ivPhotoUpload.setImageBitmap(bitmap);
+                    fileImage = savebitmap(bitmap);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (requestCode == Constant.CAM_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
-            Uri fileUri = getPhotoFileUri("temp.png");
-            bitmap = BitmapUtil.decodeFromFile(fileUri.getPath(), 1900, 600);
         }
-        if (bitmap != null) {
-            ivPhotoUpload.setImageBitmap(bitmap);
-            fileImage = savebitmap(bitmap);
+
+        if (requestCode == Constant.CAM_PHOTO_FORM_AVATAR && resultCode == Activity.RESULT_OK) {
+            CropImage.activity(fileUri).setAspectRatio(16, 9).start(getContext(), this);
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == Activity.RESULT_OK) {
+                Uri resultUri = result.getUri();
+                Bitmap bitmap = BitmapUtil.decodeFromFile(resultUri.getPath(), 900, 900);
+                try {
+                    fileImage = creatFilefromBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ivPhotoUpload.setImageBitmap(bitmap);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
         }
     }
 
@@ -236,12 +265,20 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
         switch (item.getItemId()) {
             case Constant.CONTEXT_MENU_FROM_CAM:
-                pickFormCam();
+
+                Intent getCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                fileUri = Uri.fromFile(imagePickerUtil.createFileUri(getActivity()));
+                getCamera.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                startActivityForResult(getCamera, AppConstant.CAM_PHOTO_FORM_AVATAR);
                 break;
             case Constant.CONTEXT_MENU_FROM_STORAGE:
-                pickFormStorage();
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select File"), AppConstant.PICK_PHOTO_FORM_AVATAR);
                 break;
         }
         return super.onContextItemSelected(item);
@@ -277,14 +314,12 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         List<Address> addresses;
         try {
-            addresses = geocoder.getFromLocation(latitude, longtitude,1);
+            addresses = geocoder.getFromLocation(latitude, longtitude, 1);
             String address = addresses.get(0).getAddressLine(0);
             String city = addresses.get(0).getLocality();
             String state = addresses.get(0).getAdminArea();
             String country = addresses.get(0).getCountryName();
-
-//            location = address+"";
-
+            location = address + ", " + state + ", " + city + ", " + country;
         } catch (IOException e) {
             e.printStackTrace();
         }
