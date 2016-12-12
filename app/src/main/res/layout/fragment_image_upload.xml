@@ -14,7 +14,7 @@
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/placeholer_image_800" />
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/bt_camera_upload"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
@@ -37,10 +37,8 @@
                     android:background="@drawable/bg_button_profile"
                     android:padding="10dp"
                     android:scaleType="centerCrop"
-                    android:layout_gravity="right"
-                    android:src="@drawable/icon_camera"
-                    app:layout_anchor="@id/iv_photo_upload"
-                    app:layout_anchorGravity="end" />
+                    android:layout_gravity="end"
+                    android:src="@drawable/icon_camera" />
             </android.support.design.widget.CoordinatorLayout>
 
             <LinearLayout
