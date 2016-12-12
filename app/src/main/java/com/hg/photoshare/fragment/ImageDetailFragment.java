@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.Marker;
 import com.hg.photoshare.R;
 import com.hg.photoshare.adapter.CommentListAdapter;
 import com.hg.photoshare.api.request.CommentListRequest;
@@ -132,7 +133,6 @@ public class ImageDetailFragment extends BaseFragment {
         latitude = mImageBean.lat;
         longtitude = mImageBean._long;
     }
-
 
     @Override
     protected void initData() {

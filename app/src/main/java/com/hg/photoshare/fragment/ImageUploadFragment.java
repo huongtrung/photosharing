@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -17,7 +18,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -128,6 +133,7 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
         editHashTag.operate(etHashTag);
 
         etHashTag.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -153,9 +159,7 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
 
             @Override
             public void afterTextChanged(Editable editable) {
-//                Spannable wordtoSpan = new SpannableString(hashtag);
-//                wordtoSpan.setSpan(new ForegroundColorSpan(Color.BLUE), 1, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//                etHashTag.setText(wordtoSpan);
+
             }
         });
 
@@ -249,7 +253,7 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == Activity.RESULT_OK) {
                 Uri resultUri = result.getUri();
-                Bitmap bitmap = BitmapUtil.decodeFromFile(resultUri.getPath(), 900, 900);
+                Bitmap bitmap = BitmapUtil.decodeFromFile(resultUri.getPath(), 1600, 900);
                 try {
                     fileImage = creatFilefromBitmap(bitmap);
                 } catch (IOException e) {
