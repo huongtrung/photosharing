@@ -15,6 +15,7 @@ import com.hg.photoshare.R;
 import com.hg.photoshare.api.request.LoginRequest;
 import com.hg.photoshare.api.respones.LoginReponse;
 import com.hg.photoshare.contants.Constant;
+import com.hg.photoshare.contants.ErrorCodeUlti;
 import com.hg.photoshare.manage.UserManage;
 
 import java.io.UnsupportedEncodingException;
@@ -94,18 +95,23 @@ public class LoginFragment extends BaseFragment {
             return;
         }
         try {
+
             LoginRequest loginRequest = new LoginRequest(userId, SHA1(pass));
             loginRequest.setRequestCallBack(new ApiObjectCallBack<LoginReponse>() {
+
                 @Override
                 public void onSuccess(LoginReponse data) {
                     loginReponse = data;
                     handleLoginSuccess(loginReponse);
                     hideCoverNetworkLoading();
+                    resetLayout();
                 }
+
                 @Override
                 public void onFail(int failCode, String message) {
                     hideCoverNetworkLoading();
-                    DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, message);
+                    resetLayout();
+                    DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
 
                 }
             });
@@ -117,7 +123,11 @@ public class LoginFragment extends BaseFragment {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
 
+    private void resetLayout() {
+        etLogin.setText("");
+        etPass.setText("");
     }
 
     private void handleLoginSuccess(LoginReponse loginReponse) {

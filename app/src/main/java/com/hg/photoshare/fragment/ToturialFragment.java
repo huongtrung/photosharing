@@ -1,5 +1,6 @@
 package com.hg.photoshare.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hg.photoshare.HomeActivity;
 import com.hg.photoshare.R;
 import com.hg.photoshare.adapter.TutorialAdapter;
 import com.hg.photoshare.api.request.TutorialRequest;
@@ -47,7 +49,9 @@ public class ToturialFragment extends BaseFragment {
 
     @OnClick(R.id.bt_skip)
     public void goHome() {
-        replaceFragment(R.id.container, HomeFragment.newInstance());
+//        replaceFragment(R.id.container, HomeFragment.newInstance());
+        Intent intent = new Intent(getActivity(), HomeActivity.class);
+        startActivity(intent);
     }
 
     public static ToturialFragment newInstance() {

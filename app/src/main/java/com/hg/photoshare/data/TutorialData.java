@@ -13,11 +13,8 @@ import java.util.List;
  */
 public class TutorialData {
         @SerializedName("tutorial")
-        @Expose
         public List<TutorialBean> tutorial = new ArrayList<>();
-
         @SerializedName("user")
-        @Expose
         public ProfileBean user;
 
 }
