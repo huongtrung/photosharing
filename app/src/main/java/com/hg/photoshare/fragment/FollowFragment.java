@@ -11,6 +11,7 @@ import com.hg.photoshare.adapter.FollowListAdapter;
 import com.hg.photoshare.api.request.FollowListRequest;
 import com.hg.photoshare.api.respones.FollowListRespones;
 import com.hg.photoshare.contants.Constant;
+import com.hg.photoshare.contants.ErrorCodeUlti;
 import com.hg.photoshare.inter.OnItemClickListener;
 
 import butterknife.BindView;
@@ -87,7 +88,7 @@ public class FollowFragment extends BaseFragment {
             @Override
             public void onFail(int failCode, String message) {
                 hideCoverNetworkLoading();
-                DialogUtil.showOkBtnDialog(getContext(), "Error " + failCode, message);
+                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
                 if (swipeFollow.isRefreshing())
                     swipeFollow.setRefreshing(false);
             }

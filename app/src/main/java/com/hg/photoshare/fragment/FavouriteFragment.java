@@ -18,11 +18,13 @@ import com.hg.photoshare.api.respones.ImageListResponse;
 import com.hg.photoshare.bean.ImageBean;
 import com.hg.photoshare.bean.UserBean;
 import com.hg.photoshare.contants.Constant;
+import com.hg.photoshare.contants.ErrorCodeUlti;
 
 import java.util.Locale;
 
 import butterknife.BindView;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
+import vn.app.base.customview.endlessrecycler.EndlessRecyclerOnScrollListener;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
@@ -40,6 +42,8 @@ public class FavouriteFragment extends BaseFragment {
     @BindView(R.id.swipe_favourite)
     SwipeRefreshLayout swipeFavorite;
     private String mUserId;
+    private int mCurrentPage = 10;
+    private static final int DEFAULT_PAGER = 10;
 
     public static FavouriteFragment newInstance() {
         FavouriteFragment fragment = new FavouriteFragment();
@@ -56,7 +60,7 @@ public class FavouriteFragment extends BaseFragment {
         setUpToolBarView(true, getString(R.string.title_favorite), true, "", false);
         mUserId = SharedPrefUtils.getString(Constant.KEY_USER_ID, "");
         mFavoriteAdapter = new ImageListAdapter(getContext());
-        showCoverNetworkLoading();
+
         getRequestFavorite();
         swipeFavorite.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -70,7 +74,7 @@ public class FavouriteFragment extends BaseFragment {
             @Override
             public void onItemAvatarClick(View view, String userId) {
                 if (userId.equalsIgnoreCase(mUserId))
-                   replaceFragment(R.id.container, ProfileFragment.newInstance(userId));
+                    replaceFragment(R.id.container, ProfileFragment.newInstance(userId));
                 else
                     replaceFragment(R.id.container, UserFragment.newInstance(userId));
             }
@@ -94,11 +98,11 @@ public class FavouriteFragment extends BaseFragment {
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }
-
         });
     }
 
     private void getRequestFavorite() {
+        showCoverNetworkLoading();
         FavouriteListRequest favouriteListRequest = new FavouriteListRequest();
         favouriteListRequest.setRequestCallBack(new ApiObjectCallBack<ImageListResponse>() {
             @Override
@@ -117,7 +121,7 @@ public class FavouriteFragment extends BaseFragment {
                 hideCoverNetworkLoading();
                 if (swipeFavorite.isRefreshing())
                     swipeFavorite.setRefreshing(false);
-                DialogUtil.showOkBtnDialog(getContext(), "Error " + failCode, message);
+                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
             }
         });
         favouriteListRequest.execute();

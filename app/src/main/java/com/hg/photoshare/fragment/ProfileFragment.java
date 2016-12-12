@@ -34,6 +34,7 @@ import com.hg.photoshare.api.respones.ProfileUserResponse;
 import com.hg.photoshare.bean.ImageBean;
 import com.hg.photoshare.bean.UserBean;
 import com.hg.photoshare.contants.Constant;
+import com.hg.photoshare.contants.ErrorCodeUlti;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -161,7 +162,7 @@ public class ProfileFragment extends BaseFragment {
             @Override
             public void onFail(int failCode, String message) {
                 hideCoverNetworkLoading();
-                DialogUtil.showOkBtnDialog(getContext(), "Error " + failCode, message);
+                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
             }
         });
         profilelRequest.execute();
@@ -199,7 +200,8 @@ public class ProfileFragment extends BaseFragment {
             public void onFail(int failCode, String message) {
                 if (swipeRefreshProfile.isRefreshing())
                     swipeRefreshProfile.setRefreshing(false);
-                DialogUtil.showOkBtnDialog(getContext(), "Error", message);
+                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
+
             }
         });
         imageListRequest.execute();
@@ -241,7 +243,6 @@ public class ProfileFragment extends BaseFragment {
                     getRequestImageList();
                     SharedPrefUtils.putString(Constant.KEY_IMAGE_USER, response.data.avatar);
                     DialogUtil.showOkBtnDialog(getContext(), "Upload Success", "Upload Image Success !");
-
                 }
             }, params, filePart);
             NetworkUtils.getInstance(getActivity().getApplicationContext()).addToRequestQueue(updateProfileRequest);

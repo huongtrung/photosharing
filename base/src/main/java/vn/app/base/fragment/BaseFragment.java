@@ -352,7 +352,6 @@ public abstract class BaseFragment extends Fragment {
         File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
         imageDir.mkdir();
         imageAvatar = new File(imageDir, "avatarCropped.jpg");
-        DebugLog.i("Duong dan" + imageDir);
         OutputStream fOut = new FileOutputStream(imageAvatar);
         Bitmap getBitmap = bitmap;
         getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);

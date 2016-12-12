@@ -18,12 +18,10 @@ import vn.app.base.util.SharedPrefUtils;
  * Created by Nart on 25/10/2016.
  */
 public class HomeRequest extends ObjectApiRequest<HomeResponse> {
-    private int type = 0;
-    private int num = 0;
+    private int type;
 
-    public HomeRequest(int type, int num) {
+    public HomeRequest(int type) {
         this.type = type;
-        this.num = num;
     }
 
     @Override
@@ -45,7 +43,7 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     public Map<String, String> getRequestParams() {
         Map<String, String> params = new HashMap<>();
         params.put(APIConstant.TYPE, String.valueOf(type));
-        params.put(APIConstant.NUM, String.valueOf(num));
+//        params.put(APIConstant.NUM, String.valueOf(num));
         return params;
     }
 

@@ -21,6 +21,7 @@ import com.hg.photoshare.api.request.FollowRequest;
 import com.hg.photoshare.bean.ImageBean;
 import com.hg.photoshare.bean.UserBean;
 import com.hg.photoshare.contants.Constant;
+import com.hg.photoshare.contants.ErrorCodeUlti;
 import com.hg.photoshare.data.HomeData;
 import com.hg.photoshare.data.ImageListData;
 import com.hg.photoshare.fragment.HomeMenuFragment;
@@ -176,7 +177,7 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
 
                     @Override
                     public void onFail(int failCode, String message) {
-                        DialogUtil.showOkBtnDialog(mContext, "Error " + failCode, message);
+                        DialogUtil.showOkBtnDialog(mContext, "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
                     }
                 });
                 followRequest.execute();
@@ -205,7 +206,7 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
 
                     @Override
                     public void onFail(int failCode, String message) {
-                        DialogUtil.showOkBtnDialog(mContext, "Error " + failCode, message);
+                        DialogUtil.showOkBtnDialog(mContext, "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
                     }
                 });
                 favoriteRequest.execute();

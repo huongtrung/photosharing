@@ -15,6 +15,7 @@ import com.hg.photoshare.R;
 import com.hg.photoshare.api.request.FollowRequest;
 import com.hg.photoshare.bean.UserBean;
 import com.hg.photoshare.contants.Constant;
+import com.hg.photoshare.contants.ErrorCodeUlti;
 import com.hg.photoshare.data.UserData;
 import com.hg.photoshare.inter.OnItemClickListener;
 
@@ -41,7 +42,6 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
     private OnItemClickListener mOnItemClickListener;
     private List<UserData> userList = new ArrayList<>();
     private int isFollow;
-    private String mUserId;
 
     public FollowListAdapter(Context context, OnItemClickListener itemClickListener) {
         this.mContext = context;
@@ -109,7 +109,8 @@ public class FollowListAdapter extends RecyclerView.Adapter<FollowListAdapter.Vi
 
                     @Override
                     public void onFail(int failCode, String message) {
-                        DialogUtil.showOkBtnDialog(mContext, "Error " + failCode, message);
+                        DialogUtil.showOkBtnDialog(mContext, "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
+
                     }
                 });
                 followRequest.execute();

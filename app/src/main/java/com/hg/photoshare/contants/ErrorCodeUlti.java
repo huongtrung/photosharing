@@ -21,22 +21,22 @@ public class ErrorCodeUlti {
                     message = "Not Found . Please try again !";
                     break;
                 case 408:
-                    message = "Request Time-out . please try again !";
+                    message = "Request Time-out . Please try again !";
                     break;
                 case 500:
-                    message = " Internal Server Error . please try again !";
+                    message = "Internal Server Error . Please try again !";
                     break;
                 case 502:
-                    message = " Bad Gateway . please try again !";
+                    message = "Bad Gateway . Please try again !";
                     break;
                 case 503:
-                    message = "Service Unavailable . please try again !";
+                    message = "Service Unavailable . Please try again !";
                     break;
                 case 520:
-                    message = " Unknown Error . please try again !";
+                    message = "Unknown Error . Please try again !";
                     break;
                 case 999:
-                    message = "No Internet Connect . please check network !";
+                    message = "No Internet Connect . Please check network !";
                     break;
             }
         return message;

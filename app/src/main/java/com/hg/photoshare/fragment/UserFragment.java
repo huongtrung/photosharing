@@ -23,6 +23,7 @@ import com.hg.photoshare.api.respones.ProfileUserResponse;
 import com.hg.photoshare.bean.ImageBean;
 import com.hg.photoshare.bean.UserBean;
 import com.hg.photoshare.contants.Constant;
+import com.hg.photoshare.contants.ErrorCodeUlti;
 
 import java.util.Locale;
 
@@ -137,7 +138,7 @@ public class UserFragment extends BaseFragment {
             @Override
             public void onFail(int failCode, String message) {
                 hideCoverNetworkLoading();
-                DialogUtil.showOkBtnDialog(getContext(), "Error " + failCode, message);
+                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
             }
         });
         userRequest.execute();
@@ -175,7 +176,7 @@ public class UserFragment extends BaseFragment {
             public void onFail(int failCode, String message) {
                 if (swipeRefreshProfile.isRefreshing())
                     swipeRefreshProfile.setRefreshing(false);
-                DialogUtil.showOkBtnDialog(getContext(), "Error", message);
+                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
             }
         });
         imageListRequest.execute();

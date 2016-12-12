@@ -115,6 +115,13 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
     @Override
     protected void initView(View root) {
         setUpToolBarView(true, "Post Image", true, "", false);
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
         char[] additionalSymbols = new char[]{'_'};
         final ActiveHashTag editHashTag = ActiveHashTag.Factory.create(ResourcesCompat.getColor(getResources(), R.color.color_white, null), null, additionalSymbols);
@@ -316,11 +323,8 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
         List<Address> addresses;
         try {
             addresses = geocoder.getFromLocation(latitude, longtitude, 1);
-            String address = addresses.get(0).getAddressLine(0);
-            String city = addresses.get(0).getLocality();
-            String state = addresses.get(0).getAdminArea();
-            String country = addresses.get(0).getCountryName();
-            location = address + ", " + state + ", " + city + ", " + country;
+            String featureName = addresses.get(0).getFeatureName();
+            location = featureName;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -377,14 +381,10 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
 
     @OnCheckedChanged(R.id.sc_location)
     public void checkChangedSend() {
-        if (scLocation.isChecked()) {
-            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
+        if (scLocation.isChecked())
             mGoogleApiClient.connect();
-        }
+        else
+            mGoogleApiClient.disconnect();
     }
 
     @Override

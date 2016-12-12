@@ -95,7 +95,7 @@ public class LoginFragment extends BaseFragment {
             return;
         }
         try {
-
+            showCoverNetworkLoading();
             LoginRequest loginRequest = new LoginRequest(userId, SHA1(pass));
             loginRequest.setRequestCallBack(new ApiObjectCallBack<LoginReponse>() {
 
@@ -104,20 +104,16 @@ public class LoginFragment extends BaseFragment {
                     loginReponse = data;
                     handleLoginSuccess(loginReponse);
                     hideCoverNetworkLoading();
-                    resetLayout();
                 }
-
                 @Override
                 public void onFail(int failCode, String message) {
-                    hideCoverNetworkLoading();
                     resetLayout();
                     DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
-
+                    hideCoverNetworkLoading();
                 }
             });
             loginRequest.execute();
             KeyboardUtil.hideKeyboard(getActivity());
-            showCoverNetworkLoading();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -137,18 +133,15 @@ public class LoginFragment extends BaseFragment {
             SharedPrefUtils.putString(Constant.KEY_USER_NAME, loginReponse.data.username);
             SharedPrefUtils.putString(Constant.KEY_USER_ID, loginReponse.data._id);
             SharedPrefUtils.putString(Constant.KEY_IMAGE_USER, loginReponse.data.avatar);
-            Log.e("user:", loginReponse.data._id);
             boolean isAgreeTutorial = SharedPrefUtils.getBoolean(ToturialFragment.KEY_AGREE, false);
             if (isAgreeTutorial) {
                 Intent intent = new Intent(getActivity(), HomeActivity.class);
                 startActivity(intent);
             } else {
                 replaceFragment(R.id.container, ToturialFragment.newInstance());
-
             }
         }
     }
-
     @Override
     public void onResume() {
         super.onResume();

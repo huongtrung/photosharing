@@ -27,6 +27,7 @@ import com.hg.photoshare.api.respones.CommentListResponse;
 import com.hg.photoshare.bean.ImageBean;
 import com.hg.photoshare.bean.UserBean;
 import com.hg.photoshare.contants.Constant;
+import com.hg.photoshare.contants.ErrorCodeUlti;
 import com.hg.photoshare.data.HomeData;
 import com.hg.photoshare.manage.UserManage;
 
@@ -204,7 +205,7 @@ public class ImageDetailFragment extends BaseFragment {
 
                     @Override
                     public void onFail(int failCode, String message) {
-                        DialogUtil.showOkBtnDialog(getContext(), "Error " + failCode, message);
+                        DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
                     }
                 });
                 followRequest.execute();
@@ -230,7 +231,7 @@ public class ImageDetailFragment extends BaseFragment {
 
                     @Override
                     public void onFail(int failCode, String message) {
-                        DialogUtil.showOkBtnDialog(getContext(), "Error " + failCode, message);
+                        DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
                     }
                 });
                 favoriteRequest.execute();
@@ -263,7 +264,7 @@ public class ImageDetailFragment extends BaseFragment {
 
                             @Override
                             public void onFail(int failCode, String message) {
-                                DialogUtil.showOkBtnDialog(getContext(), "Error " + failCode, message);
+                                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
                             }
                         });
                         deleteImageRequest.execute();
@@ -295,7 +296,8 @@ public class ImageDetailFragment extends BaseFragment {
                         @Override
                         public void onFail(int failCode, String message) {
                             hideCoverNetworkLoading();
-                            DialogUtil.showOkBtnDialog(getContext(), "Error :" + String.valueOf(failCode), message);
+                            DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
+
                         }
                     });
                     commentRequest.execute();
