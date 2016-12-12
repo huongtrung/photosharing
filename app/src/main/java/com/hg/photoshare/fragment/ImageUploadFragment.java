@@ -209,8 +209,8 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
         NetworkUtils.getInstance(getActivity().getApplicationContext()).addToRequestQueue(uploadImageRequest);
     }
 
-    private void resetLayout(){
-        fileImage =null;
+    private void resetLayout() {
+        fileImage = null;
         ivPhotoUpload.setImageResource(R.drawable.placeholer_image_800);
         etCaption.setText("");
         scLocation.setChecked(false);
@@ -251,6 +251,7 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
                 ivPhotoUpload.setImageBitmap(bitmap);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
+                DialogUtil.showOkBtnDialog(getContext(), "Error", error.toString());
             }
         }
     }

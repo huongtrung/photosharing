@@ -238,12 +238,12 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void handleBack() {
-            int backStackCnt = getFragmentManager().getBackStackEntryCount();
-            if (backStackCnt > 1) {
-                getFragmentManager().popBackStack();
-            } else {
-                getActivity().onBackPressed();
-            }
+        int backStackCnt = getFragmentManager().getBackStackEntryCount();
+        if (backStackCnt > 1) {
+            getFragmentManager().popBackStack();
+        } else {
+            getActivity().onBackPressed();
+        }
     }
 
     public void replaceFragment(int container, Fragment fragment) {
@@ -260,21 +260,12 @@ public abstract class BaseFragment extends Fragment {
         }
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(container, fragment, tag);
-        if (isAddToBackStack){
+        if (isAddToBackStack) {
             transaction.addToBackStack(tag);
         }
         int id = transaction.commit();
     }
 
-    public void pickFormStorage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select File"), AppConstant.PICK_PHOTO_FORM_AVATAR);
-    }
-    public void pickFormCam() {
-
-    }
 
     public Uri getPhotoFileUri(String fileName) {
         if (isExternalStorageAvailable()) {

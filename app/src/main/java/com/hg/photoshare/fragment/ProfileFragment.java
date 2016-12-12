@@ -86,8 +86,6 @@ public class ProfileFragment extends BaseFragment {
     @BindView(R.id.swipe_profile)
     SwipeRefreshLayout swipeRefreshProfile;
     private Uri fileUri;
-
-    private String mUserId;
     private String userId;
     private ImageListAdapter mImageListAdapter;
     private File fileImage;
@@ -216,34 +214,42 @@ public class ProfileFragment extends BaseFragment {
 
     @OnClick(R.id.title_nav_item_bar)
     public void update() {
-        showCoverNetworkLoading();
-        Map<String, String> header = new HashMap<>();
-        header.put(ApiParam.TOKEN, SharedPrefUtils.getAccessToken());
+        if (fileImage == null)
+            DialogUtil.showOkBtnDialog(getContext(), "Image Not Found", "Please try again !");
+        else {
+            showCoverNetworkLoading();
+            Map<String, String> header = new HashMap<>();
+            header.put(ApiParam.TOKEN, SharedPrefUtils.getAccessToken());
 
-        Map<String, String> params = new HashMap<>();
+            Map<String, String> params = new HashMap<>();
 
+            Map<String, File> filePart = new HashMap<>();
+            filePart.put(APIConstant.UPLOAD_IMAGE, fileImage);
 
-        Map<String, File> filePart = new HashMap<>();
-        filePart.put(APIConstant.UPLOAD_IMAGE, fileImage);
+            UpdateProfileRequest updateProfileRequest = new UpdateProfileRequest(Request.Method.POST, APIConstant.REQUEST_URL_UPDATE_PROFILE, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    hideCoverNetworkLoading();
+                    DialogUtil.showOkBtnDialog(getContext(), "Update Fail", "Update Profile Failed !");
+                }
+            }, ProfileUserResponse.class, header, new Response.Listener<ProfileUserResponse>() {
+                @Override
+                public void onResponse(ProfileUserResponse response) {
+                    hideCoverNetworkLoading();
+                    showData(response);
+                    resetImageFile();
+                    getRequestImageList();
+                    SharedPrefUtils.putString(Constant.KEY_IMAGE_USER, response.data.avatar);
+                    DialogUtil.showOkBtnDialog(getContext(), "Upload Success", "Upload Image Success !");
 
-        UpdateProfileRequest updateProfileRequest = new UpdateProfileRequest(Request.Method.POST, APIConstant.REQUEST_URL_UPDATE_PROFILE, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                hideCoverNetworkLoading();
-                DialogUtil.showOkBtnDialog(getContext(), "Update Fail", "Update Profile Failed !");
-            }
-        }, ProfileUserResponse.class, header, new Response.Listener<ProfileUserResponse>() {
-            @Override
-            public void onResponse(ProfileUserResponse response) {
-                hideCoverNetworkLoading();
-                showData(response);
-                getRequestImageList();
-                SharedPrefUtils.putString(Constant.KEY_IMAGE_USER,response.data.avatar );
-                DialogUtil.showOkBtnDialog(getContext(), "Upload Success", "Upload Image Success !");
+                }
+            }, params, filePart);
+            NetworkUtils.getInstance(getActivity().getApplicationContext()).addToRequestQueue(updateProfileRequest);
+        }
+    }
 
-            }
-        }, params, filePart);
-        NetworkUtils.getInstance(getActivity().getApplicationContext()).addToRequestQueue(updateProfileRequest);
+    private void resetImageFile() {
+        fileImage = null;
     }
 
 

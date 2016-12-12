@@ -51,6 +51,8 @@ import vn.app.base.util.NetworkUtils;
 import vn.app.base.util.SharedPrefUtils;
 import vn.app.base.util.StringUtil;
 
+import static com.hg.photoshare.R.id.etLogin;
+
 /**
  * Created by on 10/16/2016.
  */
@@ -112,8 +114,6 @@ public class RegisterFragment extends BaseFragment {
 
     @OnClick(R.id.btnSignUp)
     public void goToUserProfile() {
-        KeyboardUtil.hideKeyboard(getActivity());
-        showCoverNetworkLoading();
         userName = etUser.getText().toString().trim();
         emailAdd = etEmail.getText().toString().trim();
         password = etPass.getText().toString().trim();
@@ -124,8 +124,12 @@ public class RegisterFragment extends BaseFragment {
         }
         if (!password.equals(compassword)) {
             DialogUtil.showOkBtnDialog(getActivity(), "Password not match ", "Please re-enter again");
-        } else {
+        }
+        if (fileImage == null)
+            DialogUtil.showOkBtnDialog(getContext(), "Image Not Found", "Please try again !");
+        else {
             try {
+                KeyboardUtil.hideKeyboard(getActivity());
                 showCoverNetworkLoading();
                 Map<String, String> header = new HashMap<>();
                 Map<String, String> params = new HashMap<>();
@@ -145,8 +149,10 @@ public class RegisterFragment extends BaseFragment {
                         hideCoverNetworkLoading();
                         if (response != null && response.data != null)
                             handleRegisterSuccess(response);
-                        else
+                        else {
+                            resetLayout();
                             DialogUtil.showOkBtnDialog(getContext(), "Register Fail", "Please register again !");
+                        }
                     }
                 }, params, filePart);
                 NetworkUtils.getInstance(getActivity().getApplicationContext()).addToRequestQueue(registerRequest);
@@ -230,5 +236,13 @@ public class RegisterFragment extends BaseFragment {
                 break;
         }
         return super.onContextItemSelected(item);
+    }
+
+    private void resetLayout() {
+        etUser.setText("");
+        etPass.setText("");
+        etEmail.setText("");
+        etConfirm.setText("");
+        fileImage = null;
     }
 }

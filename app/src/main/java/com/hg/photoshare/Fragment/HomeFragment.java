@@ -50,7 +50,6 @@ public class HomeFragment extends BaseFragment {
     }
     @Override
     protected void getArgument(Bundle bundle) {
-
     }
 
     @Override

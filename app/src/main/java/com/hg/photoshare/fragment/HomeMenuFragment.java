@@ -1,6 +1,7 @@
 package com.hg.photoshare.fragment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.hg.photoshare.HomeActivity;
+import com.hg.photoshare.MainActivity;
 import com.hg.photoshare.R;
 import com.hg.photoshare.contants.Constant;
 import com.hg.photoshare.manage.UserManage;
@@ -136,7 +139,8 @@ public class HomeMenuFragment extends BaseFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         UserManage.clearUserData();
                         UserManage.clearUser();
-                        replaceFragment(R.id.container, LoginFragment.newInstance());
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(intent);
                     }
                 }, new DialogInterface.OnClickListener() {
                     @Override

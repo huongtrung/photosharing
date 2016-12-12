@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -23,10 +25,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hg.photoshare.R;
+import com.hg.photoshare.adapter.InfowindowAdapter;
 import com.hg.photoshare.api.request.NearByRequest;
 import com.hg.photoshare.api.respones.NearByRespones;
 import com.hg.photoshare.bean.ImageBean;
@@ -40,13 +45,15 @@ import java.util.List;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
+import vn.app.base.util.FragmentUtil;
 
+import static android.R.attr.bitmap;
 import static android.R.attr.data;
 
 /**
  * Created by Nart on 26/10/2016.
  */
-public class NearbyFragment extends BaseFragment implements OnMapReadyCallback,GoogleMap.OnInfoWindowClickListener,
+public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private double latitude;
@@ -58,6 +65,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback,G
     private List<NearByData> nearByData;
     private ImageBean imageBean;
     private UserBean userBean;
+    private InfowindowAdapter newInfo;
 
     private final static int CONNECTION_FAILED_REQUEST = 9000;
     private GoogleApiClient mGoogleApiClient;
@@ -135,22 +143,25 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback,G
                     imageBean = nearByData.get(i).image;
                     userBean = nearByData.get(i).user;
                     if (latCurrentUser != null && !latCurrentUser.isEmpty() || longCurrentUser != null && !longCurrentUser.isEmpty()) {
-                        LatLng latLng = new LatLng(Double.parseDouble(latCurrentUser), Double.parseDouble(longCurrentUser));
-                        CameraUpdate allTheThings = CameraUpdateFactory.newLatLngZoom(latLng, 16);
-                        googleMap.moveCamera(allTheThings);
-                        googleMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(Double.parseDouble(latCurrentUser), Double.parseDouble(longCurrentUser)))
-                                .title(userName))
-                                .setSnippet(captionPost);
+                        newInfo = new InfowindowAdapter(getActivity());
+                        googleMap.setInfoWindowAdapter(newInfo);
+
+                        MarkerOptions mMarker = new MarkerOptions().position(new LatLng(Double.parseDouble(latCurrentUser), Double.parseDouble(longCurrentUser)));
+                        mMarker.icon(BitmapDescriptorFactory.fromBitmap(resizeMarker(R.drawable.map_pin)));
+
+                        googleMap.addMarker(mMarker.title(userName)
+                                .snippet(captionPost)).setTag(nearByData);
+
                     }
                 }
             }
         });
     }
 
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        replaceFragment(R.id.container, ImageDetailFragment.newInstance(imageBean, userBean));
+    private Bitmap resizeMarker(int ResID) {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), ResID);
+        Bitmap resized = Bitmap.createScaledBitmap(bitmap, 40, 70, true);
+        return resized;
     }
 
     @Override
@@ -179,7 +190,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback,G
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
                     LatLng latLng = new LatLng(latitude, longtitude);
-                    CameraUpdate allTheThings = CameraUpdateFactory.newLatLngZoom(latLng, 16);
+                    CameraUpdate allTheThings = CameraUpdateFactory.newLatLngZoom(latLng, 18);
                     googleMap.moveCamera(allTheThings);
                     if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
@@ -192,8 +203,12 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback,G
                         return;
                     }
                     googleMap.setMyLocationEnabled(true);
-
-
+                    googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                        @Override
+                        public void onInfoWindowClick(Marker marker) {
+                                replaceFragment(R.id.container, ImageDetailFragment.newInstance(imageBean, userBean));
+                        }
+                    });
                 }
             });
         }
@@ -259,8 +274,12 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback,G
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        googleMap.setOnInfoWindowClickListener(this);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+
     }
 }
