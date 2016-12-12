@@ -1,18 +1,15 @@
 package com.hg.photoshare.fragment;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -25,30 +22,24 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hg.photoshare.R;
-import com.hg.photoshare.adapter.InfowindowAdapter;
+import com.hg.photoshare.adapter.InfoWindowAdapter;
 import com.hg.photoshare.api.request.NearByRequest;
 import com.hg.photoshare.api.respones.NearByRespones;
 import com.hg.photoshare.bean.ImageBean;
 import com.hg.photoshare.bean.UserBean;
-import com.hg.photoshare.data.ImageListData;
+import com.hg.photoshare.contants.ErrorCodeUlti;
 import com.hg.photoshare.data.NearByData;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
-import vn.app.base.util.FragmentUtil;
-
-import static android.R.attr.bitmap;
-import static android.R.attr.data;
 
 /**
  * Created by Nart on 26/10/2016.
@@ -65,7 +56,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
     private List<NearByData> nearByData;
     private ImageBean imageBean;
     private UserBean userBean;
-    private InfowindowAdapter newInfo;
+    private InfoWindowAdapter newInfo;
 
     private final static int CONNECTION_FAILED_REQUEST = 9000;
     private GoogleApiClient mGoogleApiClient;
@@ -124,7 +115,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
             @Override
             public void onFail(int failCode, String message) {
                 hideCoverNetworkLoading();
-                DialogUtil.showOkBtnDialog(getContext(), "Error", message);
+                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
             }
         });
         nearByRequest.execute();
@@ -143,7 +134,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
                     imageBean = nearByData.get(i).image;
                     userBean = nearByData.get(i).user;
                     if (latCurrentUser != null && !latCurrentUser.isEmpty() || longCurrentUser != null && !longCurrentUser.isEmpty()) {
-                        newInfo = new InfowindowAdapter(getActivity());
+                        newInfo = new InfoWindowAdapter(getActivity());
                         googleMap.setInfoWindowAdapter(newInfo);
 
                         MarkerOptions mMarker = new MarkerOptions().position(new LatLng(Double.parseDouble(latCurrentUser), Double.parseDouble(longCurrentUser)));
@@ -151,7 +142,6 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
 
                         googleMap.addMarker(mMarker.title(userName)
                                 .snippet(captionPost)).setTag(nearByData);
-
                     }
                 }
             }
@@ -190,7 +180,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
                     LatLng latLng = new LatLng(latitude, longtitude);
-                    CameraUpdate allTheThings = CameraUpdateFactory.newLatLngZoom(latLng, 18);
+                    CameraUpdate allTheThings = CameraUpdateFactory.newLatLngZoom(latLng, 20);
                     googleMap.moveCamera(allTheThings);
                     if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling

@@ -16,6 +16,7 @@ import com.hg.photoshare.api.request.TutorialRequest;
 import com.hg.photoshare.api.respones.RegisterResponse;
 import com.hg.photoshare.api.respones.TutorialResponse;
 import com.hg.photoshare.bean.TutorialBean;
+import com.hg.photoshare.contants.ErrorCodeUlti;
 import com.hg.photoshare.data.TutorialData;
 
 import java.util.List;
@@ -88,7 +89,7 @@ public class ToturialFragment extends BaseFragment {
             @Override
             public void onFail(int failCode, String message) {
                 hideCoverNetworkLoading();
-                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, message);
+                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
             }
 
         });

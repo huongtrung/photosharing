@@ -60,23 +60,19 @@ import static com.hg.photoshare.R.id.etLogin;
 public class RegisterFragment extends BaseFragment {
     @BindView(R.id.ivAvatar)
     CircleImageView ivAvatar;
-
     @BindView(R.id.etUser)
     EditText etUser;
-
     @BindView(R.id.etEmail)
     EditText etEmail;
-
     @BindView(R.id.etPass)
     EditText etPass;
-
     @BindView(R.id.etConfirm)
     EditText etConfirm;
 
-    private String userName = "";
-    private String emailAdd = "";
-    private String password = "";
-    private String compassword = "";
+    private String userName;
+    private String emailAdd;
+    private String password;
+    private String compassword;
     Uri fileUri;
     Bitmap bitmap;
     private File fileImage;

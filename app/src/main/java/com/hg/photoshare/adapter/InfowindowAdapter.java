@@ -12,14 +12,13 @@ import com.hg.photoshare.R;
  * Created by GMORUNSYSTEM on 12/12/2016.
  */
 
-public class InfowindowAdapter implements GoogleMap.InfoWindowAdapter {
+public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     Activity activity;
     TextView title;
     TextView snippet;
 
-    public InfowindowAdapter(Activity activity) {
+    public InfoWindowAdapter(Activity activity) {
         this.activity = activity;
-
     }
 
     @Override

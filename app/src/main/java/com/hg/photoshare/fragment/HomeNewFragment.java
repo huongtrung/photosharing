@@ -25,6 +25,7 @@ import com.hg.photoshare.api.respones.HomeResponse;
 import com.hg.photoshare.bean.ImageBean;
 import com.hg.photoshare.bean.UserBean;
 import com.hg.photoshare.contants.Constant;
+import com.hg.photoshare.contants.ErrorCodeUlti;
 import com.hg.photoshare.data.HomeData;
 
 import java.util.Locale;
@@ -120,7 +121,7 @@ public class HomeNewFragment extends BaseFragment {
 
     public void getHomeData() {
         showCoverNetworkLoading();
-        HomeRequest homeRequest = new HomeRequest(typeIndex, num);
+        HomeRequest homeRequest = new HomeRequest(typeIndex);
         homeRequest.setRequestCallBack(new ApiObjectCallBack<HomeResponse>() {
             @Override
             public void onSuccess(HomeResponse responses) {
@@ -138,7 +139,7 @@ public class HomeNewFragment extends BaseFragment {
                 if (swipeHome.isRefreshing())
                     swipeHome.setRefreshing(false);
                 hideCoverNetworkLoading();
-                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, message);
+                DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
             }
         });
         homeRequest.execute();

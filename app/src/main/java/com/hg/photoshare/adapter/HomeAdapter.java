@@ -30,7 +30,6 @@ public class HomeAdapter extends FragmentPagerAdapter {
                 return HomeNewFragment.newInstance(Constant.TYPE_NEW);
         }
     }
-
     @Override
     public int getCount() {
         return 2;
