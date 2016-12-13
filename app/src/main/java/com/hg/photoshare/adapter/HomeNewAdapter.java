@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -67,12 +68,11 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
 
     public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener) {
         this.mOnItemClickListener = mOnItemClickListener;
-        notifyDataSetChanged();
-
     }
 
     public void setHomeDataList(List<HomeData> homeDataList) {
         this.homeDataList = homeDataList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -122,7 +122,7 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
         if (homeData.image.location != null && !homeData.image.location.isEmpty())
             StringUtil.displayText(homeData.image.location, holder.tvLocation);
         else
-            holder.tvLocation.setVisibility(View.GONE);
+            holder.llLocation.setVisibility(View.GONE);
         StringUtil.displayText(homeData.image.caption, holder.tvCaption);
         if (homeData.image.hashtag.size() > 0) {
             String result = "";
@@ -235,6 +235,7 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
         TextView tvCaption;
         TextView tvHashTag;
         ImageView ivFavorite;
+        LinearLayout llLocation;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -246,6 +247,7 @@ public class HomeNewAdapter extends RecyclerView.Adapter<HomeNewAdapter.ViewHold
             tvCaption = (TextView) itemView.findViewById(R.id.tv_description);
             tvHashTag = (TextView) itemView.findViewById(R.id.tv_hash_tag);
             ivFavorite = (ImageView) itemView.findViewById(R.id.iv_favorite);
+            llLocation=(LinearLayout)itemView.findViewById(R.id.ll_location);
         }
     }
 

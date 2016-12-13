@@ -112,7 +112,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
         if (imageList.image.location != null && !imageList.image.location.isEmpty())
             StringUtil.displayText(imageList.image.location, holder.tvLocation);
         else
-            holder.tvLocation.setVisibility(View.GONE);
+            holder.llLocation.setVisibility(View.GONE);
         StringUtil.displayText(imageList.image.caption, holder.tvDescription);
         if (imageList.image.hashtag.size() > 0) {
             String result = "";
@@ -226,6 +226,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
         private TextView tvName;
         private Button btFollow;
         private LinearLayout llImage;
+        private LinearLayout llLocation;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -238,6 +239,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
             tvName = (TextView) itemView.findViewById(R.id.tv_name_account);
             btFollow = (Button) itemView.findViewById(R.id.bt_follow);
             llImage = (LinearLayout) itemView.findViewById(R.id.ll_image);
+            llLocation = (LinearLayout) itemView.findViewById(R.id.ll_location);
         }
     }
 }

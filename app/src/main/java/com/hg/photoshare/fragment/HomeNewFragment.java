@@ -9,17 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.hg.photoshare.R;
 import com.hg.photoshare.adapter.HomeNewAdapter;
-import com.hg.photoshare.api.request.FollowRequest;
 import com.hg.photoshare.api.request.HomeRequest;
 import com.hg.photoshare.api.respones.HomeResponse;
 import com.hg.photoshare.bean.ImageBean;
@@ -28,19 +19,19 @@ import com.hg.photoshare.contants.Constant;
 import com.hg.photoshare.contants.ErrorCodeUlti;
 import com.hg.photoshare.data.HomeData;
 
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
-import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
+import vn.app.base.customview.endlessrecycler.EndlessRecyclerOnScrollListener;
 import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.DialogUtil;
-import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.SharedPrefUtils;
 
 import static android.R.attr.data;
+import static android.R.attr.type;
 import static android.R.id.message;
-import static java.lang.String.valueOf;
 
 /**
  * Created by Nart on 25/10/2016.
@@ -53,16 +44,14 @@ public class HomeNewFragment extends BaseFragment {
     SwipeRefreshLayout swipeHome;
 
     private HomeNewAdapter mHomeNewAdapter;
-    private int typeIndex;
-    private int num = 10;
+    private static final int typeIndex = 0;
+    private int numOfPage = 10;
+    private long lastQuery;
     private String mUserId;
-    private double lat;
-    private String lng;
+    private List<HomeData> homeDataList;
 
-    public static HomeNewFragment newInstance(int type) {
+    public static HomeNewFragment newInstance() {
         HomeNewFragment fragment = new HomeNewFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constant.TYPE_INDEX_NEW, type);
         return fragment;
     }
 
@@ -76,6 +65,8 @@ public class HomeNewFragment extends BaseFragment {
         getHomeData();
         mUserId = SharedPrefUtils.getString(Constant.KEY_USER_ID, "");
         mHomeNewAdapter = new HomeNewAdapter(getContext());
+        rcHomeNew.setAdapter(mHomeNewAdapter);
+        rcHomeNew.setLayoutManager(new LinearLayoutManager(getContext()));
         swipeHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -111,7 +102,6 @@ public class HomeNewFragment extends BaseFragment {
             @Override
             public void OnItemLocationClick(View view, String lat, String longtitude) {
                 Uri uri = Uri.parse(String.format(Locale.ENGLISH, "geo:%f,%f", Float.valueOf(lat), Float.valueOf(longtitude)));
-                Log.e("lat", lat + "long" + longtitude);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }
@@ -130,6 +120,8 @@ public class HomeNewFragment extends BaseFragment {
                 hideCoverNetworkLoading();
                 if (responses.data != null && responses.data.size() > 0) {
                     handleHomeData(responses);
+                    handleHomeLoadMore(responses.data);
+                    lastQuery = responses.data.get(responses.data.size() - 1).image.createdAt;
                 } else
                     DialogUtil.showOkBtnDialog(getContext(), "Error", "No data");
             }
@@ -145,17 +137,42 @@ public class HomeNewFragment extends BaseFragment {
         homeRequest.execute();
     }
 
+    private void handleHomeLoadMore(final List<HomeData> homeDatas) {
+        this.homeDataList = homeDatas;
+        rcHomeNew.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore(int currentPage) {
+                showCoverNetworkLoading();
+                HomeRequest homeRequest = new HomeRequest(typeIndex, numOfPage, lastQuery);
+                homeRequest.setRequestCallBack(new ApiObjectCallBack<HomeResponse>() {
+                    @Override
+                    public void onSuccess(HomeResponse response) {
+                        hideCoverNetworkLoading();
+                        if (response.data.size() != 0) {
+                            homeDataList.addAll(response.data);
+                            mHomeNewAdapter.notifyDataSetChanged();
+                            lastQuery = response.data.get(response.data.size() - 1).image.createdAt;
+                        }
+                    }
+
+                    @Override
+                    public void onFail(int failCode, String message) {
+                        hideCoverNetworkLoading();
+                        DialogUtil.showOkBtnDialog(getContext(), "Error : " + failCode, ErrorCodeUlti.getErrorCode(failCode));
+                    }
+                });
+                homeRequest.execute();
+            }
+        });
+    }
+
     private void handleHomeData(HomeResponse response) {
         mHomeNewAdapter.setHomeDataList(response.data);
-        rcHomeNew.setAdapter(mHomeNewAdapter);
-        rcHomeNew.setLayoutManager(new LinearLayoutManager(getContext()));
         mHomeNewAdapter.notifyDataSetChanged();
     }
 
-
     @Override
     protected void getArgument(Bundle bundle) {
-        typeIndex = bundle.getInt(Constant.TYPE_INDEX_NEW);
     }
 
     @Override

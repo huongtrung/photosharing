@@ -116,10 +116,10 @@ public class RegisterFragment extends BaseFragment {
         compassword = etConfirm.getText().toString().trim();
         if (!StringUtil.checkStringValid(userName) || !StringUtil.checkStringValid(emailAdd)
                 || !StringUtil.checkStringValid(password) || !StringUtil.checkStringValid(compassword)) {
-            DialogUtil.showOkBtnDialog(getActivity(), "Required fields", "Please re-enter again");
+            DialogUtil.showOkBtnDialog(getActivity(), "Required fields", "Please re-enter again !");
         }
         if (!password.equals(compassword)) {
-            DialogUtil.showOkBtnDialog(getActivity(), "Password not match ", "Please re-enter again");
+            DialogUtil.showOkBtnDialog(getActivity(), "Password not match ", "Please re-enter again !");
         }
         if (fileImage == null)
             DialogUtil.showOkBtnDialog(getContext(), "Image Not Found", "Please try again !");
@@ -137,7 +137,8 @@ public class RegisterFragment extends BaseFragment {
                 RegisterRequest registerRequest = new RegisterRequest(Request.Method.POST, APIConstant.REQUEST_URL_REGISTER, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        DialogUtil.showOkBtnDialog(getContext(), "Register Fail", "Please register again !");
+                        hideCoverNetworkLoading();
+                        DialogUtil.showOkBtnDialog(getContext(), "Register Fail", "Please try register again !");
                     }
                 }, RegisterResponse.class, header, new Response.Listener<RegisterResponse>() {
                     @Override
@@ -146,8 +147,9 @@ public class RegisterFragment extends BaseFragment {
                         if (response != null && response.data != null)
                             handleRegisterSuccess(response);
                         else {
+                            hideCoverNetworkLoading();
                             resetLayout();
-                            DialogUtil.showOkBtnDialog(getContext(), "Register Fail", "Please register again !");
+                            DialogUtil.showOkBtnDialog(getContext(), "Register Fail", "Please try register again !");
                         }
                     }
                 }, params, filePart);

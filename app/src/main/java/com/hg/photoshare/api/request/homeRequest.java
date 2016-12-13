@@ -19,6 +19,14 @@ import vn.app.base.util.SharedPrefUtils;
  */
 public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     private int type;
+    private int num;
+    private long last_query_timestamp;
+
+    public HomeRequest(int type, int num, long last_query_timestamp) {
+        this.type = type;
+        this.num = num;
+        this.last_query_timestamp = last_query_timestamp;
+    }
 
     public HomeRequest(int type) {
         this.type = type;
@@ -43,7 +51,10 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     public Map<String, String> getRequestParams() {
         Map<String, String> params = new HashMap<>();
         params.put(APIConstant.TYPE, String.valueOf(type));
-//        params.put(APIConstant.NUM, String.valueOf(num));
+        if (num != 0)
+            params.put(APIConstant.NUM, String.valueOf(num));
+        if (last_query_timestamp != 0)
+            params.put(APIConstant.LAST_QUERY_TIMESTAMP, String.valueOf(last_query_timestamp));
         return params;
     }
 

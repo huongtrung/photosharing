@@ -61,7 +61,7 @@ public class ImageDetailFragment extends BaseFragment {
     Button btFollow;
     @BindView(R.id.iv_photo)
     ImageView ivPhoto;
-    @BindView(R.id.tv_location)
+    @BindView(R.id.tv_address)
     TextView tvLocation;
     @BindView(R.id.iv_favorite)
     ImageView ivFavorite;
@@ -179,7 +179,7 @@ public class ImageDetailFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.title_nav_item_bar, R.id.bt_follow, R.id.iv_favorite, R.id.tv_location, R.id.ll_user, R.id.bt_comment})
+    @OnClick({R.id.title_nav_item_bar, R.id.bt_follow, R.id.iv_favorite, R.id.tv_address, R.id.ll_user, R.id.bt_comment})
     public void onClickItem(View v) {
         switch (v.getId()) {
             case R.id.bt_follow:
@@ -236,7 +236,7 @@ public class ImageDetailFragment extends BaseFragment {
                 });
                 favoriteRequest.execute();
                 break;
-            case R.id.tv_location:
+            case R.id.tv_address:
                 Uri uri = Uri.parse(String.format(Locale.ENGLISH, "geo:%f,%f", Float.valueOf(latitude), Float.valueOf(longtitude)));
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
