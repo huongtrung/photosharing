@@ -82,19 +82,32 @@
                 app:layout_anchor="@id/iv_photo"
                 app:layout_anchorGravity="bottom|right" />
 
-            <TextView
-                android:id="@+id/tv_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
                 android:layout_gravity="right"
-                android:layout_marginRight="75dp"
-                android:layout_marginLeft="7dp"
-                android:background="@drawable/bg_text_pin_map"
-                android:padding="2dp"
-                android:textColor="@color/white"
+                android:id="@+id/ll_location"
                 app:layout_anchor="@+id/iv_photo"
                 app:layout_anchorGravity="bottom|left"
-                tools:text="Ha Noi, VN" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="6dp"
+                android:background="@drawable/bg_text_pin_map"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="18dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_location"/>
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:textColor="@color/white"
+                    tools:text="Ha Noi, VN" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -151,7 +164,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2">
+            android:layout_weight="1.5">
 
             <EditText
                 android:id="@+id/ed_comment"

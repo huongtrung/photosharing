@@ -37,7 +37,6 @@
             android:background="@color/colorPurpleDam"/>
 
         <EditText
-            android:text="hg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/etUser"
@@ -69,7 +68,6 @@
             android:background="@color/colorPurpleDam"/>
 
         <EditText
-            android:text="hg@gmail.com"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/etEmail"
@@ -100,7 +98,6 @@
             android:background="@color/colorPurpleDam"/>
 
         <EditText
-            android:text="123456"
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -132,7 +129,6 @@
             android:background="@color/colorPurpleDam"/>
 
         <EditText
-            android:text="123456"
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

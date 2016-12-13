@@ -23,11 +23,11 @@ public class HomeAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return HomeNewFragment.newInstance(Constant.TYPE_NEW);
+                return HomeNewFragment.newInstance();
             case 1:
-                return HomeFollowFragment.newInstance(Constant.TYPE_NEW);
+                return HomeFollowFragment.newInstance();
             default:
-                return HomeNewFragment.newInstance(Constant.TYPE_NEW);
+                return HomeNewFragment.newInstance();
         }
     }
     @Override
