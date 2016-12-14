@@ -68,7 +68,6 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
         return fragment;
     }
 
-
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_near_by;
@@ -131,8 +130,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
                     longCurrentUser = nearByData.get(i).image._long;
                     userName = nearByData.get(i).user.username;
                     captionPost = nearByData.get(i).image.caption;
-                    imageBean = nearByData.get(i).image;
-                    userBean = nearByData.get(i).user;
+
                     if (latCurrentUser != null && !latCurrentUser.isEmpty() || longCurrentUser != null && !longCurrentUser.isEmpty()) {
                         newInfo = new InfoWindowAdapter(getActivity());
                         googleMap.setInfoWindowAdapter(newInfo);
@@ -146,6 +144,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
                 }
             }
         });
+
     }
 
     private Bitmap resizeMarker(int ResID) {
@@ -157,7 +156,6 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
         if (location == null) {
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -180,7 +178,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
                     LatLng latLng = new LatLng(latitude, longtitude);
-                    CameraUpdate allTheThings = CameraUpdateFactory.newLatLngZoom(latLng, 20);
+                    CameraUpdate allTheThings = CameraUpdateFactory.newLatLngZoom(latLng, 18);
                     googleMap.moveCamera(allTheThings);
                     if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
@@ -196,7 +194,13 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
                     googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         @Override
                         public void onInfoWindowClick(Marker marker) {
-                                replaceFragment(R.id.container, ImageDetailFragment.newInstance(imageBean, userBean));
+                            for (int i = 0; i < nearByData.size(); i++) {
+                                captionPost = nearByData.get(i).image.caption;
+                                imageBean = nearByData.get(i).image;
+                                userBean = nearByData.get(i).user;
+                                if (captionPost.equalsIgnoreCase(marker.getSnippet()))
+                                    replaceFragment(R.id.container, ImageDetailFragment.newInstance(imageBean, userBean));
+                            }
                         }
                     });
                 }

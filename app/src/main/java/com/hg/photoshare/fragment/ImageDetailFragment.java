@@ -197,7 +197,7 @@ public class ImageDetailFragment extends BaseFragment {
                                 isFollow = 1;
                                 btFollow.setText("Follow");
                                 btFollow.setBackgroundResource(R.color.color_button);
-                                DialogUtil.showOkBtnDialog(getContext(), "Success", " Unfollow User Successfully !");
+                                DialogUtil.showOkBtnDialog(getContext(), "Success", " UnFollow User Successfully !");
                             }
                         } else
                             DialogUtil.showOkBtnDialog(getContext(), "Error", "Follow User Fail !");

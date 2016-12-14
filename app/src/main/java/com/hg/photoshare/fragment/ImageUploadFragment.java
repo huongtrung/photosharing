@@ -327,8 +327,7 @@ public class ImageUploadFragment extends BaseFragment implements GoogleApiClient
         List<Address> addresses;
         try {
             addresses = geocoder.getFromLocation(latitude, longtitude, 1);
-            String featureName = addresses.get(0).getFeatureName();
-            location = featureName;
+            location = addresses.get(0).getFeatureName();
         } catch (IOException e) {
             e.printStackTrace();
         }
