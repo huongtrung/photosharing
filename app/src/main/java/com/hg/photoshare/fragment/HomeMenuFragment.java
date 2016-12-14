@@ -112,9 +112,6 @@ public class HomeMenuFragment extends BaseFragment {
     public void OnClick(View v) {
         mDrawerLayout.closeDrawers();
         switch (v.getId()) {
-            case R.id.iv_open_drawer:
-                mDrawerLayout.openDrawer(Gravity.LEFT);
-                break;
             case R.id.rl_user:
                 replaceFragment(R.id.container, ProfileFragment.newInstance(userId));
                 break;
