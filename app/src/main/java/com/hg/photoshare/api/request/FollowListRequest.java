@@ -4,7 +4,9 @@ import com.hg.photoshare.api.respones.FollowListRespones;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import com.android.volley.Request;
+
 import vn.app.base.api.volley.core.BaseApiRequest;
 import vn.app.base.api.volley.core.ObjectApiRequest;
 import vn.app.base.constant.APIConstant;
@@ -15,7 +17,7 @@ import vn.app.base.util.SharedPrefUtils;
  * Created by GMORUNSYSTEM on 11/17/2016.
  */
 
-public class FollowListRequest extends ObjectApiRequest<FollowListRespones>{
+public class FollowListRequest extends ObjectApiRequest<FollowListRespones> {
     @Override
     public boolean isRequiredAuthorization() {
         return false;
@@ -38,7 +40,7 @@ public class FollowListRequest extends ObjectApiRequest<FollowListRespones>{
 
     @Override
     public Map<String, String> getRequestHeaders() {
-        Map<String,String> header=new HashMap<>();
+        Map<String, String> header = new HashMap<>();
         header.put(ApiParam.TOKEN, SharedPrefUtils.getAccessToken());
         return header;
     }

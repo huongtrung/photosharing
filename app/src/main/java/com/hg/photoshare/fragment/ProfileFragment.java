@@ -242,7 +242,7 @@ public class ProfileFragment extends BaseFragment {
                     resetImageFile();
                     getRequestImageList();
                     SharedPrefUtils.putString(Constant.KEY_IMAGE_USER, response.data.avatar);
-                    DialogUtil.showOkBtnDialog(getContext(), "Upload Success", "Upload Image Success !");
+                    DialogUtil.showOkBtnDialog(getContext(), "Upload Success", "Upload Profile Success !");
                 }
             }, params, filePart);
             NetworkUtils.getInstance(getActivity().getApplicationContext()).addToRequestQueue(updateProfileRequest);

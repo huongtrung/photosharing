@@ -195,10 +195,11 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
                         @Override
                         public void onInfoWindowClick(Marker marker) {
                             for (int i = 0; i < nearByData.size(); i++) {
+                                userName = nearByData.get(i).user.username;
                                 captionPost = nearByData.get(i).image.caption;
                                 imageBean = nearByData.get(i).image;
                                 userBean = nearByData.get(i).user;
-                                if (captionPost.equalsIgnoreCase(marker.getSnippet()))
+                                if (captionPost.equalsIgnoreCase(marker.getSnippet()) && userName.equalsIgnoreCase(marker.getTitle()))
                                     replaceFragment(R.id.container, ImageDetailFragment.newInstance(imageBean, userBean));
                             }
                         }
