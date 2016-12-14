@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -48,6 +49,7 @@ import vn.app.base.util.StringUtil;
 
 import static android.R.attr.data;
 import static android.R.id.message;
+import static com.hg.photoshare.R.id.ll_location;
 
 /**
  * Created by Nart on 26/10/2016.
@@ -77,6 +79,8 @@ public class ImageDetailFragment extends BaseFragment {
     RecyclerView rcCommentList;
     @BindView(R.id.swipe_comment_list)
     SwipeRefreshLayout swipeCommentList;
+    @BindView(R.id.ll_location)
+    LinearLayout llLocation;
 
     private ImageBean mImageBean;
     private UserBean mUserBean;
@@ -168,7 +172,7 @@ public class ImageDetailFragment extends BaseFragment {
         if (mImageBean.location != null && !mImageBean.location.isEmpty())
             StringUtil.displayText(mImageBean.location, tvLocation);
         else
-            tvLocation.setVisibility(View.GONE);
+            llLocation.setVisibility(View.GONE);
         StringUtil.displayText(mImageBean.caption, tvDescription);
         if (mImageBean.hashtag.size() > 0) {
             String result = "";

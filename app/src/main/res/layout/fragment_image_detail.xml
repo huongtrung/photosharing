@@ -79,7 +79,7 @@
                 android:background="@drawable/bg_icon_heart"
                 android:padding="5dp"
                 android:src="@drawable/icon_favourite"
-                app:layout_anchor="@id/iv_photo"
+                app:layout_anchor="@+id/iv_photo"
                 app:layout_anchorGravity="bottom|right" />
 
             <LinearLayout
@@ -182,6 +182,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/icon_send" />
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

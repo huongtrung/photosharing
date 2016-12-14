@@ -177,12 +177,12 @@ public class RegisterFragment extends BaseFragment {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().
                         getApplicationContext().getContentResolver(), data.getData());
-                if (bitmap != null) {
-                    ivAvatar.setImageBitmap(bitmap);
-                    fileImage = savebitmap(bitmap);
-                }
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            if (bitmap != null) {
+                ivAvatar.setImageBitmap(bitmap);
+                fileImage = savebitmap(bitmap);
             }
         }
 
@@ -220,7 +220,6 @@ public class RegisterFragment extends BaseFragment {
         ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
         switch (item.getItemId()) {
             case Constant.CONTEXT_MENU_FROM_CAM:
-
                 Intent getCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 fileUri = Uri.fromFile(imagePickerUtil.createFileUri(getActivity()));
                 getCamera.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
